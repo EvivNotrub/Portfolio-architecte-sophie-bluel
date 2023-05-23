@@ -1,25 +1,4 @@
-// async function myFunction(){
-//     console.log("Hello!");
 
-//     const logInput = {
-//         email: "sophie.bluel@test.tld",
-//         password: "S0phie"
-//     };
-    
-//     const chargeUtile = JSON.stringify(logInput);
-//     const response = await fetch("http://localhost:5678/api/users/login", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: chargeUtile
-//     });
-//     const valeursLogin = await response.json();
-//     console.log(valeursLogin);
-//     const token = valeursLogin.token
-//     console.log(token);
-// };
-
-// const login = document.querySelector(".login");
-// login.addEventListener('click', myFunction);
 
 async function getWorks() {
     
@@ -62,7 +41,6 @@ async function createProjectContent() {
 //Below we create the filters depending on the categories in the database
 async function createCategoriesFilters() {
     categories = await getCategories();
-    console.log(categories);
     categories.unshift({id: 0, name: "Tous"});
     console.log(categories);
 
@@ -146,7 +124,6 @@ const checkBoxs = document.querySelectorAll(".filterCheck");
                 state = false;
             };
         }
-        console.log(state);
         return state
     }
 
@@ -161,16 +138,12 @@ const checkBoxs = document.querySelectorAll(".filterCheck");
 
 /***** main filter functiom *****/
 function filter(){    
-    console.log(checkBoxs);
     let marker = true;
     for (let i = 0; i < checkBoxs.length; i++) {
         const filter = checkBoxs[i];
-        console.log(filter);
         const id = filter.dataset.id;
-        console.log(id);
         filter.addEventListener('click', function () {
                 if (id == "0") {
-                    console.log("0");
                     showAll()
                     marker = true;
                 }else if( allUnchecked() ){
@@ -182,7 +155,6 @@ function filter(){
                         hideAll();
                         marker = false;
                     };
-                    console.log(id);
                     toogle(filter, id)
                 }
         })
