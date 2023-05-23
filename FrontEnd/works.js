@@ -29,11 +29,18 @@ async function getWorks() {
     
 };
     
+async function getCategories() {
+    const categoriesResponse = await fetch('http://localhost:5678/api/categories');
+    const categories = await categoriesResponse.json();
+    return categories;
+};
 
+let categories;
 
 async function createProjectContent() {
     const works = await getWorks();
     console.log(works);
+
     for (let i in works) {
 
         const gallery = document.querySelector(".gallery");
@@ -41,7 +48,7 @@ async function createProjectContent() {
         const work = document.createElement("figure");
         const workImage = document.createElement("img")
         const workTitle = document.createElement("figcaption");
-        work.classList.add(`cat${works[i].category.id}`);
+        work.dataset.id = works[i].category.id;
         workImage.src = works[i].imageUrl;
         workTitle.textContent = works[i].title;
 
@@ -51,30 +58,25 @@ async function createProjectContent() {
     }
 };
 
-const categoriesList = ["Tous"];
-const categoriesId = [0];
-//here we add a 0 for the "tous" category
+
+//Below we create the filters depending on the categories in the database
 async function createCategoriesFilters() {
-    const works = await getWorks();
-    
-    for (let i in works) {
-        if (categoriesList.includes(works[i].category.name) == false) {
-            categoriesList.push(works[i].category.name);
-            categoriesId.push(works[i].category.id);
-        }
-    }
-    
+    categories = await getCategories();
+    console.log(categories);
+    categories.unshift({id: 0, name: "Tous"});
+    console.log(categories);
+
     const filters = document.querySelector(".filters");
-    for (let i in categoriesList) {
+    for (let i in categories) {
         const filter = document.createElement("div");
         filter.classList.add("filter");        
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";
-        checkBox.name = categoriesList[i];
+        checkBox.name = categories[i].name;
         checkBox.classList.add("filterCheck");
-        checkBox.classList.add(`checkCat${categoriesId[i]}`);
+        checkBox.dataset.id = categories[i].id;
         const button = document.createElement("button");
-        button.innerText = categoriesList[i];
+        button.innerText = categories[i].name;
         button.classList.add("filter-button");
         filters.appendChild(filter);
         filter.appendChild(checkBox);
@@ -90,122 +92,103 @@ async function main(){
 await main();
 
 /******FILTERS *******/
-/*functions*/
-console.log(categoriesList);
-console.log(categoriesId);
-    
-    function selectAllCat(){
-           return document.querySelectorAll(`.cat1, .cat2, .cat3`);
-         }
 
+    
+const articles = document.querySelectorAll("figure[data-id]");
+const checkBoxs = document.querySelectorAll(".filterCheck");
+
+   /****tool functions for filters****/ 
     function uncheckExcept(value){
-        const checkBoxs = document.querySelectorAll(".filterCheck");
         for (let i = 0; i < checkBoxs.length; i++){
-            if (checkBoxs[i].classList.contains(`${value}`) == false) {
+            if (checkBoxs[i].dataset.id !== value) {
                 checkBoxs[i].checked = false;
             }
         };
     }
-
-    // function hideAll(){
-    //     const articles = document.querySelectorAll("figure");
-    //     for (let i in articles){
-    //         articles[i].style.display = "none";
-    //     };
-    // }
+    function uncheck(value){        
+        for (let i = 0; i < checkBoxs.length; i++){
+            if (checkBoxs[i].dataset.id == value) {
+                checkBoxs[i].checked = false;
+            }
+        };
+    }
+    function hideAll(){
+        for (let i=0; i<articles.length; i++){
+            articles[i].style.display = "none";
+        };
+    }
     function showAll(){
-        const articles = selectAllCat();
-        uncheckExcept("checkCat0");
-        for (let i in articles){
+        uncheckExcept("0");
+        for (let i=0; i<articles.length; i++){
             articles[i].style.display = "block";
         };
     }
 
     function showCategory(value){
-        const articles = selectAllCat();
-        uncheckExcept(`checkCat${value}`);
-        for (let i in articles){
-            if (articles[i].classList.contains(`cat${value}`) == true) {
+        uncheck("0");
+        for (let i=0; i<articles.length; i++){
+            if (articles[i].dataset.id == value) {
                 articles[i].style.display = "block";
-            }else{
+            }
+        };
+    }
+    function hideCategory(value){
+        for (let i=0; i<articles.length; i++){
+            if (articles[i].dataset.id == value) {
                 articles[i].style.display = "none";
             }
         };
     }
-/*checkboxes*/
-/*OBJETS*/
-const checkObjet = document.querySelector(".checkCat1");
-checkObjet.addEventListener('click', function(){
-    if (checkObjet.checked == true) {
-        showCategory("1")
-    }else if (checkObjet.checked == false) {
-        showAll();
+    function allUnchecked() {
+        let state = true;
+        for (let i = 0; i < checkBoxs.length; i++) {
+            if(checkBoxs[i].checked == true){
+                state = false;
+            };
+        }
+        console.log(state);
+        return state
     }
-})
-/*APPART*/
-const checkAppart = document.querySelector(".checkCat2");
-checkAppart.addEventListener('click', function(){
-    if (checkAppart.checked == true) {
-        showCategory("2")
-    }else if (checkAppart.checked == false) {
-        showAll();
+
+    function toogle(check, id) {
+        if(check.checked == true){
+            showCategory(id)
+        }else{
+            hideCategory(id)
+        }
     }
-})
-/*RESTO*/
-const checkResto = document.querySelector(".checkCat3");
-checkResto.addEventListener('click', function(){
-    if (checkResto.checked == true) {
-        showCategory("3")
-    }else if (checkResto.checked == false) {
-        showAll();
+
+
+/***** main filter functiom *****/
+function filter(){    
+    console.log(checkBoxs);
+    let marker = true;
+    for (let i = 0; i < checkBoxs.length; i++) {
+        const filter = checkBoxs[i];
+        console.log(filter);
+        const id = filter.dataset.id;
+        console.log(id);
+        filter.addEventListener('click', function () {
+                if (id == "0") {
+                    console.log("0");
+                    showAll()
+                    marker = true;
+                }else if( allUnchecked() ){
+                    console.log("all unchecked");
+                    showAll()
+                    marker = true;
+                }else{
+                    if(marker == true){
+                        hideAll();
+                        marker = false;
+                    };
+                    console.log(id);
+                    toogle(filter, id)
+                }
+        })
     }
-})
+}
 
-/*TOUS*/
-const checkAll = document.querySelector(".checkCat0");
-checkAll.addEventListener('click', function(){
-    if (checkAll.checked == true) {
-        showAll();
-    }
-})
+filter();
 
-
-
-// console.log(checkAll);
-// console.log(checkObjet);
-// const checkAppart = document.querySelector(".checkCat2");
-// console.log(checkAppart);
-// const checkResto = document.querySelector(".checkCat3");
-// console.log(checkResto);
-
-// function hideAll(){
-//     const articles = document.querySelectorAll("figure");
-//     for (let i in articles){
-//         articles[i].style.display = "none";
-//     };
-// }
-// function showAll(){
-//     const articles = document.querySelectorAll("figure");
-//     for (let i in articles){
-//         articles[i].style.display = "block";
-//     };
-// }
-
-// const objets = document.querySelector(".cat1");
-// console.log(objets);
-
-// const articles = document.querySelectorAll("figure");
-// console.log(articles);
-// checkObjet.addEventListener('click', function(){
-//     if (checkObjet.checked == true) {
-//         hideAll().then(objets.style.display = "block");
-//     } else {
-//         objets.style.display = "none";
-//     }
-// });
-
-// if (checkAll.checked == true) {
-//     for (let i in articles){
-//         articles[i].style.display = "block";
-//     };
-// }
+ 
