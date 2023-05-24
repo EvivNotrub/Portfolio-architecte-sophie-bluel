@@ -69,7 +69,7 @@ async function main(){
 
 await main();
 
-/******FILTERS *******/
+/*************  FILTERS  *************/
 
     
 const articles = document.querySelectorAll("figure[data-id]");
@@ -95,21 +95,34 @@ const checkBoxs = document.querySelectorAll(".filterCheck");
             articles[i].style.display = "none";
         };
     }
-    function showAll(){
-        uncheckExcept("0");
-        for (let i=0; i<articles.length; i++){
-            articles[i].style.display = "block";
+    function show(value = "all"){
+        if(value == "all"){
+            uncheckExcept("0");
+        }else{
+            uncheck("0");
         };
-    }
-
-    function showCategory(value){
-        uncheck("0");
         for (let i=0; i<articles.length; i++){
-            if (articles[i].dataset.id == value) {
+            if (value == "all" || articles[i].dataset.id == value) {
                 articles[i].style.display = "block";
             }
         };
     }
+
+    // function showAll(){
+    //     uncheckExcept("0");
+    //     for (let i=0; i<articles.length; i++){
+    //         articles[i].style.display = "block";
+    //     };
+    // }
+
+    // function showCategory(value){
+    //     uncheck("0");
+    //     for (let i=0; i<articles.length; i++){
+    //         if (articles[i].dataset.id == value) {
+    //             articles[i].style.display = "block";
+    //         }
+    //     };
+    // }
     function hideCategory(value){
         for (let i=0; i<articles.length; i++){
             if (articles[i].dataset.id == value) {
@@ -129,7 +142,7 @@ const checkBoxs = document.querySelectorAll(".filterCheck");
 
     function toogle(check, id) {
         if(check.checked == true){
-            showCategory(id)
+            show(id)
         }else{
             hideCategory(id)
         }
@@ -144,11 +157,11 @@ function filter(){
         const id = filter.dataset.id;
         filter.addEventListener('click', function () {
                 if (id == "0") {
-                    showAll()
+                    show("all")
                     marker = true;
                 }else if( allUnchecked() ){
                     console.log("all unchecked");
-                    showAll()
+                    show("all")
                     marker = true;
                 }else{
                     if(marker == true){

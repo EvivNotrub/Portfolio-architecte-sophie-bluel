@@ -1,4 +1,8 @@
 
+// const logInput = {
+    //         email: "sophie.bluel@test.tld",
+    //         password: "S0phie"
+    //     };
 
 function getInput(){
     const email = document.querySelector("input[name='email']").value;
