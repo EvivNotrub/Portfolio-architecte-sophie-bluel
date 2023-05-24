@@ -14,7 +14,7 @@ async function getCategories() {
     return categories;
 };
 
-let categories;
+// let categories;
 
 async function createProjectContent() {
     const works = await getWorks();
@@ -40,7 +40,7 @@ async function createProjectContent() {
 
 //Below we create the filters depending on the categories in the database
 async function createCategoriesFilters() {
-    categories = await getCategories();
+    let categories = await getCategories();
     categories.unshift({id: 0, name: "Tous"});
     console.log(categories);
 
