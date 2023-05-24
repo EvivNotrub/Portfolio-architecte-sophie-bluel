@@ -75,27 +75,45 @@ await main();
 const articles = document.querySelectorAll("figure[data-id]");
 const checkBoxs = document.querySelectorAll(".filterCheck");
 
-   /****tool functions for filters****/ 
-    function uncheckExcept(value){
+   /****tool functions for filters****/
+   function uncheck(method = "target", value){
         for (let i = 0; i < checkBoxs.length; i++){
-            if (checkBoxs[i].dataset.id !== value) {
+            if (method == "except" && checkBoxs[i].dataset.id !== value) {
+                checkBoxs[i].checked = false;
+            }else if(method == "target" && checkBoxs[i].dataset.id == value){
                 checkBoxs[i].checked = false;
             }
         };
-    }
-    function uncheck(value){        
-        for (let i = 0; i < checkBoxs.length; i++){
-            if (checkBoxs[i].dataset.id == value) {
-                checkBoxs[i].checked = false;
-            }
+   }
+   function allUnchecked() {
+    let state = true;
+    for (let i = 0; i < checkBoxs.length; i++) {
+        if(checkBoxs[i].checked == true){
+            state = false;
         };
     }
+    return state
+}
+    // function uncheckExcept(value){
+    //     for (let i = 0; i < checkBoxs.length; i++){
+    //         if (checkBoxs[i].dataset.id !== value) {
+    //             checkBoxs[i].checked = false;
+    //         }
+    //     };
+    // }
+    // function uncheck(value){        
+    //     for (let i = 0; i < checkBoxs.length; i++){
+    //         if (checkBoxs[i].dataset.id == value) {
+    //             checkBoxs[i].checked = false;
+    //         }
+    //     };
+    // }
     
     function show(value = "all"){
         if(value == "all"){
-            uncheckExcept("0");
+            uncheck("except", "0");
         }else{
-            uncheck("0");
+            uncheck("target", "0");
         };
         for (let i=0; i<articles.length; i++){
             if (value == "all" || articles[i].dataset.id == value) {
@@ -138,15 +156,6 @@ const checkBoxs = document.querySelectorAll(".filterCheck");
     //         }
     //     };
     // }
-    function allUnchecked() {
-        let state = true;
-        for (let i = 0; i < checkBoxs.length; i++) {
-            if(checkBoxs[i].checked == true){
-                state = false;
-            };
-        }
-        return state
-    }
 
     function toogle(check, id) {
         if(check.checked == true){
