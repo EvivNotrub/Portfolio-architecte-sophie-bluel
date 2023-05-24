@@ -90,11 +90,7 @@ const checkBoxs = document.querySelectorAll(".filterCheck");
             }
         };
     }
-    function hideAll(){
-        for (let i=0; i<articles.length; i++){
-            articles[i].style.display = "none";
-        };
-    }
+    
     function show(value = "all"){
         if(value == "all"){
             uncheckExcept("0");
@@ -123,13 +119,25 @@ const checkBoxs = document.querySelectorAll(".filterCheck");
     //         }
     //     };
     // }
-    function hideCategory(value){
+    function hide(value = "all"){
         for (let i=0; i<articles.length; i++){
-            if (articles[i].dataset.id == value) {
+            if (value == "all" || articles[i].dataset.id == value) {
                 articles[i].style.display = "none";
             }
         };
     }
+    // function hideAll(){
+    //     for (let i=0; i<articles.length; i++){
+    //         articles[i].style.display = "none";
+    //     };
+    // }
+    // function hideCategory(value){
+    //     for (let i=0; i<articles.length; i++){
+    //         if (articles[i].dataset.id == value) {
+    //             articles[i].style.display = "none";
+    //         }
+    //     };
+    // }
     function allUnchecked() {
         let state = true;
         for (let i = 0; i < checkBoxs.length; i++) {
@@ -144,7 +152,7 @@ const checkBoxs = document.querySelectorAll(".filterCheck");
         if(check.checked == true){
             show(id)
         }else{
-            hideCategory(id)
+            hide(id)
         }
     }
 
@@ -165,7 +173,7 @@ function filter(){
                     marker = true;
                 }else{
                     if(marker == true){
-                        hideAll();
+                        hide("all");
                         marker = false;
                     };
                     toogle(filter, id)
