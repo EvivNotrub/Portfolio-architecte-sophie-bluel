@@ -54,9 +54,46 @@ body {
 	font-size: 14px;
 }
 header {
+	margin: 50px 0
+}
+
+header .edit {
+	box-sizing: border-box;
+	background-color: black;
+	height: 59px;
+	color: white;
+	padding: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 21px;
+	margin-bottom: 38px;
+}
+.header__edit__indication {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 12.5px;
+	font-family: 'work sans';
+	font-weight: 400;
+}
+.material-symbols-outlined {
+	font-size: 1.25em;
+	transform: translateY(-7%);
+}
+.header__edit__button {
+	font-family: 'work sans';
+	font-size: 0.875em;
+	font-weight: 500;
+	height: 38px;
+	border-radius: 60px;
+	background-color: #FFFFFF;
+	border: none;
+	padding: 11px 23px;
+}
+.header_permanent {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
 }
 section {
 	margin: 50px 0
@@ -119,9 +156,25 @@ li:hover {
 	margin: auto;
 	width: 80%;
 }
-
 #introduction article {
 	flex: 1
+}
+.edit--intro {
+	padding-bottom: 20px;
+}
+.edit--author-img {
+	margin-left: 10%;
+	padding: 15px 0;
+
+}
+.edit--author-img, .edit--portfolio, .edit--intro {
+	font-family: 'work sans';
+	font-size: 0.875em;
+	display: flex;
+	flex-direction: row;
+	justify-content: start;
+	align-items: center;
+	gap: 10px;
 }
 #introduction h2 {
 	margin-bottom: 1em;
@@ -130,9 +183,16 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
-#portfolio h2 {
-	text-align: center;
+.portfolio-title {
 	margin-bottom: 1em;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 30px;
+}
+#portfolio h2{
+	text-align: center;
 }
 .filters {
 	display: flex;
@@ -250,4 +310,3 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
-

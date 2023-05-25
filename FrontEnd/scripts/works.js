@@ -1,4 +1,12 @@
 
+//Below we check if the user is connected or not, and if he is, we display the edit mode
+let token, valeurToken = window.localStorage.getItem('token');
+if (valeurToken === null){
+   const edits = document.querySelectorAll(".edit");
+   edits.forEach( edit => edit.style.display = "none");
+}else{
+   token = JSON.parse(valeurToken);
+};
 
 async function getWorks() {
     
@@ -64,7 +72,9 @@ async function createCategoriesFilters() {
 
 async function main(){
     await createProjectContent();
-    await createCategoriesFilters();
+    if(token == undefined){
+        await createCategoriesFilters();   
+    }
 }
 
 await main();
@@ -199,6 +209,5 @@ function filter(){
     }
 }
 
-filter();
 
- 
+filter();
