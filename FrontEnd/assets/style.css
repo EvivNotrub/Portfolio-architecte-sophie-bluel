@@ -3,7 +3,6 @@
    License: none (public domain)
 */
 
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -122,10 +121,12 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+a, button, input, nav li {
+	cursor: pointer;
+}
 a {
 	text-decoration: none;
 	color: inherit;
-	cursor: pointer;
 }
 .activ-page {
 	font-weight: 700;
@@ -139,12 +140,21 @@ nav ul {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
-	cursor: pointer;
 }
 
 li:hover {
 	color: #B1663C;
 }
+
+/*** BUTTON ***/
+.rnd-button {
+	font-family: 'Syne';
+	font-weight: 700;
+	text-align: center;
+	border-radius: 60px;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -217,14 +227,10 @@ li:hover {
 	flex: auto;
 	height: 100%;
 	z-index: -1;
-	font-family: 'Syne';
-	font-weight: 700;
 	color: #1D6154;
 	background-color: white;
 	border: 1px solid #1D6154;
 	padding: 0 12px;
-	text-align: center;
-	border-radius: 60px ;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -294,20 +300,31 @@ li:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
-	font-family: 'Syne';
-	font-weight: 700;
+input[type="submit"] {
 	color: white;
 	background-color: #1D6154;
 	margin : 2em auto ;
 	width: 180px;
-	text-align: center;
-	border-radius: 60px ;
-	cursor:pointer;
 }
 
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
+}
+/***** MODALE ******/
+
+
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: #282a2f;
+		color: #FFFFFF;
+	}
+	img[class*="logo"] {
+		filter: invert(100%) sepia(100%) saturate(47%) hue-rotate(34deg) brightness(112%) contrast(112%);
+	}
+	.filter-button {
+		border: solid 1px white;
+	}
 }
