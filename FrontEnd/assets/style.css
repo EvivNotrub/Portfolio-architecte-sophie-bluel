@@ -320,15 +320,76 @@ footer nav ul {
 }
 /***** MODALE ******/
 
-.modal__header span::before {
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 100;
+}
+.modal-wrapper {
+	width: 70%;
+	height: 70%;
+	padding: 32px;
+	border-radius: 10px;
+	color: black;
+	background-color: white;
+	box-sizing: border-box;
+}
+.modal__header {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	font-size: 16px;
+	/* margin-bottom: 16px; */
+}
+.modal__body {
+	box-sizing: border-box;
+	width: 66.67%;
+	padding: 30px 0;
+	height: calc(100% - 20px);
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	gap: 46px;
+}
+.modal__title {
+	font-family: 'work sans';
+	font-weight: 400;
+	font-size: 26px;
+}
+.modal__content {
+	padding: 46px 0;
+}
+.modal__footer {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+}
+.modal__line {
+	width: 100%;
+	border: 1px solid #B3B3B3;
+	margin-bottom: 16px ;
+}
+/* .modal__header span::before {
 		content: "\e5c4";
 		display: inline-block;
 		font-family: 'Material Symbols Outlined';
 		-moz-font-feature-settings: 'liga';
-		color: #FFFFFF;
-}
+		color: inherit;
+} */
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
 	body {
 		background-color: #282a2f;
 		color: #FFFFFF;
@@ -339,4 +400,4 @@ footer nav ul {
 	.filter-button {
 		border: none;
 	}
-} */
+}
