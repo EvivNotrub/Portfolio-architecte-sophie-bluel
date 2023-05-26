@@ -99,7 +99,7 @@ async function createCategoriesFilters() {
         checkBox.dataset.id = categories[i].id;
         const button = document.createElement("button");
         button.innerText = categories[i].name;
-        button.classList.add("filter-button", "rnd-button");
+        button.classList.add("filter-button", "rnd-button", "rnd-button--white");
         filters.appendChild(filter);
         filter.appendChild(checkBox);
         filter.appendChild(button);
