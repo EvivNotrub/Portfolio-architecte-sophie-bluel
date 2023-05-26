@@ -16,7 +16,7 @@ function toggleEditMode(action = "hide"){
 }
 
 
-function logedInAction() {
+function loginButtonAction() {
     const valeurToken = window.localStorage.getItem('token');
     if (valeurToken === null){
     toggleEditMode();
@@ -28,13 +28,13 @@ function logedInAction() {
     };
 }
 
-logedInAction();
+loginButtonAction();
 
 loginButton.addEventListener("click", async function(event){
     event.preventDefault();
     if (loginButton.innerText === "logout"){
         window.localStorage.removeItem("token");
-        logedInAction();
+        loginButtonAction();
         await createCategoriesFilters();
         filters();
     }else{
