@@ -16,28 +16,46 @@ export function modalGallerySpecifics(article, articleTitle) {
 }
 
 let modal = null;
-const focusableSelector = "figure, button, a, input, textarea";
+const focusableSelector = "button, a, input, textarea";
 console.log(focusableSelector);
 let focusables = [];
 let previouslyFocusedElement = null;
 
-async function createModalGallery(containerId) {
+async function createModalGallery(containerClass) {
     const gallery2 = document.createElement("div");
     gallery2.id = "galleryModal";
     gallery2.classList.add("galleryModal");
-    document.querySelector(containerId).appendChild(gallery2);
+    document.querySelector(containerClass).appendChild(gallery2);
     await createProjectContent("#galleryModal", true);
 }
 
+function setModalTexts(modal, modalVersion){
+    const modalTitle = modal.querySelector(".modal__title");
+    const modalButton = modal.querySelector(".modal__action");
+    if (modalVersion === "gallery") {
+        modalTitle.innerText = "Galerie Photos";
+        modalButton.innerText = "Ajouter une photo";
+    }else if (modalVersion === "addPhoto"){
+        modalTitle.innerText = "Ajout photo";
+        modalButton.innerText = "Valider";
+    }else if (modalVersion === "editPhoto"){
+        modalTitle.innerText = "Changer la photo";
+        modalButton.innerText = "Valider";
+    }else if (modalVersion === "editText"){
+        modalTitle.innerText = "Changer le texte";
+        modalButton.innerText = "Valider";
+    }
+}
 
+async function createModalBody(modalVersion){
+    if (modalVersion === "gallery") {
+        await createModalGallery(".modal__content");
+    };
+}
 const closeModal = function (event) {
     if (modal === null) return;
     if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
     event.preventDefault();
-    // window.setTimeout(function () {
-    //     modal.style.display = "none";
-    //     modal = null;
-    // }, 500)
     modal.setAttribute("aria-hidden", "true");
     modal.removeAttribute("aria-modal");
     modal.removeEventListener("click", closeModal);
@@ -49,7 +67,10 @@ const closeModal = function (event) {
         modal = null;    
 
     }
-    modal.querySelector("#galleryModal").remove();
+    const gallery = modal.querySelector("#galleryModal");
+    if (gallery) {
+        gallery.remove();
+    }
     modal.addEventListener('animationend', hideModal)
 }
 
@@ -59,8 +80,10 @@ async function openModal (event) {
     // const href = event.target.getAttribute("href");
     // console.log(href);
     modal = document.querySelector(this.getAttribute('href'));
-    // console.log(modal);
-    await createModalGallery(".modal__content");
+    console.log(modal);
+    const modalVersion = this.getAttribute("data-id");
+    setModalTexts(modal, modalVersion);
+    await createModalBody(modalVersion);
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
     console.log(focusables);
     previouslyFocusedElement = document.querySelector(':focus');

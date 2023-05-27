@@ -424,8 +424,9 @@ footer nav ul {
 	text-align: center;
 	color: var(--dark-mode-color);
 	background-color: var(--dark-mode-bg-color);
+	transform: scale(1);
 }
-.icon-drag {
+.modal__icons .icon-drag {
 	transform: scale(0);
 }
 .galleryModal button:hover .icon-drag, .galleryModal button:focus .icon-drag{

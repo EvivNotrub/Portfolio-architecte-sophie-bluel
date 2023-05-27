@@ -12,20 +12,20 @@
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
-	<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="modal__title" style="display: none;">
+	<aside id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="modal__title" style="display: none;">
 		<div class="modal-wrapper js-modal-stop">
 			<div class="modal__header">
 				<button class="material-symbols-outlined">arrow_back</button>
 				<button class="js-modal-close material-symbols-outlined">close</button>
 			</div>
 			<div class="modal__body">
-				<h3 id="modal__title" class="modal__title">Galerie Photo</h3>
+				<h3 id="modal__title" class="modal__title"></h3>
 				<div class="modal__content">
 					<!-- here we add the gallery using the API data -->
 				</div>
 				<div class="modal__footer">
 					<div class="modal__line"></div>
-					<button class="rnd-button rnd-button--green modal__action">Ajouter une photo</button>
+					<button class="rnd-button rnd-button--green modal__action"></button>
 				</div>
 			</div>
 		</div>
@@ -55,13 +55,13 @@
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
-				<a href="#modal1" class="js-modal edit edit--author-img">
+				<a href="#modal" data-id="editPhoto" class="js-modal edit edit--author-img">
 					<span class="material-symbols-outlined">edit_square</span>
 					<span>modifier</span>
 				</a>
 			</figure>
 			<article>
-				<a href="#modal1" class="js-modal edit edit--intro">
+				<a href="#modal" data-id="editText" class="js-modal edit edit--intro">
 					<span class="material-symbols-outlined">edit_square</span>
 					<span>modifier</span>
 				</a>
@@ -74,7 +74,7 @@
 		<section id="portfolio">
 				<div class="portfolio-title">
 					<h2>Mes Projets</h2>
-					<a href="#modal1" class="js-modal edit edit--portfolio">
+					<a href="#modal" data-id="gallery" class="js-modal edit edit--portfolio">
 						<span class="material-symbols-outlined">edit_square</span>
 						<span>modifier</span>
 					</a>
