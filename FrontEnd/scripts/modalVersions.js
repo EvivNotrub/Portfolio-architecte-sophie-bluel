@@ -1,5 +1,5 @@
 import { openModal } from './modale.js';
-import  { createProjectContent, deletePicture } from './works.js';
+import  { createProjectContent, deletePicture, getCategories } from './works.js';
 
 
 
@@ -13,7 +13,7 @@ export function setModalTexts(modal, modalVersion){
         modalTitle.innerText = "Ajout photo";
         modalButton.innerText = "Valider";
     }else if (modalVersion === "editPhoto"){
-        modalTitle.innerText = "Changer la photo";
+        modalTitle.innerText = "Éditer la photo";
         modalButton.innerText = "Valider";
     }else if (modalVersion === "editText"){
         modalTitle.innerText = "Changer le texte";
@@ -30,7 +30,7 @@ export function removeGallery() {
 
 export function modalGallerySpecifics(article, articleTitle) {
     console.log(article);
-    article.setAttribute("href", "#modal")
+    article.setAttribute("href", "./pages/modalImageForm.html#modal__form")
     article.dataset.version = "editPhoto";
     articleTitle.textContent = "éditer";
     const icons = document.createElement("div");
@@ -46,7 +46,7 @@ export function modalGallerySpecifics(article, articleTitle) {
     icons.appendChild(iconDrag);
 }
 
-export async function createModalGallery(containerClass) {
+async function createModalGallery(containerClass) {
     const gallery2 = document.createElement("div");
     gallery2.id = "galleryModal";
     gallery2.classList.add("galleryModal");
@@ -62,7 +62,24 @@ export async function createModalGallery(containerClass) {
     });
 }
 
-export async function createModalBody(modalVersion, id){
+async function createModalEditPhoto(containerClass, element) {
+
+    const modalForm = element;
+    document.querySelector(containerClass).appendChild(modalForm);
+
+    const categories = await getCategories();
+    console.log(categories);
+    const imgCategory = document.querySelector("#img-category"); 
+    categories.forEach( category => {
+        const imgCategoryOption = document.createElement("option");
+        imgCategoryOption.setAttribute("value", category.id);
+        imgCategoryOption.textContent = category.name;
+        console.log(imgCategoryOption);
+        imgCategory.appendChild(imgCategoryOption);
+    });
+}
+
+export async function createModalBody(modalVersion, id, element){
 
         const arrow = document.querySelector(".modal__arrow");
         arrow.style.transform = "scale(0)";
@@ -73,5 +90,6 @@ export async function createModalBody(modalVersion, id){
         await createModalGallery(".modal__content");
     };
     if (modalVersion === "editPhoto") {
+        /* await*/  createModalEditPhoto(".modal__content", element);
     }
 }

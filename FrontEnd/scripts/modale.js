@@ -27,19 +27,27 @@ const closeModal = function (event) {
 
 export async function openModal (e) {
     e.preventDefault();
+    let element;
     console.log(this);
     const id = this.getAttribute("data-id");
     console.log(id);
     removeGallery();
     // const href = e.getAttribute("href");
     // console.log(href);
-
-    modal = document.querySelector(this.getAttribute("href"));
+    const target = this.getAttribute("href");
+    console.log(target);
+    if (target.startsWith('#')){
+        modal = document.querySelector(target);
+    } else {
+        modal = document.querySelector("#modal");
+        element = await loadModal(target);
+    }
+    // modal = document.querySelector(this.getAttribute("href"));
     console.log(modal);
     const modalVersion = this.getAttribute("data-version");
     console.log(modalVersion);
     setModalTexts(modal, modalVersion);
-    await createModalBody(modalVersion, id);
+    await createModalBody(modalVersion, id, element);
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
     console.log(focusables);
     previouslyFocusedElement = document.querySelector(':focus');
@@ -73,6 +81,24 @@ const focusInModal = function (event) {
         index = focusables.length - 1;
     }
     focusables[index].focus();
+}
+
+const loadModal = async function (url) {
+    // TODO ajouter un loader pendant le chargement
+    const target = '#' + url.split('#')[1];
+    console.log(target);
+    const existingModal = document.querySelector(target);
+    if (existingModal !== null) return existingModal;
+    const html = await fetch(url).then(response => response.text());
+    console.log(html);
+    const fragment = document.createRange().createContextualFragment(html);
+    console.log(fragment);
+    const element = fragment.querySelector(target)
+    console.log(element);
+    if (element === null) throw `L'élément ${target} n'existe pas dans la page ${url}`;
+    // ici devrait mettre des try and catch ... plus tard
+    document.body.appendChild(element);
+    return element;
 }
 
 const modalLinks = Array.from(document.querySelectorAll('.js-modal'));
