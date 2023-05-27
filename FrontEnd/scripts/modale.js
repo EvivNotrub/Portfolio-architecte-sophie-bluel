@@ -38,6 +38,8 @@ export async function openModal (e) {
     console.log(target);
     if (target.startsWith('#')){
         modal = document.querySelector(target);
+        element = modal.querySelector("#modal__form");
+        if (element !== null) element.remove();
     } else {
         modal = document.querySelector("#modal");
         element = await loadModal(target);

@@ -90,6 +90,6 @@ export async function createModalBody(modalVersion, id, element){
         await createModalGallery(".modal__content");
     };
     if (modalVersion === "editPhoto") {
-        /* await*/  createModalEditPhoto(".modal__content", element);
+        await createModalEditPhoto(".modal__content", element);
     }
 }
