@@ -1,4 +1,5 @@
 import { filters } from "./filters.js";
+import { modalGallerySpecifics } from "./modale.js";
 
 let token;
 //Below we check if the user is connected or not.
@@ -44,7 +45,7 @@ loginButton.addEventListener("click", async function(event){
 
 
 
-async function getWorks() {
+export async function getWorks() {
     
     const worksResponse = await fetch('http://localhost:5678/api/works');
     const works = await worksResponse.json();
@@ -60,20 +61,24 @@ async function getCategories() {
 
 // let categories;
 
-async function createProjectContent() {
+export async function createProjectContent(containerId, modal = false) {
     const works = await getWorks();
     console.log(works);
 
     for (let i in works) {
 
-        const gallery = document.querySelector(".gallery");
+        const gallery = document.querySelector(containerId);
 
-        const work = document.createElement("figure");
+        const work = modal === false ? document.createElement("figure"): document.createElement("button");
         const workImage = document.createElement("img")
         const workTitle = document.createElement("figcaption");
         work.dataset.id = works[i].category.id;
         workImage.src = works[i].imageUrl;
-        workTitle.textContent = works[i].title;
+        if (modal === false){
+            workTitle.textContent = works[i].title;
+        }else{
+            modalGallerySpecifics(work, workTitle);
+        }
 
         gallery.appendChild(work);
         work.appendChild(workImage);
@@ -107,7 +112,7 @@ async function createCategoriesFilters() {
 }
 
 async function main(){
-    await createProjectContent();
+    await createProjectContent("#gallery");
     if(token == undefined){
         await createCategoriesFilters();
         filters();  
@@ -115,5 +120,4 @@ async function main(){
 }
 
 await main();
-
 

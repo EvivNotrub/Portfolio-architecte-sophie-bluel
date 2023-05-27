@@ -1,7 +1,34 @@
+import  {createProjectContent} from './works.js';
+
+export function modalGallerySpecifics(article, articleTitle) {
+    articleTitle.textContent = "éditer";
+    const icons = document.createElement("div");
+    icons.classList.add("modal__icons");
+    const iconBin = document.createElement("span");
+    iconBin.classList.add("icon-bin", "material-symbols-outlined");
+    iconBin.innerText = "delete";
+    const iconDrag = document.createElement("span");
+    iconDrag.classList.add("icon-drag", "material-symbols-outlined");
+    iconDrag.innerText = "drag_pan";
+    article.appendChild(icons);
+    icons.appendChild(iconBin);
+    icons.appendChild(iconDrag);
+}
+
 let modal = null;
-const focusableSelector = "button, a, input, textarea";
+const focusableSelector = "figure, button, a, input, textarea";
+console.log(focusableSelector);
 let focusables = [];
 let previouslyFocusedElement = null;
+
+async function createModalGallery(containerId) {
+    const gallery2 = document.createElement("div");
+    gallery2.id = "galleryModal";
+    gallery2.classList.add("galleryModal");
+    document.querySelector(containerId).appendChild(gallery2);
+    await createProjectContent("#galleryModal", true);
+}
+
 
 const closeModal = function (event) {
     if (modal === null) return;
@@ -22,17 +49,20 @@ const closeModal = function (event) {
         modal = null;    
 
     }
+    modal.querySelector("#galleryModal").remove();
     modal.addEventListener('animationend', hideModal)
 }
 
 
-const openModal = function (event) {
+async function openModal (event) {
     event.preventDefault();
     // const href = event.target.getAttribute("href");
     // console.log(href);
     modal = document.querySelector(this.getAttribute('href'));
     // console.log(modal);
+    await createModalGallery(".modal__content");
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
+    console.log(focusables);
     previouslyFocusedElement = document.querySelector(':focus');
     focusables[0].focus();
     modal.style.display = "";
@@ -79,5 +109,7 @@ window.addEventListener("keydown", function (event) {
         focusInModal(event);
     }
 });
+
+
 
 
