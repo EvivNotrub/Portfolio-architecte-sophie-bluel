@@ -7,6 +7,19 @@ let token;
 // If not, we hide the edit mode, get filters and change the login button to login.
 const loginButton = document.querySelector("#login-link");
 
+export async function deletePicture(event, id) {
+    event.stopPropagation();
+    console.log(id);
+
+    alert("delete?");
+    // const pictureDelete = await fetch(`http://localhost:5678/api/works/${id}`, {
+    //     method: 'DELETE',
+    //     Authorization: Bearer + token
+    // })
+    // console.log(pictureDelete);
+}
+
+
 function toggleEditMode(action = "hide"){
     const edits = document.querySelectorAll(".edit");
     if (action === "hide"){
@@ -69,7 +82,7 @@ export async function createProjectContent(containerId, modal = false) {
 
         const gallery = document.querySelector(containerId);
 
-        const work = modal === false ? document.createElement("figure"): document.createElement("button");
+        const work = modal === false ? document.createElement("figure"): document.createElement("a");
         const workImage = document.createElement("img")
         const workTitle = document.createElement("figcaption");
         work.dataset.id = works[i].category.id;
@@ -77,6 +90,7 @@ export async function createProjectContent(containerId, modal = false) {
         if (modal === false){
             workTitle.textContent = works[i].title;
         }else{
+            work.dataset.id = works[i].id;
             modalGallerySpecifics(work, workTitle);
         }
 

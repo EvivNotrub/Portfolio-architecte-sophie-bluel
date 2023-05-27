@@ -1,8 +1,9 @@
-import  {createProjectContent} from './works.js';
+import  {createProjectContent, deletePicture } from './works.js';
 
 export function modalGallerySpecifics(article, articleTitle) {
+    console.log(article);
     article.setAttribute("href", "#modal")
-    article.dataset.id = "addPhoto";
+    article.dataset.version = "editPhoto";
     articleTitle.textContent = "éditer";
     const icons = document.createElement("div");
     icons.classList.add("modal__icons");
@@ -17,12 +18,7 @@ export function modalGallerySpecifics(article, articleTitle) {
     icons.appendChild(iconDrag);
 }
 
-function changeGalleryPictures() {
-    console.log(this);
-    removeGallery();
 
-    openModal(this);
-}
 
 let modal = null;
 const focusableSelector = "button, a, input, textarea";
@@ -37,11 +33,17 @@ async function createModalGallery(containerClass) {
     document.querySelector(containerClass).appendChild(gallery2);
     await createProjectContent("#galleryModal", true);
     console.log(gallery2);
-    gallery2.querySelectorAll("button").forEach( picture => {
-        console.log(picture);
+    gallery2.querySelectorAll("a").forEach( picture => {
+        // console.log(picture);
+        const id = picture.dataset.id;
+        // console.log(id);
+        picture.querySelector(".icon-bin").addEventListener("click", function (event) {deletePicture(event, id)} );
         picture.addEventListener("click", openModal );
     });
-
+    // gallery2.querySelectorAll(".icon-bin").forEach( icon => {
+    //     console.log(icon);
+    //     icon.addEventListener("click", function (event) {deletePicture(event, id)} );
+    // });
 }
 
 function setModalTexts(modal, modalVersion){
@@ -73,6 +75,7 @@ function removeGallery() {
         gallery.remove();
     }
 }
+
 const closeModal = function (event) {
     if (modal === null) return;
     if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
@@ -91,7 +94,6 @@ const closeModal = function (event) {
     modal.addEventListener('animationend', hideModal)
 }
 
-
 async function openModal (event) {
     event.preventDefault();
     console.log(this);
@@ -101,7 +103,7 @@ async function openModal (event) {
 
     modal = document.querySelector(this.getAttribute("href"));
     console.log(modal);
-    const modalVersion = this.getAttribute("data-id");
+    const modalVersion = this.getAttribute("data-version");
     console.log(modalVersion);
     setModalTexts(modal, modalVersion);
     await createModalBody(modalVersion);

@@ -400,7 +400,7 @@ footer nav ul {
 	grid-column-gap: 7px;
 	grid-row-gap: 10px;
 }
-.galleryModal button {
+.galleryModal a {
 	position: relative;
 }
 .modal img {
@@ -429,7 +429,7 @@ footer nav ul {
 .modal__icons .icon-drag {
 	transform: scale(0);
 }
-.galleryModal button:hover .icon-drag, .galleryModal button:focus .icon-drag{
+.galleryModal a:hover .icon-drag, .galleryModal a:focus .icon-drag{
 	transform: scale(1);
 }
 	
