@@ -1,5 +1,5 @@
 import { filters } from "./filters.js";
-import { modalGallerySpecifics } from "./modale.js";
+import { modalGallerySpecifics } from "./modalVersions.js";
 
 let token;
 //Below we check if the user is connected or not.
@@ -19,7 +19,6 @@ export async function deletePicture(event, id) {
     // console.log(pictureDelete);
 }
 
-
 function toggleEditMode(action = "hide"){
     const edits = document.querySelectorAll(".edit");
     if (action === "hide"){
@@ -28,7 +27,6 @@ function toggleEditMode(action = "hide"){
         edits.forEach( edit => edit.style.display = "");
     }
 }
-
 
 function loginButtonAction() {
     const valeurToken = window.localStorage.getItem('token');
@@ -55,8 +53,6 @@ loginButton.addEventListener("click", async function(event){
         window.location = "./pages/login.html";
     };
 });
-
-
 
 export async function getWorks() {
     

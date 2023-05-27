@@ -1,24 +1,4 @@
-import  {createProjectContent, deletePicture } from './works.js';
-
-export function modalGallerySpecifics(article, articleTitle) {
-    console.log(article);
-    article.setAttribute("href", "#modal")
-    article.dataset.version = "editPhoto";
-    articleTitle.textContent = "éditer";
-    const icons = document.createElement("div");
-    icons.classList.add("modal__icons");
-    const iconBin = document.createElement("span");
-    iconBin.classList.add("icon-bin", "material-symbols-outlined");
-    iconBin.innerText = "delete";
-    const iconDrag = document.createElement("span");
-    iconDrag.classList.add("icon-drag", "material-symbols-outlined");
-    iconDrag.innerText = "drag_pan";
-    article.appendChild(icons);
-    icons.appendChild(iconBin);
-    icons.appendChild(iconDrag);
-}
-
-
+import { removeGallery, createModalBody, setModalTexts } from './modalVersions.js';
 
 let modal = null;
 const focusableSelector = "button, a, input, textarea";
@@ -26,55 +6,6 @@ console.log(focusableSelector);
 let focusables = [];
 let previouslyFocusedElement = null;
 
-async function createModalGallery(containerClass) {
-    const gallery2 = document.createElement("div");
-    gallery2.id = "galleryModal";
-    gallery2.classList.add("galleryModal");
-    document.querySelector(containerClass).appendChild(gallery2);
-    await createProjectContent("#galleryModal", true);
-    console.log(gallery2);
-    gallery2.querySelectorAll("a").forEach( picture => {
-        // console.log(picture);
-        const id = picture.dataset.id;
-        // console.log(id);
-        picture.querySelector(".icon-bin").addEventListener("click", function (event) {deletePicture(event, id)} );
-        picture.addEventListener("click", openModal );
-    });
-    // gallery2.querySelectorAll(".icon-bin").forEach( icon => {
-    //     console.log(icon);
-    //     icon.addEventListener("click", function (event) {deletePicture(event, id)} );
-    // });
-}
-
-function setModalTexts(modal, modalVersion){
-    const modalTitle = modal.querySelector(".modal__title");
-    const modalButton = modal.querySelector(".modal__action");
-    if (modalVersion === "gallery") {
-        modalTitle.innerText = "Galerie Photos";
-        modalButton.innerText = "Ajouter une photo";
-    }else if (modalVersion === "addPhoto"){
-        modalTitle.innerText = "Ajout photo";
-        modalButton.innerText = "Valider";
-    }else if (modalVersion === "editPhoto"){
-        modalTitle.innerText = "Changer la photo";
-        modalButton.innerText = "Valider";
-    }else if (modalVersion === "editText"){
-        modalTitle.innerText = "Changer le texte";
-        modalButton.innerText = "Valider";
-    }
-}
-
-async function createModalBody(modalVersion){
-    if (modalVersion === "gallery") {
-        await createModalGallery(".modal__content");
-    };
-}
-function removeGallery() {
-    const gallery = document.querySelector("#galleryModal");
-    if (gallery) {
-        gallery.remove();
-    }
-}
 
 const closeModal = function (event) {
     if (modal === null) return;
@@ -94,11 +25,13 @@ const closeModal = function (event) {
     modal.addEventListener('animationend', hideModal)
 }
 
-async function openModal (event) {
-    event.preventDefault();
+export async function openModal (e) {
+    e.preventDefault();
     console.log(this);
+    const id = this.getAttribute("data-id");
+    console.log(id);
     removeGallery();
-    // const href = event.target.getAttribute("href");
+    // const href = e.getAttribute("href");
     // console.log(href);
 
     modal = document.querySelector(this.getAttribute("href"));
@@ -106,7 +39,7 @@ async function openModal (event) {
     const modalVersion = this.getAttribute("data-version");
     console.log(modalVersion);
     setModalTexts(modal, modalVersion);
-    await createModalBody(modalVersion);
+    await createModalBody(modalVersion, id);
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
     console.log(focusables);
     previouslyFocusedElement = document.querySelector(':focus');
