@@ -63,7 +63,7 @@ async function createModalGallery(containerClass) {
 }
 
 async function createModalEditPhoto(containerClass, element) {
-
+    
     const modalForm = element;
     document.querySelector(containerClass).appendChild(modalForm);
 

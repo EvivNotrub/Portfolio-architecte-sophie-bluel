@@ -27,3 +27,9 @@
 // gallery2.id = "gallery2";
 // document.querySelector("modal__content").appendChild(gallery2);
 // await createModalGallery ("#gallery2")
+
+document.querySelector("#add-photo-input").addEventListener('change', function() {
+    console.log(this.files[0]);
+    filename = this.files[0].name;
+    console.log(filename);
+  });

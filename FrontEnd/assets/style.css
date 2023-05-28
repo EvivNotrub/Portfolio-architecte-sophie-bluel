@@ -38,6 +38,10 @@ body {
 	--secondary-color: #1D6154 ;
 	--soft-secd-color: #143e3624;
 	--third-color: #B1663C;
+	--fourth-color: #B9C5CC;
+	--fourth-bg-color: #E8F1F7;
+	--fifth-color: #306685;
+	--fifth-bg-color: #CBD6DC;
 
 }
 ol, ul {
@@ -386,14 +390,15 @@ footer nav ul {
 	font-weight: 400;
 	font-size: 26px;
 }
-/* i want to create a grid display that adapts automaically to content */
-/* there should be 5 columns but the grid can reduce to less columns when space is smaller */
 
 .modal__content {
 	padding: 16px 0;
 	width: 78%;
 	overflow: auto;
+	height: 100%;
 }
+
+/*** specifications for gallery mode ***/
 .galleryModal {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -433,8 +438,81 @@ footer nav ul {
 .galleryModal a:hover .icon-drag, .galleryModal a:focus .icon-drag{
 	transform: scale(1);
 }
-	
-
+/*** specifications for form mode ***/
+.modal__form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	gap: 20px;
+	height: 90%;
+	padding: 7px;
+	margin-top: 10px;
+}
+.modal__form__imgDiv {
+	position: relative;
+	width: 100%;
+	flex: 1;
+	background-color: var(--fourth-bg-color);
+}
+.add-photo-label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	color: var(--fourth-color);
+	font-size: 100px;
+	font-weight: thin;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 14px ;
+}
+.add-photo-button {
+	font-family: 'work sans';
+	font-weight: 600;
+	font-size: 14px;
+	background-color: var(--fifth-bg-color);
+	color: var(--fifth-color);
+	height: 36px;
+	width: fit-content;
+	padding: 10px 33px;
+	border-radius: 50px;
+}
+.add-photo-specs {
+	font-family: 'work sans';
+	font-weight: 400;
+	font-size: 10px;
+	color: #444444;
+}
+.add-photo-input {
+	position: absolute;
+	top: 0;
+	right: 0;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+}
+.file-input-info {
+	width: 100%;
+	height: fit-content;
+	overflow: visible;
+}
+.file-input-info input, .file-input-info select {
+	width: 100%;
+	margin-top: 10px;
+	width: 100%;
+	height: 51px;
+	border: none;
+	background-color: white;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
 .modal__footer {
 	width: 100%;
 	display: flex;
