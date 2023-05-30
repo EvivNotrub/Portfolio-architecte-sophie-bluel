@@ -1,4 +1,3 @@
-
 import { closeModal } from "./modale.js";
 // document.querySelector("#add-photo-input").addEventListener('change', function() {
 //   console.log("bob");
@@ -7,45 +6,46 @@ import { closeModal } from "./modale.js";
 //     console.log(filename);
 //   });
 
+/********* Intro Edit mode *********/
 
 
-export function getIntroTexts(){
-  const currentIntroTitle = document.querySelector(".intro__title").innerText;
-  console.log(currentIntroTitle);
-  const currentIntroDescriptionArray = Array.from(document.querySelectorAll(".intro__description p"));
-  console.log(currentIntroDescriptionArray);
-  const currentIntroDescription = currentIntroDescriptionArray.map(p => p.innerText).join("\n\n");
-  console.log(currentIntroDescription);
-  return {
-      title: currentIntroTitle,
-      description: currentIntroDescription
-  }
-}
-export function showIntroTexts(currentIntro){
-  console.log(currentIntro);
-  const titleDescriptionInput = document.querySelector("input[name='about-title']");
-  console.log(titleDescriptionInput);
-  const descriptionInput = document.querySelector("#about-txt");
-  console.log(descriptionInput);
-  titleDescriptionInput.value = currentIntro.title;
-  descriptionInput.value = currentIntro.description;
-  console.log(titleDescriptionInput, descriptionInput);
-}
-
-export function setIntroTexts(modalButton){
-  modalButton.addEventListener("click", function(event){
-    // event.preventDefault();
-    const titleDescriptionInput = document.querySelector("input[name='about-title']");
-    // console.log(titleDescriptionInput);
-    const descriptionInput = document.querySelector("#about-txt");
-    // console.log(descriptionInput);
-    const descriptionArray = descriptionInput.value.split("\n");
-    // console.log(descriptionArray);
-    const description = descriptionArray.map(p => `<p>${p}</p>`).join("").replace(/<p><\/p>/g, "");
-    document.querySelector(".intro__title").innerText = titleDescriptionInput.value;
+  export function getIntroTexts(){
+    const currentIntroTitle = document.querySelector(".intro__title").innerText;
+    console.log(currentIntroTitle);
     const currentIntroDescriptionArray = Array.from(document.querySelectorAll(".intro__description p"));
-    currentIntroDescriptionArray.forEach( p => p.remove());
-    document.querySelector(".intro__description").innerHTML += description;
-    closeModal(event);
-  }, {once: true});
-}
+    console.log(currentIntroDescriptionArray);
+    const currentIntroDescription = currentIntroDescriptionArray.map(p => p.innerText).join("\n\n");
+    console.log(currentIntroDescription);
+    return {
+        title: currentIntroTitle,
+        description: currentIntroDescription
+    }
+  }
+  export function showIntroTexts(currentIntro){
+    console.log(currentIntro);
+    const titleDescriptionInput = document.querySelector("input[name='about-title']");
+    console.log(titleDescriptionInput);
+    const descriptionInput = document.querySelector("#about-txt");
+    console.log(descriptionInput);
+    titleDescriptionInput.value = currentIntro.title;
+    descriptionInput.value = currentIntro.description;
+    console.log(titleDescriptionInput, descriptionInput);
+  }
+
+  export function setIntroTexts(modalButton){
+    modalButton.addEventListener("click", function(event){
+      // event.preventDefault();
+      const titleDescriptionInput = document.querySelector("input[name='about-title']");
+      // console.log(titleDescriptionInput);
+      const descriptionInput = document.querySelector("#about-txt");
+      // console.log(descriptionInput);
+      const descriptionArray = descriptionInput.value.split("\n");
+      // console.log(descriptionArray);
+      const description = descriptionArray.map(p => `<p>${p}</p>`).join("").replace(/<p><\/p>/g, "");
+      document.querySelector(".intro__title").innerText = titleDescriptionInput.value;
+      const currentIntroDescriptionArray = Array.from(document.querySelectorAll(".intro__description p"));
+      currentIntroDescriptionArray.forEach( p => p.remove());
+      document.querySelector(".intro__description").innerHTML += description;
+      closeModal(event);
+    }, {once: true});
+  }
