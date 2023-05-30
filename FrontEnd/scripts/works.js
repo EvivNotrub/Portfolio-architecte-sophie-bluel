@@ -9,6 +9,7 @@ const loginButton = document.querySelector("#login-link");
 
 export async function deletePicture(event, id) {
     event.stopPropagation();
+    event.preventDefault();
     console.log(id);
 
     alert("delete?");

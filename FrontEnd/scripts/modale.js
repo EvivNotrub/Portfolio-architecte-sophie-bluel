@@ -1,13 +1,13 @@
 import { removeGallery, createModalBody, setModalTexts } from './modalVersions.js';
 
 let modal = null;
-const focusableSelector = "button, a, input, textarea";
+const focusableSelector = "button, a, input, textarea, select";
 console.log(focusableSelector);
 let focusables = [];
 let previouslyFocusedElement = null;
+let modalLinks;
 
-
-const closeModal = function (event) {
+export const closeModal = function (event) {
     if (modal === null) return;
     if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
     event.preventDefault();
@@ -16,6 +16,9 @@ const closeModal = function (event) {
     modal.removeEventListener("click", closeModal);
     document.querySelector(".js-modal-close").removeEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
+    const element = modal.querySelector(".modal__form");
+    console.log(element);
+    if (element !== null) element.remove();
     const hideModal = function () {
         modal.style.display = "none";
         modal.removeEventListener('animationend', hideModal)
@@ -23,6 +26,7 @@ const closeModal = function (event) {
     }
     removeGallery();
     modal.addEventListener('animationend', hideModal)
+    modalLinkSetup();
 }
 
 export async function openModal (e) {
@@ -38,20 +42,22 @@ export async function openModal (e) {
     console.log(target);
     if (target.startsWith('#')){
         modal = document.querySelector(target);
-        element = modal.querySelector("#modal__form");
+        element = modal.querySelector(".modal__form");
         if (element !== null) element.remove();
     } else {
         modal = document.querySelector("#modal");
         element = await loadModal(target);
+        console.log(element);
     }
     // modal = document.querySelector(this.getAttribute("href"));
     console.log(modal);
     const modalVersion = this.getAttribute("data-version");
     console.log(modalVersion);
-    setModalTexts(modal, modalVersion);
-    await createModalBody(modalVersion, id, element);
+    const modalBUtton = setModalTexts(modal, modalVersion);
+    await createModalBody(modalVersion, id, element, modalBUtton);
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
     console.log(focusables);
+    // console.log(focusables);
     previouslyFocusedElement = document.querySelector(':focus');
     focusables[0].focus();
     modal.style.display = "";
@@ -82,6 +88,7 @@ const focusInModal = function (event) {
     if (index < 0 ) {
         index = focusables.length - 1;
     }
+    console.log(index);
     focusables[index].focus();
 }
 
@@ -89,10 +96,11 @@ const loadModal = async function (url) {
     // TODO ajouter un loader pendant le chargement
     const target = '#' + url.split('#')[1];
     console.log(target);
-    const existingModal = document.querySelector(target);
-    if (existingModal !== null) return existingModal;
+    // const existingModal = document.querySelector(target);
+    // console.log(existingModal);
+    // if (existingModal !== null) return existingModal;
     const html = await fetch(url).then(response => response.text());
-    console.log(html);
+    // console.log(html);
     const fragment = document.createRange().createContextualFragment(html);
     console.log(fragment);
     const element = fragment.querySelector(target)
@@ -103,10 +111,15 @@ const loadModal = async function (url) {
     return element;
 }
 
-const modalLinks = Array.from(document.querySelectorAll('.js-modal'));
+// const modalLinks = Array.from(document.querySelectorAll('.js-modal'));
 // console.log(modalLinks);
-modalLinks.forEach( link => {link.addEventListener("click", openModal)});
-
+// modalLinks.forEach( link => {link.addEventListener("click", openModal)});
+function modalLinkSetup () {
+    modalLinks = Array.from(document.querySelectorAll('.js-modal'));
+    console.log(modalLinks);
+    modalLinks.forEach( link => {link.addEventListener("click", openModal, {once: true})});
+}
+modalLinkSetup();
 
 window.addEventListener("keydown", function (event) {
     if (event.key === "Escape" || event.key === "Esc") {

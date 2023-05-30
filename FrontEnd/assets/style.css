@@ -467,7 +467,7 @@ footer nav ul {
 	cursor: pointer;
 	color: var(--fourth-color);
 	font-size: 100px;
-	font-weight: thin;
+	font-weight: 100;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -499,19 +499,23 @@ footer nav ul {
 	width: 100%;
 	height: 100%;
 }
-.file-input-info {
+.file-input-info, .about-input {
 	width: 100%;
 	height: fit-content;
-	overflow: visible;
+	/* overflow: visible; */
 }
-.file-input-info input, .file-input-info select {
+.file-input-info input, .file-input-info select, .about-input input, .about-input textarea {
 	width: 100%;
 	margin-top: 10px;
-	width: 100%;
 	height: 51px;
 	border: none;
 	background-color: white;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	padding: 10px;
+
+}
+#about-txt {
+	height: 200px;
 }
 .file-input-info label {
 	font-family: 'work sans';
