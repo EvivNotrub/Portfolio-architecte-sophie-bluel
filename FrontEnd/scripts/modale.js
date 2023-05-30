@@ -107,7 +107,7 @@ const loadModal = async function (url) {
     console.log(element);
     if (element === null) throw `L'élément ${target} n'existe pas dans la page ${url}`;
     // ici devrait mettre des try and catch ... plus tard
-    document.body.appendChild(element);
+    // document.body.appendChild(element);
     return element;
 }
 

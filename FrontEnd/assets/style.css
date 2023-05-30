@@ -95,7 +95,7 @@ header .edit {
 	font-family: 'work sans';
 	font-weight: 400;
 }
-.material-symbols-outlined {
+.edit_square-logo {
 	font-size: 1.25em;
 	transform: translateY(-7%);
 }
@@ -488,7 +488,7 @@ footer nav ul {
 .add-photo-specs {
 	font-family: 'work sans';
 	font-weight: 400;
-	font-size: 10px;
+	font-size:14px;
 	color: #444444;
 }
 .add-photo-input {

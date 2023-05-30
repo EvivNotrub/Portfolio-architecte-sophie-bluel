@@ -49,3 +49,7 @@ import { closeModal } from "./modale.js";
       closeModal(event);
     }, {once: true});
   }
+
+  /************** Edit Sophie's photo **************/
+
+  

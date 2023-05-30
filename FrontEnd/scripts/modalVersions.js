@@ -64,25 +64,44 @@ async function createModalGallery(containerClass) {
     });
 }
 
-async function createModalEditPhoto(containerClass, element) {
+async function createModalEditPhoto(containerClass, id, element) {
     
     // const modalForm = element;
     document.querySelector(containerClass).appendChild(element);
 
-    const categories = await getCategories();
-    console.log(categories);
-    const imgCategory = document.querySelector("#img-category"); 
-    categories.forEach( category => {
-        const imgCategoryOption = document.createElement("option");
-        imgCategoryOption.setAttribute("value", category.id);
-        imgCategoryOption.textContent = category.name;
-        console.log(imgCategoryOption);
-        imgCategory.appendChild(imgCategoryOption);
-    });
+    if (id !== null) {
+        const categories = await getCategories();
+        console.log(categories);
+        const imgCategory = document.querySelector("#img-category"); 
+        categories.forEach( category => {
+            const imgCategoryOption = document.createElement("option");
+            imgCategoryOption.setAttribute("value", category.id);
+            imgCategoryOption.textContent = category.name;
+            console.log(imgCategoryOption);
+            imgCategory.appendChild(imgCategoryOption);
+        });
+    }else{
+        const imgCategoryLabel = document.querySelector("label[for='img-category']");
+        imgCategoryLabel.remove();
+        const imgCategory = document.querySelector("#img-category"); 
+        imgCategory.remove();
+        const imgAltTxt = document.querySelector("label[for='img-title']");
+        imgAltTxt.textContent = "Texte alternatif";
+        const IdImage = document.querySelector("#sophie-bluel").src;
+        console.log(IdImage);
+        const formPhoto = document.querySelector(".add-photo-label");
+        formPhoto.style.backgroundImage = `url(${IdImage})`;
+        formPhoto.style.backgroundSize = "cover";
+
+    }
+    
 }
-function createModalEditText(containerClass, element, modalButton){
+function createModalEditText(containerClass, element){
     // const modalForm = element;
     document.querySelector(containerClass).appendChild(element);
+    const currentIntro = getIntroTexts();
+    // console.log(currentIntro);
+    showIntroTexts(currentIntro);
 }
 export async function createModalBody(modalVersion, id, element, modalButton){
 
@@ -95,13 +114,11 @@ export async function createModalBody(modalVersion, id, element, modalButton){
         await createModalGallery(".modal__content");
     };
     if (modalVersion === "editPhoto") {
-        await createModalEditPhoto(".modal__content", element);
+        await createModalEditPhoto(".modal__content", id, element);
     }
     if (modalVersion === "editText") {
-        createModalEditText(".modal__content", element, modalButton);
-        const currentIntro = getIntroTexts();
-        console.log(currentIntro);
-        showIntroTexts(currentIntro);
+        createModalEditText(".modal__content", element);
+        // this also closes the modal and sets the event listener for the modals anew
         setIntroTexts(modalButton);
     }
 }
