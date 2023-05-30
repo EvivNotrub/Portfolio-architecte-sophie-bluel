@@ -1,37 +1,51 @@
-// import { getWorks } from "./works.js";
+
+import { closeModal } from "./modale.js";
+// document.querySelector("#add-photo-input").addEventListener('change', function() {
+//   console.log("bob");
+//     console.log(this.files[0]);
+//     filename = this.files[0].name;
+//     console.log(filename);
+//   });
 
 
 
+export function getIntroTexts(){
+  const currentIntroTitle = document.querySelector(".intro__title").innerText;
+  console.log(currentIntroTitle);
+  const currentIntroDescriptionArray = Array.from(document.querySelectorAll(".intro__description p"));
+  console.log(currentIntroDescriptionArray);
+  const currentIntroDescription = currentIntroDescriptionArray.map(p => p.innerText).join("\n\n");
+  console.log(currentIntroDescription);
+  return {
+      title: currentIntroTitle,
+      description: currentIntroDescription
+  }
+}
+export function showIntroTexts(currentIntro){
+  console.log(currentIntro);
+  const titleDescriptionInput = document.querySelector("input[name='about-title']");
+  console.log(titleDescriptionInput);
+  const descriptionInput = document.querySelector("#about-txt");
+  console.log(descriptionInput);
+  titleDescriptionInput.value = currentIntro.title;
+  descriptionInput.value = currentIntro.description;
+  console.log(titleDescriptionInput, descriptionInput);
+}
 
-// async function createModalGallery (containerId) {
-//     const works = await getWorks();
-//     console.log(works);
-
-//     for (let i in works) {
-
-//         const gallery = document.querySelector(containerId);
-
-//         const work = document.createElement("figure");
-//         const workImage = document.createElement("img")
-//         const workTitle = document.createElement("figcaption");
-//         work.dataset.id = works[i].category.id;
-//         workImage.src = works[i].imageUrl;
-//         workTitle.textContent = "éditer";
-
-//         gallery.appendChild(work);
-//         work.appendChild(workImage);
-//         work.appendChild(workTitle);
-//     }
-// // };
-// const gallery2 = document.createElement("div");
-// gallery2.id = "gallery2";
-// document.querySelector("modal__content").appendChild(gallery2);
-// await createModalGallery ("#gallery2")
-console.log("bob");
-
-document.querySelector("#add-photo-input").addEventListener('change', function() {
-  console.log("bob");
-    console.log(this.files[0]);
-    filename = this.files[0].name;
-    console.log(filename);
-  });
+export function setIntroTexts(modalButton){
+  modalButton.addEventListener("click", function(event){
+    // event.preventDefault();
+    const titleDescriptionInput = document.querySelector("input[name='about-title']");
+    // console.log(titleDescriptionInput);
+    const descriptionInput = document.querySelector("#about-txt");
+    // console.log(descriptionInput);
+    const descriptionArray = descriptionInput.value.split("\n");
+    // console.log(descriptionArray);
+    const description = descriptionArray.map(p => `<p>${p}</p>`).join("").replace(/<p><\/p>/g, "");
+    document.querySelector(".intro__title").innerText = titleDescriptionInput.value;
+    const currentIntroDescriptionArray = Array.from(document.querySelectorAll(".intro__description p"));
+    currentIntroDescriptionArray.forEach( p => p.remove());
+    document.querySelector(".intro__description").innerHTML += description;
+    closeModal(event);
+  }, {once: true});
+}

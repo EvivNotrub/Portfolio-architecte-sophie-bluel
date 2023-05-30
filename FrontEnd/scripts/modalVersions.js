@@ -1,11 +1,12 @@
 import { openModal } from './modale.js';
 import  { createProjectContent, deletePicture, getCategories } from './works.js';
-
+import { showIntroTexts, getIntroTexts, setIntroTexts } from './modalForm.js';
 
 
 export function setModalTexts(modal, modalVersion){
     const modalTitle = modal.querySelector(".modal__title");
     const modalButton = modal.querySelector(".modal__action");
+    modalButton.setAttribute("type", "button");
     if (modalVersion === "gallery") {
         modalTitle.innerText = "Galerie Photos";
         modalButton.innerText = "Ajouter une photo";
@@ -19,6 +20,7 @@ export function setModalTexts(modal, modalVersion){
         modalTitle.innerText = "Changer le texte";
         modalButton.innerText = "Valider";
     }
+    return modalButton;
 }
 
 export function removeGallery() {
@@ -64,8 +66,8 @@ async function createModalGallery(containerClass) {
 
 async function createModalEditPhoto(containerClass, element) {
     
-    const modalForm = element;
-    document.querySelector(containerClass).appendChild(modalForm);
+    // const modalForm = element;
+    document.querySelector(containerClass).appendChild(element);
 
     const categories = await getCategories();
     console.log(categories);
@@ -78,11 +80,11 @@ async function createModalEditPhoto(containerClass, element) {
         imgCategory.appendChild(imgCategoryOption);
     });
 }
-function createModalEditText(containerClass, element){
-    const modalForm = element;
-    document.querySelector(containerClass).appendChild(modalForm);
+function createModalEditText(containerClass, element, modalButton){
+    // const modalForm = element;
+    document.querySelector(containerClass).appendChild(element);
 }
-export async function createModalBody(modalVersion, id, element){
+export async function createModalBody(modalVersion, id, element, modalButton){
 
         const arrow = document.querySelector(".modal__arrow");
         arrow.style.transform = "scale(0)";
@@ -96,6 +98,10 @@ export async function createModalBody(modalVersion, id, element){
         await createModalEditPhoto(".modal__content", element);
     }
     if (modalVersion === "editText") {
-        createModalEditText(".modal__content", element);
+        createModalEditText(".modal__content", element, modalButton);
+        const currentIntro = getIntroTexts();
+        console.log(currentIntro);
+        showIntroTexts(currentIntro);
+        setIntroTexts(modalButton);
     }
 }
