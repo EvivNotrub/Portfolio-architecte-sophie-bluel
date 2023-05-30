@@ -43,7 +43,6 @@
 							<!-- here we add the category options using the API response and category availables -->
 						</select>
 					</form>
-
 				</div>
 				<div class="modal__footer">
 					<div class="modal__line"></div>
@@ -52,9 +51,38 @@
 			</div>
 		</div>
 	</aside>
+	<aside id="modal3" class="modal" aria-hidden="false" role="dialog" aria-modal="false" aria-labelledby="modal__title" style="display: block;">
+		<div class="modal-wrapper js-modal-stop">
+			<div class="modal__header">
+				<button class="material-symbols-outlined">arrow_back</button>
+				<button class="js-modal-close material-symbols-outlined">close</button>
+			</div>
+			<div class="modal__body">
+				<h3 id="modal__title" class="modal__title">À propos</h3>
+				<div class="modal__content">
+					
+					
+					<form id="modal__txt--change" class="modal__form" action="#">
+						<div class="about-input">
+							<label for="about-title">Titre d'introduction</label>
+							<input type="text" name="img-title" id="about-title">
+						</div>
+						<div class="about-input">
+							<label for="about-txt">Éditer la description</label>
+							<textarea name="about-txt" id="about-txt" cols="1000" rows="1000"></textarea>
+						</div>
+					</form>
+				</div>
+				<div class="modal__footer">
+					<div class="modal__line"></div>
+					<button class="rnd-button rnd-button--green modal__action">Valider</button>
+				</div>
+			</div>
+		</div>
+	</aside>
     <section id="gallery"></section>
     <button href="#modal2" class="js-modal rnd-button rnd-button--green">blob</button>
-    <script type="module" src="../scripts/modal2.js"></script>
+    <script type="module" src="../scripts/modalForm.js"></script>
 	<script type="module" src="../scripts/modale.js"></script>
 </body>
 </html>

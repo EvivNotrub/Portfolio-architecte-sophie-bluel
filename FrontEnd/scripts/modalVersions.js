@@ -78,7 +78,10 @@ async function createModalEditPhoto(containerClass, element) {
         imgCategory.appendChild(imgCategoryOption);
     });
 }
-
+function createModalEditText(containerClass, element){
+    const modalForm = element;
+    document.querySelector(containerClass).appendChild(modalForm);
+}
 export async function createModalBody(modalVersion, id, element){
 
         const arrow = document.querySelector(".modal__arrow");
@@ -91,5 +94,8 @@ export async function createModalBody(modalVersion, id, element){
     };
     if (modalVersion === "editPhoto") {
         await createModalEditPhoto(".modal__content", element);
+    }
+    if (modalVersion === "editText") {
+        createModalEditText(".modal__content", element);
     }
 }
