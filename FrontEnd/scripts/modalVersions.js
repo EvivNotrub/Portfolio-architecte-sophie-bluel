@@ -1,6 +1,6 @@
 import { openModal } from './modale.js';
 import  { createProjectContent, deletePicture, getCategories } from './works.js';
-import { showIntroTexts, getIntroTexts, setIntroTexts } from './modalForm.js';
+import { showIntroTexts, getIntroTexts, setIntroTexts, changeDisplayPhoto, setIdPhoto, showCUrrentImage } from './modalForm.js';
 
 
 export function setModalTexts(modal, modalVersion){
@@ -81,20 +81,12 @@ async function createModalEditPhoto(containerClass, id, element) {
             imgCategory.appendChild(imgCategoryOption);
         });
     }else{
-        const imgCategoryLabel = document.querySelector("label[for='img-category']");
-        imgCategoryLabel.remove();
-        const imgCategory = document.querySelector("#img-category"); 
-        imgCategory.remove();
-        const imgAltTxt = document.querySelector("label[for='img-title']");
-        imgAltTxt.textContent = "Texte alternatif";
-        const IdImage = document.querySelector("#sophie-bluel").src;
-        console.log(IdImage);
-        const formPhoto = document.querySelector(".add-photo-label");
-        formPhoto.style.backgroundImage = `url(${IdImage})`;
-        formPhoto.style.backgroundSize = "cover";
-
+        document.querySelector("label[for='img-category']").remove();
+        document.querySelector("#img-category").remove(); 
+        document.querySelector("label[for='img-title']").textContent = "Texte alternatif";
+        const formPhoto = showCUrrentImage();
+        changeDisplayPhoto(formPhoto);
     }
-    
 }
 function createModalEditText(containerClass, element){
     // const modalForm = element;
@@ -115,6 +107,7 @@ export async function createModalBody(modalVersion, id, element, modalButton){
     };
     if (modalVersion === "editPhoto") {
         await createModalEditPhoto(".modal__content", id, element);
+        setIdPhoto(modalButton);
     }
     if (modalVersion === "editText") {
         createModalEditText(".modal__content", element);

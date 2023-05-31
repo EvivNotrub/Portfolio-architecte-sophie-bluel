@@ -1,11 +1,7 @@
 import { removeGallery, createModalBody, setModalTexts } from './modalVersions.js';
 
-let modal = null;
 const focusableSelector = "button, a, input, textarea, select";
-console.log(focusableSelector);
-let focusables = [];
-let previouslyFocusedElement = null;
-let modalLinks;
+let modalLinks, modalButton, focusables = [], modal = null, previouslyFocusedElement = null;
 
 export const closeModal = function (event) {
     if (modal === null) return;
@@ -53,8 +49,8 @@ export async function openModal (e) {
     console.log(modal);
     const modalVersion = this.getAttribute("data-version");
     console.log(modalVersion);
-    const modalBUtton = setModalTexts(modal, modalVersion);
-    await createModalBody(modalVersion, id, element, modalBUtton);
+    modalButton = setModalTexts(modal, modalVersion);
+    await createModalBody(modalVersion, id, element, modalButton);
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
     console.log(focusables);
     // console.log(focusables);
@@ -127,6 +123,9 @@ window.addEventListener("keydown", function (event) {
     }
     if (event.key === "Tab" && modal !== null) {
         focusInModal(event);
+    }
+    if (event.key === "Enter" && modal !== null) {
+        modalButton.focus();
     }
 });
 

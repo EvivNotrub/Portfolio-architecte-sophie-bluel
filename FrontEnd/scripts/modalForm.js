@@ -52,4 +52,46 @@ import { closeModal } from "./modale.js";
 
   /************** Edit Sophie's photo **************/
 
-  
+  export function changeDisplayPhoto(formPhoto){
+    document.getElementById("add-photo-input").addEventListener("change", function(event){
+      const file = event.target.files[0];
+      console.log(file);
+      const reader = new FileReader();
+      reader.onload = function(e)  {
+          const newImage = document.createElement("img");
+          newImage.src = e.target.result;
+          console.log(newImage);
+          window.localStorage.setItem("newImageSource", newImage.src);
+          formPhoto.style.backgroundImage = `url(${newImage.src})`;
+          formPhoto.style.backgroundSize = "cover";
+      }
+      reader.readAsDataURL(file);
+      }
+    );
+  }
+export function showCUrrentImage() {
+  const inputAlt = document.querySelector("input[name='img-title']");
+  console.log(inputAlt);
+  const image = document.querySelector("#sophie-bluel");
+  inputAlt.value = image.alt;
+  const formPhoto = document.querySelector(".add-photo-label");
+  formPhoto.style.backgroundImage = `url(${image.src})`;
+  formPhoto.style.backgroundSize = "cover";
+  return formPhoto;
+}
+
+
+  export function setIdPhoto(modalButton){
+    modalButton.addEventListener("click", function(event){
+      event.preventDefault();
+      const currentImage = document.querySelector("#sophie-bluel");
+      if (window.localStorage.getItem("newImageSource") !== null) {
+        currentImage.src = window.localStorage.getItem("newImageSource");
+        window.localStorage.removeItem("newImageSource");
+      }
+      const inputAlt = document.querySelector("input[name='img-title']");
+      currentImage.alt = inputAlt.value;
+      closeModal(event);
+    }, {once: true});
+  }
+
