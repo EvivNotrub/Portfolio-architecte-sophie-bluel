@@ -99,6 +99,14 @@ export async function createModalBody(modalVersion, id, element, modalButton){
 
         const arrow = document.querySelector(".modal__arrow");
         arrow.style.transform = "scale(0)";
+
+        if (element !== null) {
+            element.addEventListener("submit", function (event) {
+                event.preventDefault();
+                modalButton.focus();
+            });        
+        }
+    
     if (id !== null) {
         arrow.style.transform = "scale(1)";
     }

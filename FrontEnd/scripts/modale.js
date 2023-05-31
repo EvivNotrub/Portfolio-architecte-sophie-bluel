@@ -62,6 +62,13 @@ export async function openModal (e) {
     modal.addEventListener("click", closeModal);
     document.querySelector(".js-modal-close").addEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
+    focusables[2].focus();
+    // console.log(element);
+        // element.addEventListener("submit", function (event){
+        //     event.preventDefault();
+        //     modalButton.focus();
+        // });
+
 }
 
 const stopPropagation = function (event) {
@@ -70,7 +77,7 @@ const stopPropagation = function (event) {
 
 const focusInModal = function (event) {
     event.preventDefault();
-    // console.log(focusables);
+    console.log(focusables);
     let index = focusables.findIndex(f => f === modal.querySelector(':focus'));
     console.log(index);
     if (event.shiftKey === true){
@@ -107,9 +114,7 @@ const loadModal = async function (url) {
     return element;
 }
 
-// const modalLinks = Array.from(document.querySelectorAll('.js-modal'));
-// console.log(modalLinks);
-// modalLinks.forEach( link => {link.addEventListener("click", openModal)});
+
 function modalLinkSetup () {
     modalLinks = Array.from(document.querySelectorAll('.js-modal'));
     console.log(modalLinks);
@@ -123,9 +128,6 @@ window.addEventListener("keydown", function (event) {
     }
     if (event.key === "Tab" && modal !== null) {
         focusInModal(event);
-    }
-    if (event.key === "Enter" && modal !== null) {
-        modalButton.focus();
     }
 });
 
