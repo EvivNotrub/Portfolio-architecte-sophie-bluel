@@ -1,6 +1,6 @@
 import { openModal } from './modale.js';
-import  { createProjectContent, deletePicture, getCategories } from './works.js';
-import { showIntroTexts, getIntroTexts, setIntroTexts, changeDisplayPhoto, setIdPhoto, showCUrrentImage } from './modalForm.js';
+import  { createProjectContent, deletePicture } from './works.js';
+import { showIntroTexts, getIntroTexts, setIntroTexts, changeDisplayPhoto, setIdPhoto, showCUrrentImage, createCategoryOptions } from './modalForm.js';
 
 
 export function setModalTexts(modal, modalVersion){
@@ -33,6 +33,7 @@ export function removeGallery() {
 export function modalGallerySpecifics(article, articleTitle) {
     console.log(article);
     article.setAttribute("href", "./pages/modalImageForm.html#modal__form")
+    article.classList.add("js-modal");
     article.dataset.version = "editPhoto";
     articleTitle.textContent = "éditer";
     const icons = document.createElement("div");
@@ -48,19 +49,22 @@ export function modalGallerySpecifics(article, articleTitle) {
     icons.appendChild(iconDrag);
 }
 
-async function createModalGallery(containerClass) {
+async function createModalGallery(containerClass, modalButton) {
+    modalButton.setAttribute("href", "./pages/modalImageForm.html#modal__form")
+    modalButton.classList.add("js-modal");
+    modalButton.dataset.version = "editPhoto";
+    modalButton.dataset.id = "add";
     const gallery2 = document.createElement("div");
     gallery2.id = "galleryModal";
     gallery2.classList.add("galleryModal");
     document.querySelector(containerClass).appendChild(gallery2);
     await createProjectContent("#galleryModal", true);
     console.log(gallery2);
-    gallery2.querySelectorAll("a").forEach( picture => {
+    gallery2.querySelectorAll(".icon-bin").forEach( picture => {
         // console.log(picture);
         const id = picture.dataset.id;
-        console.log(id);
-        picture.querySelector(".icon-bin").addEventListener("click", function (event) {deletePicture(event, id)} );
-        picture.addEventListener("click", openModal );
+        // console.log(id);
+        picture.addEventListener("click", function (event) {deletePicture(event, id)}, {once: true} );
     });
 }
 
@@ -70,16 +74,7 @@ async function createModalEditPhoto(containerClass, id, element) {
     document.querySelector(containerClass).appendChild(element);
 
     if (id !== null) {
-        const categories = await getCategories();
-        console.log(categories);
-        const imgCategory = document.querySelector("#img-category"); 
-        categories.forEach( category => {
-            const imgCategoryOption = document.createElement("option");
-            imgCategoryOption.setAttribute("value", category.id);
-            imgCategoryOption.textContent = category.name;
-            console.log(imgCategoryOption);
-            imgCategory.appendChild(imgCategoryOption);
-        });
+        createCategoryOptions();
     }else{
         document.querySelector("label[for='img-category']").remove();
         document.querySelector("#img-category").remove(); 
@@ -96,7 +91,7 @@ function createModalEditText(containerClass, element){
     showIntroTexts(currentIntro);
 }
 export async function createModalBody(modalVersion, id, element, modalButton){
-
+        console.log(element);
         const arrow = document.querySelector(".modal__arrow");
         arrow.style.transform = "scale(0)";
 
@@ -106,16 +101,16 @@ export async function createModalBody(modalVersion, id, element, modalButton){
                 modalButton.focus();
             });        
         }
-    
+        
     if (id !== null) {
         arrow.style.transform = "scale(1)";
     }
     if (modalVersion === "gallery") {
-        await createModalGallery(".modal__content");
+        await createModalGallery(".modal__content", modalButton);
     };
     if (modalVersion === "editPhoto") {
         await createModalEditPhoto(".modal__content", id, element);
-        setIdPhoto(modalButton);
+        id == null ? setIdPhoto(modalButton): console.log(id);
     }
     if (modalVersion === "editText") {
         createModalEditText(".modal__content", element);

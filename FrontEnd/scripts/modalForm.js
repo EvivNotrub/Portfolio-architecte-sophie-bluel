@@ -1,4 +1,6 @@
 import { closeModal } from "./modale.js";
+import  { getCategories } from './works.js';
+
 // document.querySelector("#add-photo-input").addEventListener('change', function() {
 //   console.log("bob");
 //     console.log(this.files[0]);
@@ -93,5 +95,21 @@ export function showCUrrentImage() {
       currentImage.alt = inputAlt.value;
       closeModal(event);
     }, {once: true});
+  }
+
+
+  /************** Edit work photos **************/
+
+  export async function createCategoryOptions() {
+    const categories = await getCategories();
+        console.log(categories);
+        const imgCategory = document.querySelector("#img-category"); 
+        categories.forEach( category => {
+            const imgCategoryOption = document.createElement("option");
+            imgCategoryOption.setAttribute("value", category.id);
+            imgCategoryOption.textContent = category.name;
+            console.log(imgCategoryOption);
+            imgCategory.appendChild(imgCategoryOption);
+        });
   }
 

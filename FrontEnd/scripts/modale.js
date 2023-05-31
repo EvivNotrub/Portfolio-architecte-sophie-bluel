@@ -24,8 +24,16 @@ export const closeModal = function (event) {
     modal.addEventListener('animationend', hideModal)
     modalLinkSetup();
 }
-
+function getFocusables(id) {
+    focusables = Array.from(modal.querySelectorAll(focusableSelector));
+    console.log(focusables);
+    if (id == null) {
+        focusables = focusables.filter(f => !f.classList.contains("modal__arrow"));
+        console.log(focusables);
+    }
+}
 export async function openModal (e) {
+    console.log(modal);
     e.preventDefault();
     let element;
     console.log(this);
@@ -51,24 +59,17 @@ export async function openModal (e) {
     console.log(modalVersion);
     modalButton = setModalTexts(modal, modalVersion);
     await createModalBody(modalVersion, id, element, modalButton);
-    focusables = Array.from(modal.querySelectorAll(focusableSelector));
-    console.log(focusables);
-    // console.log(focusables);
+    getFocusables(id);
     previouslyFocusedElement = document.querySelector(':focus');
-    focusables[0].focus();
     modal.style.display = "";
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
     modal.addEventListener("click", closeModal);
     document.querySelector(".js-modal-close").addEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
-    focusables[2].focus();
-    // console.log(element);
-        // element.addEventListener("submit", function (event){
-        //     event.preventDefault();
-        //     modalButton.focus();
-        // });
-
+    focusables[1].focus();
+    // to be able
+    modalLinkSetup();
 }
 
 const stopPropagation = function (event) {
@@ -118,7 +119,10 @@ const loadModal = async function (url) {
 function modalLinkSetup () {
     modalLinks = Array.from(document.querySelectorAll('.js-modal'));
     console.log(modalLinks);
-    modalLinks.forEach( link => {link.addEventListener("click", openModal, {once: true})});
+    modalLinks.forEach( link => {
+        link.removeEventListener("click", openModal);
+        link.addEventListener("click", openModal, {once: true})
+    });
 }
 modalLinkSetup();
 

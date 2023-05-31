@@ -368,7 +368,8 @@ footer nav ul {
 	justify-content: space-between;
 }
 .modal__header {
-	width: max(200px ,100% );
+	width: 90%;
+	text-align: right;
 	display: flex;
 	justify-content: space-between;
 	font-size: 16px;
@@ -424,6 +425,7 @@ footer nav ul {
 	gap: 3px;
 }
 .modal__icons span {
+	font-size: 16px;
 	cursor: pointer;
 	border-radius: 2px;
 	padding: 2px;
