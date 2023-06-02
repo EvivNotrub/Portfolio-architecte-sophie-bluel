@@ -1,21 +1,34 @@
 import { openModal } from './modale.js';
 import  { createProjectContent, deletePicture } from './works.js';
-import { showIntroTexts, getIntroTexts, setIntroTexts, changeDisplayPhoto, setIdPhoto, showCUrrentImage, createCategoryOptions } from './modalForm.js';
+import { showIntroTexts, getIntroTexts, setIntroTexts, changeDisplayPhoto, setIdPhoto, showCUrrentImage, createCategoryOptions, getNewWorkData } from './modalForm.js';
 
 
-export function setModalTexts(modal, modalVersion){
+export function setModalTexts(modal, modalVersion, id){
+    console.log(modal);
     const modalTitle = modal.querySelector(".modal__title");
     const modalButton = modal.querySelector(".modal__action");
     modalButton.setAttribute("type", "button");
+
+    modalButton.removeAttribute("href");
+    delete modalButton.dataset.version;
+    delete modalButton.dataset.id;
+    modalButton.classList.remove("js-modal");
     if (modalVersion === "gallery") {
         modalTitle.innerText = "Galerie Photos";
         modalButton.innerText = "Ajouter une photo";
-    }else if (modalVersion === "addPhoto"){
+        modalButton.setAttribute("href", "./pages/modalImageForm.html#modal__form")
+        modalButton.classList.add("js-modal");
+        modalButton.dataset.version = "editPhoto";
+        modalButton.dataset.id = "add";
+    }else if (modalVersion === "editPhoto" && id === "add"){
         modalTitle.innerText = "Ajout photo";
         modalButton.innerText = "Valider";
     }else if (modalVersion === "editPhoto"){
         modalTitle.innerText = "Éditer la photo";
         modalButton.innerText = "Valider";
+        // if (id !== null) {
+        //     modalButton.dataset.id = id;
+        // }
     }else if (modalVersion === "editText"){
         modalTitle.innerText = "Changer le texte";
         modalButton.innerText = "Valider";
@@ -29,7 +42,12 @@ export function removeGallery() {
         gallery.remove();
     }
 }
-
+export function removeForm(){
+    const form = document.querySelector("#modal__form");
+    if (form) {
+        form.remove();
+    }
+}
 export function modalGallerySpecifics(article, articleTitle) {
     console.log(article);
     article.setAttribute("href", "./pages/modalImageForm.html#modal__form")
@@ -50,10 +68,7 @@ export function modalGallerySpecifics(article, articleTitle) {
 }
 
 async function createModalGallery(containerClass, modalButton) {
-    modalButton.setAttribute("href", "./pages/modalImageForm.html#modal__form")
-    modalButton.classList.add("js-modal");
-    modalButton.dataset.version = "editPhoto";
-    modalButton.dataset.id = "add";
+
     const gallery2 = document.createElement("div");
     gallery2.id = "galleryModal";
     gallery2.classList.add("galleryModal");
@@ -75,11 +90,14 @@ async function createModalEditPhoto(containerClass, id, element) {
 
     if (id !== null) {
         createCategoryOptions();
+        const formPhoto = document.querySelector(".add-photo-label");
+        console.log(formPhoto);
+        changeDisplayPhoto(formPhoto);
     }else{
         document.querySelector("label[for='img-category']").remove();
         document.querySelector("#img-category").remove(); 
         document.querySelector("label[for='img-title']").textContent = "Texte alternatif";
-        const formPhoto = showCUrrentImage();
+        const formPhoto = showCUrrentImage("#sophie-bluel");
         changeDisplayPhoto(formPhoto);
     }
 }
@@ -107,10 +125,16 @@ export async function createModalBody(modalVersion, id, element, modalButton){
     }
     if (modalVersion === "gallery") {
         await createModalGallery(".modal__content", modalButton);
+    
     };
     if (modalVersion === "editPhoto") {
         await createModalEditPhoto(".modal__content", id, element);
-        id == null ? setIdPhoto(modalButton): console.log(id);
+        if(id == null){
+            setIdPhoto(modalButton)
+        }else{
+            getNewWorkData(modalButton);
+
+        } console.log(id);
     }
     if (modalVersion === "editText") {
         createModalEditText(".modal__content", element);

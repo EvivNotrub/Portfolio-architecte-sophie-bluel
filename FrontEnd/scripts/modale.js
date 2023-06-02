@@ -1,4 +1,4 @@
-import { removeGallery, createModalBody, setModalTexts } from './modalVersions.js';
+import { removeGallery, removeForm, createModalBody, setModalTexts } from './modalVersions.js';
 
 const focusableSelector = "button, a, input, textarea, select";
 let modalLinks, modalButton, focusables = [], modal = null, previouslyFocusedElement = null;
@@ -21,12 +21,13 @@ export const closeModal = function (event) {
         modal = null;
     }
     removeGallery();
+    removeForm();
     modal.addEventListener('animationend', hideModal)
     modalLinkSetup();
+    window.localStorage.removeItem("newImageSource");
 }
 function getFocusables(id) {
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
-    console.log(focusables);
     if (id == null) {
         focusables = focusables.filter(f => !f.classList.contains("modal__arrow"));
         console.log(focusables);
@@ -40,6 +41,7 @@ export async function openModal (e) {
     const id = this.getAttribute("data-id");
     console.log(id);
     removeGallery();
+    removeForm();
     // const href = e.getAttribute("href");
     // console.log(href);
     const target = this.getAttribute("href");
@@ -57,7 +59,7 @@ export async function openModal (e) {
     console.log(modal);
     const modalVersion = this.getAttribute("data-version");
     console.log(modalVersion);
-    modalButton = setModalTexts(modal, modalVersion);
+    modalButton = setModalTexts(modal, modalVersion, id);
     await createModalBody(modalVersion, id, element, modalButton);
     getFocusables(id);
     previouslyFocusedElement = document.querySelector(':focus');
@@ -114,7 +116,20 @@ const loadModal = async function (url) {
     // document.body.appendChild(element);
     return element;
 }
-
+// function modalLinkSetup () {
+//     modalLinks = Array.from(document.querySelectorAll('.js-modal'));
+//     console.log(modalLinks);
+//     modalLinks.forEach( link => {
+//         link.removeEventListener("click", function (event) {
+//             if (modal != null){ closeModal(event);}
+//             openModal( event);
+//         });
+//         link.addEventListener("click", function (event) {
+//             if (modal != null){ closeModal(event);}
+//             openModal( event);
+//         }, {once: true})
+//     });
+// }
 
 function modalLinkSetup () {
     modalLinks = Array.from(document.querySelectorAll('.js-modal'));
