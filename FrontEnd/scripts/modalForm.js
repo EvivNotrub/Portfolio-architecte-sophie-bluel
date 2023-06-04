@@ -66,6 +66,7 @@ import  { getCategories, getWorks } from './works.js';
           window.localStorage.setItem("newImageSource", newImage.src);
           formPhoto.style.backgroundImage = `url(${newImage.src})`;
           formPhoto.style.backgroundSize = "cover";
+          formPhoto.style.backgroundPosition = "center";
       }
       reader.readAsDataURL(file);
       }
@@ -84,6 +85,7 @@ export function showCUrrentImage(identification) {
 
 
   export function setIdPhoto(modalButton){
+    console.log("lancement fonction setIdPhoto");
     modalButton.addEventListener("click", function photoAndClose(event){
       event.preventDefault();
       const currentImage = document.querySelector("#sophie-bluel");
@@ -92,7 +94,7 @@ export function showCUrrentImage(identification) {
         window.localStorage.removeItem("newImageSource");
       }
       const inputAlt = document.querySelector("input[name='img-title']");
-      currentImage.alt = inputAlt.value;
+      if(inputAlt.value){currentImage.alt = inputAlt.value};
       closeModal(event);
       modalButton.removeEventListener("click", photoAndClose);
     }, {once: true});
@@ -113,12 +115,9 @@ export function showCUrrentImage(identification) {
             imgCategory.appendChild(imgCategoryOption);
         });
   }
-
-
-export async function getNewWorkData(modalButton) {
-
-  modalButton.addEventListener("click", async function(event){
+  export async function commitWorkEdit (event){
     event.preventDefault();
+    console.log("lancement fonction getNewWorkData");
     const file = document.getElementById("add-photo-input").files[0];
     console.log(file);
     const fileURL = document.URL.createObjectURL(file);
@@ -139,8 +138,12 @@ export async function getNewWorkData(modalButton) {
       "userId": 1
     }
     console.log(imgInput);
+    modalButton.removeEventListener("click", commitWorkEdit);
   }
-  );
+export async function getNewWorkData(modalButton) {
+  // maybe add asome alert or message if no file changed
+  console.log("creation eventListerner getNewWorkData");
+  modalButton.addEventListener("click", commitWorkEdit, { once: true});
 }
 
   /*

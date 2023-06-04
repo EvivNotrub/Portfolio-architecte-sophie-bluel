@@ -87,8 +87,9 @@ export async function createProjectContent(containerId, modal = false) {
         if (modal === false){
             workTitle.textContent = works[i].title;
         }else{
-            work.dataset.id = works[i].id;
-            modalGallerySpecifics(work, workTitle);
+            const id = works[i].id;
+            work.dataset.id = id;
+            modalGallerySpecifics(work, workTitle, id);
         }
 
         gallery.appendChild(work);

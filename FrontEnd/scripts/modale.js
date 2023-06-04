@@ -1,9 +1,12 @@
 import { removeGallery, removeForm, createModalBody, setModalTexts } from './modalVersions.js';
 
+
 const focusableSelector = "button, a, input, textarea, select";
 let modalLinks, modalButton, focusables = [], modal = null, previouslyFocusedElement = null;
 
 export const closeModal = function (event) {
+    // console.log("controller abort usage"); if used need to decalre controller in modalForm and export import plus change eventList {controller: controller.signal}
+    // controller.abort();
     if (modal === null) return;
     if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
     event.preventDefault();
@@ -38,6 +41,7 @@ export async function openModal (e) {
     e.preventDefault();
     let element;
     console.log(this);
+    console.log(e);
     const id = this.getAttribute("data-id");
     console.log(id);
     removeGallery();
@@ -132,10 +136,19 @@ const loadModal = async function (url) {
 // }
 
 function modalLinkSetup () {
+    // console.log("Function runs: modalLinkSetup");
+    if(modalLinks){
+        // console.log(modalLinks)
+        modalLinks.forEach( link => {
+            link.removeEventListener("click", openModal);
+        }
+        );
+    };
+    modalLinks = [];
+    // console.log(modalLinks);
     modalLinks = Array.from(document.querySelectorAll('.js-modal'));
-    console.log(modalLinks);
+    // console.log(modalLinks);
     modalLinks.forEach( link => {
-        link.removeEventListener("click", openModal);
         link.addEventListener("click", openModal, {once: true})
     });
 }

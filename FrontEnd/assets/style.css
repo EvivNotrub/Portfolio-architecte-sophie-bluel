@@ -210,7 +210,6 @@ li:hover {
 .edit--author-img {
 	margin-left: 10%;
 	padding: 15px 0;
-
 }
 .edit--author-img, .edit--portfolio, .edit--intro {
 	font-family: 'work sans';
@@ -220,6 +219,7 @@ li:hover {
 	justify-content: start;
 	align-items: center;
 	gap: 10px;
+	width: fit-content;
 }
 #introduction h2 {
 	margin-bottom: 1em;
