@@ -7,11 +7,12 @@ export function setModalTexts(modal, modalVersion, id){
     console.log(modal);
     const modalTitle = modal.querySelector(".modal__title");
     const modalButton = modal.querySelector(".modal__action");
+    modalButton.setAttribute("type", "button");
     const modalArrow = modal.querySelector(".modal__arrow");
     if (modalArrow.classList.contains("js-modal")) {modalArrow.classList.remove("js-modal")};
     // console.log(modalArrow);
-    modalButton.setAttribute("type", "button");
     modalButton.removeAttribute("href");
+    modalButton.removeAttribute("form");
     delete modalButton.dataset.version;
     delete modalButton.dataset.id;
     modalButton.classList.remove("js-modal");
@@ -26,13 +27,20 @@ export function setModalTexts(modal, modalVersion, id){
     }else if (modalVersion === "editPhoto" && id === "add"){
         modalTitle.innerText = "Ajout photo";
         modalButton.innerText = "Valider";
+        modalButton.dataset.version = "gallery";
+        modalButton.setAttribute("href","#modal")
         modalArrow.classList.add("js-modal");
+        modalButton.setAttribute("type", "submit");
+        modalButton.setAttribute("form", "modal__form");
     }else if (modalVersion === "editPhoto"){
         modalTitle.innerText = "Éditer la photo";
         modalButton.innerText = "Valider";
         if (id !== null) {
             modalArrow.classList.add("js-modal");
-            // modalButton.dataset.id = id;
+            modalButton.dataset.version = "gallery";
+            modalButton.setAttribute("href","#modal")
+            modalButton.setAttribute("type", "submit");
+            modalButton.setAttribute("form", "modal__form");
         }
     }else if (modalVersion === "editText"){
         modalTitle.innerText = "Changer le texte";
@@ -139,7 +147,7 @@ export async function createModalBody(modalVersion, id, element, modalButton){
             setIdPhoto(modalButton)
         }else{
             console.log("getNewWorkData usage");
-            getNewWorkData(modalButton);
+            getNewWorkData(modalButton, element, id);
 
         } console.log(id);
     }

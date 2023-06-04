@@ -2,7 +2,8 @@ import { removeGallery, removeForm, createModalBody, setModalTexts } from './mod
 
 
 const focusableSelector = "button, a, input, textarea, select";
-let modalLinks, modalButton, focusables = [], modal = null, previouslyFocusedElement = null;
+export let modalLinks;
+let modalButton, focusables = [], modal = null, previouslyFocusedElement = null;
 
 export const closeModal = function (event) {
     // console.log("controller abort usage"); if used need to decalre controller in modalForm and export import plus change eventList {controller: controller.signal}
@@ -75,7 +76,8 @@ export async function openModal (e) {
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
     focusables[1].focus();
     // to be able
-    modalLinkSetup();
+    console.log(modal);
+    modalLinkSetup(modal);
 }
 
 const stopPropagation = function (event) {
@@ -135,19 +137,22 @@ const loadModal = async function (url) {
 //     });
 // }
 
-function modalLinkSetup () {
-    // console.log("Function runs: modalLinkSetup");
+export function modalLinkSetup (target = document) {
+    console.log(target);
+    console.log("Function runs: modalLinkSetup");
     if(modalLinks){
-        // console.log(modalLinks)
+        console.log(modalLinks)
         modalLinks.forEach( link => {
             link.removeEventListener("click", openModal);
         }
         );
     };
+    // question au mentor: besoin de modalLinks = [] ?? 
+    // histoire d'effacer les anciens ou la fonction du bas est suffisante?
     modalLinks = [];
-    // console.log(modalLinks);
-    modalLinks = Array.from(document.querySelectorAll('.js-modal'));
-    // console.log(modalLinks);
+    console.log(modalLinks);
+    modalLinks = Array.from(target.querySelectorAll('.js-modal'));
+    console.log(modalLinks);
     modalLinks.forEach( link => {
         link.addEventListener("click", openModal, {once: true})
     });

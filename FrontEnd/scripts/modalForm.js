@@ -1,4 +1,4 @@
-import { closeModal } from "./modale.js";
+import { closeModal, modalLinks, modalLinkSetup } from "./modale.js";
 import  { getCategories, getWorks } from './works.js';
 
 // document.querySelector("#add-photo-input").addEventListener('change', function() {
@@ -102,7 +102,7 @@ export function showCUrrentImage(identification) {
 
 
   /************** Edit work photos **************/
-
+  let titleInput, categoryInput, addPhotoInput, photoForm, addPhotoSubmit, initialId;
   export async function createCategoryOptions() {
     const categories = await getCategories();
         console.log(categories);
@@ -118,32 +118,71 @@ export function showCUrrentImage(identification) {
   export async function commitWorkEdit (event){
     event.preventDefault();
     console.log("lancement fonction getNewWorkData");
-    const file = document.getElementById("add-photo-input").files[0];
+    // ici ajouter une vérification de validité du formulaire
+    // 1 pour chaque input et format de fichier + taille
+    // 2 pour le formulaire complet et message d'alerte
+    if(photoForm.reportValidity()){      
+      console.log("form valid")
+      addPhotoSubmit.classList.add("js-modal");
+      modalLinkSetup(modal);
+     }else{
+      console.log("formulaire non valide");
+      return;
+     }
+    const file = addPhotoInput.files[0];
     console.log(file);
-    const fileURL = document.URL.createObjectURL(file);
-    console.log(fileURL);
-    const title = document.getElementById("img-title").value;
+    // const fileURL = document.URL.createObjectURL(file);
+    // console.log(fileURL);
+    const reader = new FileReader();
+    reader.onload = function(e)  {
+      const fileURL = e.target.result;
+      console.log(fileURL);
+      return fileURL;
+    }
+    const fileURL = reader.readAsDataURL(file);
+    
+    const title = titleInput.value;
     console.log(title);
-    const category = document.getElementById("img-category").value;
+    const category = categoryInput.value;
     console.log(category);
-    const works = await getWorks();
-      const id = works.length;
-      console.log(id);
+    
+    let workId = initialId;      
+    console.log(initialId);
+    if(initialId == "add"){
+      const works = await getWorks();
+      workId = works.length;
+      console.log(workId);
+      workId += 1;
+    }
 
     const imgInput = {
-      "id": id,
+      "id": workId,
       "title": title,
       "imageUrl": fileURL,
       "categoryId": category,
       "userId": 1
     }
     console.log(imgInput);
-    modalButton.removeEventListener("click", commitWorkEdit);
+    console.log(event);
+    event.target.removeEventListener("click", commitWorkEdit);
+    addPhotoSubmit.click();
   }
-export async function getNewWorkData(modalButton) {
+export async function getNewWorkData(modalButton, element, id) {
+  console.log(id);
+  addPhotoSubmit = modalButton;
+  initialId = id;
   // maybe add asome alert or message if no file changed
   console.log("creation eventListerner getNewWorkData");
-  modalButton.addEventListener("click", commitWorkEdit, { once: true});
+  photoForm = element;
+  addPhotoInput = document.getElementById("add-photo-input");
+  titleInput = document.getElementById("img-title");
+  categoryInput = document.getElementById("img-category");
+  addPhotoInput.setAttribute("required", "");
+  titleInput.setAttribute("required", "");
+  categoryInput.setAttribute("required", "");
+
+  modalButton.addEventListener("click", commitWorkEdit);
+
 }
 
   /*

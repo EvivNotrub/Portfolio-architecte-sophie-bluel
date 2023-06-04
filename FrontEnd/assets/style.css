@@ -63,7 +63,9 @@ button {
 	border: none;
 	background-color: transparent;
 }
-
+input:invalid{
+	outline: 1px solid red;
+}
 /** end reset css**/
 body {
 	max-width: 1140px;
