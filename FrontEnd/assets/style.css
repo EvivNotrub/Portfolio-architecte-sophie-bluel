@@ -365,7 +365,7 @@ footer nav ul {
 	animation: 0.3s grow both;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	/* justify-content: space-between; */
 }
 .modal__header {
 	width: max(200px ,100% );

@@ -10,26 +10,19 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="./assets/modal.css">
 </head>
 <body>
-	<aside id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="modal__title" style="display: none;">
-		<div class="modal-wrapper js-modal-stop">
-			<div class="modal__header">
-				<a href="#modal" data-version="gallery" class="js-modal material-symbols-outlined modal__arrow">arrow_back</a>
-				<button class="js-modal-close material-symbols-outlined">close</button>
+	<div id="myModal" class="modal">
+		<div class="modal-wrapper">
+			<div class="modal-header">
+				<span class="modal-close-button">&times;</span>
 			</div>
-			<div class="modal__body">
-				<h3 id="modal__title" class="modal__title"></h3>
-				<div class="modal__content">
-					<!-- here we add the gallery using the API data -->
-				</div>
-				<div class="modal__footer">
-					<div class="modal__line"></div>
-					<button class="rnd-button rnd-button--green modal__action"></button>
-				</div>
+			<div class="modal-content">
+				<!--- Modal content -->
 			</div>
 		</div>
-	</aside>
+  	</div>
 	<header>
 		<div class="edit">
 			<p class="header__edit__indication">
@@ -55,16 +48,8 @@
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
-				<a href="./pages/modalImageForm.html#modal__form" data-version="editPhoto" class="js-modal edit edit--author-img">
-					<span class="material-symbols-outlined">edit_square</span>
-					<span>modifier</span>
-				</a>
 			</figure>
 			<article class="intro__description">
-				<a href="./pages/modalImageForm.html#modal__txt--change" data-version="editText" class="js-modal edit edit--intro">
-					<span class="material-symbols-outlined">edit_square</span>
-					<span>modifier</span>
-				</a>
 				<h2 class="intro__title">Designer d'espace</h2>
 				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
 				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
@@ -74,7 +59,7 @@
 		<section id="portfolio">
 				<div class="portfolio-title">
 					<h2>Mes Projets</h2>
-					<a href="#modal" data-version="gallery" class="js-modal edit edit--portfolio">
+					<a href="#" data-version="gallery" class="js-modal edit edit--portfolio">
 						<span class="material-symbols-outlined">edit_square</span>
 						<span>modifier</span>
 					</a>
@@ -109,7 +94,6 @@
 		</nav>
 	</footer>
 	<script type="module" src="./scripts/works.js"></script>
-	<script type="module" src="./scripts/modale.js"></script>
-	<!-- <script type="module" src="./scripts/modalForm.js"></script> -->
+	<script type="module" src="./scripts/modal.js"></script>
 </body>
 </html>
