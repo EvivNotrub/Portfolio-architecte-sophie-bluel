@@ -147,7 +147,7 @@ export async function createModalBody(modalVersion, id, element, modalButton){
             setIdPhoto(modalButton)
         }else{
             console.log("getNewWorkData usage");
-            getNewWorkData(modalButton, element, id);
+            await getNewWorkData(modalButton, element, id);
 
         } console.log(id);
     }

@@ -115,6 +115,8 @@ export function showCUrrentImage(identification) {
             imgCategory.appendChild(imgCategoryOption);
         });
   }
+
+
   export async function commitWorkEdit (event){
     event.preventDefault();
     console.log("lancement fonction getNewWorkData");
@@ -129,44 +131,71 @@ export function showCUrrentImage(identification) {
       console.log("formulaire non valide");
       return;
      }
+     let workId;      
+     console.log(initialId);
+     if(initialId == "add"){
+       const works = await getWorks();
+       workId = works.length;
+       workId += 1;
+       console.log(workId);
+     }else if (Number.isInteger(initialId)){
+       workId = initialId;
+     }else{
+       alert("error: no valid work id");
+       return;
+     }
+
     const file = addPhotoInput.files[0];
     console.log(file);
-    // const fileURL = document.URL.createObjectURL(file);
-    // console.log(fileURL);
-    const reader = new FileReader();
-    reader.onload = function(e)  {
-      const fileURL = e.target.result;
-      console.log(fileURL);
-      return fileURL;
-    }
-    const fileURL = reader.readAsDataURL(file);
-    
-    const title = titleInput.value;
-    console.log(title);
-    const category = categoryInput.value;
-    console.log(category);
-    
-    let workId = initialId;      
-    console.log(initialId);
-    if(initialId == "add"){
-      const works = await getWorks();
-      workId = works.length;
-      console.log(workId);
-      workId += 1;
-    }
+      // const fileURL = document.URL.createObjectURL(file);
+      // console.log(fileURL);
+      // const reader = new FileReader();
+      // reader.onload = function(e)  {
+      //   const fileURL = e.target.result;
+      //   console.log(fileURL);
+      //   return fileURL;
+      // }
+      // const fileURL = reader.readAsDataURL(file);
+    const fromData = new FormData();
+    fromData.append("id", workId);
+    fromData.append("imageUrl", file);
+    fromData.append("title", titleInput.value);
+    fromData.append("categoryId", categoryInput.value);
+    fromData.append("userId", 1);
+    console.log(fromData);
+     
+    // const response = await fetch('http://localhost:5678/api/works', {
+    //   method: "POST",
+    //   Authorization: "Bearer " + window.localStorage.getItem('token'),
+    //   headers: { 'Content-Type': 'multipart/form-data' },
+    //   body: fromData
+    // });
+    // console.log(response);
+    // const work = await response.json();
+    // console.log(work);
 
-    const imgInput = {
-      "id": workId,
-      "title": title,
-      "imageUrl": fileURL,
-      "categoryId": category,
-      "userId": 1
-    }
-    console.log(imgInput);
-    console.log(event);
+
+    alert("Votre photo a bien été ajoutée");
+
+    // const title = titleInput.value;
+    // console.log(title);
+    // const category = categoryInput.value;
+    // console.log(category);
+    
+    // const imgInput = {
+    //   "id": workId,
+    //   "title": title,
+    //   "imageUrl": fileURL,
+    //   "categoryId": category,
+    //   "userId": 1
+    // }
+    // console.log(imgInput);
+    // console.log(event);
     event.target.removeEventListener("click", commitWorkEdit);
     addPhotoSubmit.click();
   }
+
+
 export async function getNewWorkData(modalButton, element, id) {
   console.log(id);
   addPhotoSubmit = modalButton;
