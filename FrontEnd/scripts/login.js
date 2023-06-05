@@ -29,6 +29,7 @@ form.addEventListener("submit", async function (event){
         };
         // obtenir le corps de réponse
         const retourLogin = await response.json();
+        console.log(retourLogin);
         const token = JSON.stringify(retourLogin.token);
         window.localStorage.setItem("token", token)
         window.location = "../index.html"

@@ -1,3 +1,4 @@
+import { token} from "./works.js";
 import { closeModal, modalLinks, modalLinkSetup } from "./modale.js";
 import  { getCategories, getWorks } from './works.js';
 
@@ -53,7 +54,15 @@ import  { getCategories, getWorks } from './works.js';
   }
 
   /************** Edit Sophie's photo **************/
-
+  function returnFileSize(number) {
+    if(number < 1024) {
+      return number + ' octets';
+    } else if(number >= 1024 && number < 1048576) {
+      return (number/1024).toFixed(1) + ' Ko';
+    } else if(number >= 1048576) {
+      return (number/1048576).toFixed(1) + ' Mo';
+    }
+  }
   export function changeDisplayPhoto(formPhoto){
     document.getElementById("add-photo-input").addEventListener("change", function(event){
       const file = event.target.files[0];
@@ -67,6 +76,10 @@ import  { getCategories, getWorks } from './works.js';
           formPhoto.style.backgroundImage = `url(${newImage.src})`;
           formPhoto.style.backgroundSize = "cover";
           formPhoto.style.backgroundPosition = "center";
+          const size = returnFileSize(file.size);
+          console.log(size);
+          const sizeSpan = document.querySelector(".add-photo-label span");
+          sizeSpan.textContent = size;
       }
       reader.readAsDataURL(file);
       }
@@ -103,6 +116,7 @@ export function showCUrrentImage(identification) {
 
   /************** Edit work photos **************/
   let titleInput, categoryInput, addPhotoInput, photoForm, addPhotoSubmit, initialId;
+  const maxSize = 4000000;
   export async function createCategoryOptions() {
     const categories = await getCategories();
         console.log(categories);
@@ -115,20 +129,39 @@ export function showCUrrentImage(identification) {
             imgCategory.appendChild(imgCategoryOption);
         });
   }
-
-
+  
+  function validFileType(file) {
+    const fileTypes = [
+      'image/jpeg',
+      'image/pjpeg',
+      'image/png'
+    ]
+    return fileTypes.includes(file.type);
+  }
+  function validFileSize(file) {
+    if(file.size <= maxSize) {
+      return true;
+    }
+    return false;
+  }
   export async function commitWorkEdit (event){
     event.preventDefault();
     console.log("lancement fonction getNewWorkData");
     // ici ajouter une vérification de validité du formulaire
     // 1 pour chaque input et format de fichier + taille
     // 2 pour le formulaire complet et message d'alerte
-    if(photoForm.reportValidity()){      
+    if(photoForm.reportValidity() && validFileType(addPhotoInput.files[0]) && validFileSize(addPhotoInput.files[0])){      
       console.log("form valid")
       addPhotoSubmit.classList.add("js-modal");
       modalLinkSetup(modal);
      }else{
       console.log("formulaire non valide");
+      if(!validFileType(addPhotoInput.files[0])){
+        console.log("file type not valid");
+      }
+      if(!validFileSize(addPhotoInput.files[0])){
+        console.log("file size not valid");
+      }
       return;
      }
      let workId;      
@@ -147,7 +180,20 @@ export function showCUrrentImage(identification) {
 
     const file = addPhotoInput.files[0];
     console.log(file);
-      // const fileURL = document.URL.createObjectURL(file);
+    if(validFileType(file)){
+      console.log("file type valid")
+    }else{
+      console.log("file type not valid");
+      return;
+    };
+    
+
+
+
+    console.log(window.returnFileURL(file));
+
+  
+      const fileURL = window.URL.createObjectURL(file);
       // console.log(fileURL);
       // const reader = new FileReader();
       // reader.onload = function(e)  {
@@ -156,40 +202,39 @@ export function showCUrrentImage(identification) {
       //   return fileURL;
       // }
       // const fileURL = reader.readAsDataURL(file);
-    const fromData = new FormData();
-    fromData.append("id", workId);
-    fromData.append("imageUrl", file);
-    fromData.append("title", titleInput.value);
-    fromData.append("categoryId", categoryInput.value);
-    fromData.append("userId", 1);
-    console.log(fromData);
-     
-    // const response = await fetch('http://localhost:5678/api/works', {
-    //   method: "POST",
-    //   Authorization: "Bearer " + window.localStorage.getItem('token'),
-    //   headers: { 'Content-Type': 'multipart/form-data' },
-    //   body: fromData
-    // });
-    // console.log(response);
-    // const work = await response.json();
-    // console.log(work);
 
+
+    // const fromData = new FormData();
+    // fromData.append("id", workId);
+    // fromData.append("imageUrl", file);
+    // fromData.append("title", titleInput.value);
+    // fromData.append("categoryId", categoryInput.value);
+    // fromData.append("userId", "1");
+    // console.log(fromData);
+
+    const imgInput = {
+      "id": workId,
+      "title": titleInput.value,
+      "imageUrl": fileURL,
+      "categoryId": categoryInput.value,
+      "userId": 1
+    }
+    console.log(imgInput);
+    const bearer = "Bearer " + token;
+    console.log(bearer);
+    const response = await fetch('http://localhost:5678/api/works', {
+      method: "POST",
+      headers: { 
+        'Authorization': bearer,
+        'Content-Type': 'multipart/form-data' },
+      body: imgInput
+    });
+    console.log(response);
+    const work = await response.json();
+    console.log(work);
 
     alert("Votre photo a bien été ajoutée");
 
-    // const title = titleInput.value;
-    // console.log(title);
-    // const category = categoryInput.value;
-    // console.log(category);
-    
-    // const imgInput = {
-    //   "id": workId,
-    //   "title": title,
-    //   "imageUrl": fileURL,
-    //   "categoryId": category,
-    //   "userId": 1
-    // }
-    // console.log(imgInput);
     // console.log(event);
     event.target.removeEventListener("click", commitWorkEdit);
     addPhotoSubmit.click();

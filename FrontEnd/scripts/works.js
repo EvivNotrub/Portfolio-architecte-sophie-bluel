@@ -1,7 +1,7 @@
 import { filters } from "./filters.js";
 import { modalGallerySpecifics } from "./modalVersions.js";
 
-let token;
+export let token;
 //Below we check if the user is connected or not.
 // If he is, we display the edit mode and change the login button to logout and hide the filters.
 // If not, we hide the edit mode, get filters and change the login button to login.
@@ -31,6 +31,7 @@ function toggleEditMode(action = "hide"){
 
 function loginButtonAction() {
     const valeurToken = window.localStorage.getItem('token');
+    console.log(valeurToken);
     if (valeurToken === null){
     toggleEditMode();
     loginButton.innerText = "login";
