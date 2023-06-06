@@ -197,11 +197,7 @@ export function showCUrrentImage(identification) {
      }
      let workId;      
      console.log(initialId);
-     console.log(typeof initialId);
-     console.log(Number.isInteger(parseFloat(initialId)));
 
-     const bearer = "Bearer " + token;
-     console.log(bearer);
      if(initialId == "add"){
       const formDataAdd = new FormData();
       formDataAdd.append("image", file);
@@ -212,7 +208,7 @@ export function showCUrrentImage(identification) {
       request = {
         method: "POST",
         headers: {
-          Authorization: bearer
+          Authorization: `Bearer ${token}`
            },
         body: formDataAdd
       };
@@ -222,7 +218,7 @@ export function showCUrrentImage(identification) {
       request = {
         method: "DELETE",
         headers: {
-          "Authorization": bearer
+          "Authorization": `Bearer ${token}`
             }
       };
      }else{
@@ -230,18 +226,31 @@ export function showCUrrentImage(identification) {
        return;
      }
     const response = await fetch( url, request);
-    const result = await response.json();
-      console.log(response);
-      console.log(result);
-      if(response.ok){
-        alert("Votre photo a bien été ajoutée");
-      }else{
-      console.log("not ok");
-      console.log(response);
-      // Promise.reject(response.status);
-      return
-      }
-   
+        if(response.ok){
+          if(initialId == "add"){
+            alert("Votre photo a bien été ajoutée");
+          }else{
+            alert("Votre photo a bien été supprimée");
+          }
+          Promise.resolve(response);
+        }else{
+          console.log("not ok");
+          Promise.reject(response.status);
+          return
+        }
+      
+    
+    // const result = await response.json();
+    //   console.log(response);
+    //   console.log(result);
+    //   if(response.ok){
+    //     alert("Votre photo a bien été ajoutée");
+    //   }else{
+    //   console.log("not ok");
+    //   console.log(response);
+    //   // Promise.reject(response.status);
+    //   return
+    //   }
 
 
     console.log(event);

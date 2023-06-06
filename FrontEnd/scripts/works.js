@@ -13,11 +13,16 @@ export async function deletePicture(event, id) {
     console.log(id);
 
     alert("delete?");
-    // const pictureDelete = await fetch(`http://localhost:5678/api/works/${id}`, {
-    //     method: 'DELETE',
-    //     Authorization: Bearer + token
-    // })
-    // console.log(pictureDelete);
+    
+    
+    const pictureDeleteResponse = await fetch(`http://localhost:5678/api/works/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    console.log(pictureDeleteResponse);
+    
 }
 
 function toggleEditMode(action = "hide"){
@@ -98,7 +103,6 @@ export async function createProjectContent(containerId, modal = false) {
         work.appendChild(workTitle);
     }
 };
-
 
 //Below we create the filters depending on the categories in the database
 async function createCategoriesFilters() {
