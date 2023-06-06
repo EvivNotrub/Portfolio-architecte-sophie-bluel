@@ -165,7 +165,7 @@ export function showCUrrentImage(identification) {
       console.log(event.target.value);
     });    
   }
-  export async function commitWorkEdit (event, modalButton){
+  export async function commitWorkEdit (event){
     console.log(event);
     console.log(event.target);
     event.preventDefault();
@@ -208,13 +208,11 @@ export function showCUrrentImage(identification) {
       formDataAdd.append("title", titleInput.value);
       formDataAdd.append("category", categoryInput.value);
       console.log(formDataAdd);      
-      url = 'http://localhost:5678/api/works';      
+      url = "http://localhost:5678/api/works";      
       request = {
         method: "POST",
         headers: {
-          "Authorization": bearer,
-          Accept: "application/json",
-               "Content-Disposition": "form-data"
+          Authorization: bearer
            },
         body: formDataAdd
       };
@@ -232,26 +230,26 @@ export function showCUrrentImage(identification) {
        return;
      }
     const response = await fetch( url, request);
-    response = await response.json();
+    const result = await response.json();
       console.log(response);
+      console.log(result);
       if(response.ok){
         alert("Votre photo a bien été ajoutée");
       }else{
       console.log("not ok");
       console.log(response);
-      Promise.reject(response.status);
+      // Promise.reject(response.status);
       return
       }
    
-    console.log(response);
 
 
     console.log(event);
     console.log(event.target);
-    event.target.removeEventListener("click", bobSinclard);
-    modalButton.classList.add("js-modal");
+    event.target.removeEventListener("click", commitWorkEdit);
+    event.target.classList.add("js-modal");
     modalLinkSetup(modal);
-    modalButton.click();
+    event.target.click();
   }
 
 
@@ -267,7 +265,7 @@ export async function getNewWorkData(modalButton, element, id) {
   addPhotoInput.setAttribute("required", "");
   titleInput.setAttribute("required", "");
   categoryInput.setAttribute("required", "");
-  modalButton.addEventListener("click", async function bobSinclard(event) {event.preventDefault; await commitWorkEdit(event, modalButton)});
+  modalButton.addEventListener("click", commitWorkEdit);
 }
 
   /*
