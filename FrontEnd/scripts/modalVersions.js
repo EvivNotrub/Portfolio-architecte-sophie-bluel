@@ -30,7 +30,7 @@ export function setModalTexts(modal, modalVersion, id){
         modalButton.dataset.version = "gallery";
         modalButton.setAttribute("href","#modal")
         modalArrow.classList.add("js-modal");
-        modalButton.setAttribute("type", "submit");
+        modalButton.setAttribute("type", "button");
         modalButton.setAttribute("form", "modal__form");
     }else if (modalVersion === "editPhoto"){
         modalTitle.innerText = "Éditer la photo";
@@ -39,7 +39,7 @@ export function setModalTexts(modal, modalVersion, id){
             modalArrow.classList.add("js-modal");
             modalButton.dataset.version = "gallery";
             modalButton.setAttribute("href","#modal")
-            modalButton.setAttribute("type", "submit");
+            modalButton.setAttribute("type", "button");
             modalButton.setAttribute("form", "modal__form");
         }
     }else if (modalVersion === "editText"){
@@ -129,6 +129,8 @@ export async function createModalBody(modalVersion, id, element, modalButton){
         console.log(`Version de Modale: ${modalVersion}`);
         if (element !== null) {
             element.addEventListener("submit", function (event) {
+                console.log("submit action should be prevented");
+                console.log(event);
                 event.preventDefault();
                 modalButton.focus();
             });        

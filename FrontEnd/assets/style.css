@@ -288,7 +288,8 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
+	height: 100%;
+	object-fit: cover;
 }
 #contact, .log-in {
 	width: 50%;
@@ -405,7 +406,7 @@ footer nav ul {
 .galleryModal {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-	grid-template-rows: auto;
+	grid-template-rows: 1fr 1fr 1fr 1fr;
 	grid-column-gap: 7px;
 	grid-row-gap: 10px;
 }
@@ -414,6 +415,7 @@ footer nav ul {
 }
 .modal img {
 	width: 100%;
+	height: 88%;
 	object-fit: cover;
 	padding-bottom: 4px;
 }

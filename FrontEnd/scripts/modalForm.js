@@ -115,7 +115,7 @@ export function showCUrrentImage(identification) {
 
 
   /************** Edit work photos **************/
-  let titleInput, categoryInput, addPhotoInput, photoForm, addPhotoSubmit, initialId;
+  let titleInput, categoryInput, addPhotoInput, photoForm, initialId;
   const maxSize = 4000000;
   export async function createCategoryOptions() {
     const categories = await getCategories();
@@ -130,120 +130,133 @@ export function showCUrrentImage(identification) {
         });
   }
   
-  function validFileType(file) {
+  function validFileType(files) {
+    console.log(files);
     const fileTypes = [
       'image/jpeg',
       'image/pjpeg',
       'image/png'
     ]
-    return fileTypes.includes(file.type);
-  }
-  function validFileSize(file) {
-    if(file.size <= maxSize) {
-      return true;
+    let valid = true;
+    for (let i = 0; i < files.length; i++) {
+      if(!fileTypes.includes(files[i].type)){
+        valid = false;
+      }
     }
-    return false;
+    return valid;
   }
-  export async function commitWorkEdit (event){
+  function validFileSize(files) {
+    console.log(typeof files);
+    let valid = true;
+    for (let i = 0; i < files.length; i++) {
+      if(files[i].size > maxSize) {
+        valid = false;
+      }
+    }
+    return valid;
+  }
+  function actionOnInputChange(event) {
+    categoryInput.addEventListener("change", function logCat(event){
+      console.log("category changed");
+      console.log(event.target.value);
+    });
+    titleInput.addEventListener("change", function logTitle(event){
+      console.log("title changed");
+      console.log(event.target.value);
+    });    
+  }
+  export async function commitWorkEdit (event, modalButton){
+    console.log(event);
+    console.log(event.target);
     event.preventDefault();
     console.log("lancement fonction getNewWorkData");
-    // ici ajouter une vérification de validité du formulaire
-    // 1 pour chaque input et format de fichier + taille
-    // 2 pour le formulaire complet et message d'alerte
-    if(photoForm.reportValidity() && validFileType(addPhotoInput.files[0]) && validFileSize(addPhotoInput.files[0])){      
+    let request, url;
+    //to be deleted afterwards if no other action is inserted in function than just log:
+    actionOnInputChange(event);
+    
+    const files = addPhotoInput.files;
+    const file = files[0];
+
+    if(photoForm.reportValidity() && validFileType(files) && validFileSize(files)){      
       console.log("form valid")
-      addPhotoSubmit.classList.add("js-modal");
-      modalLinkSetup(modal);
      }else{
       console.log("formulaire non valide");
-      if(!validFileType(addPhotoInput.files[0])){
+      if(!validFileType(files)){
         console.log("file type not valid");
       }
-      if(!validFileSize(addPhotoInput.files[0])){
+      if(!validFileSize(files)){
         console.log("file size not valid");
+      }
+      if(!titleInput.valid){
+        console.log("Please enter a title");
+      }
+      if(!categoryInput.valid){
+        console.log("Please choose a category");        
       }
       return;
      }
      let workId;      
      console.log(initialId);
+     console.log(typeof initialId);
+     console.log(Number.isInteger(parseFloat(initialId)));
+
+     const bearer = "Bearer " + token;
+     console.log(bearer);
      if(initialId == "add"){
-       const works = await getWorks();
-       workId = works.length;
-       workId += 1;
-       console.log(workId);
-     }else if (Number.isInteger(initialId)){
-       workId = initialId;
+      const formDataAdd = new FormData();
+      formDataAdd.append("image", file);
+      formDataAdd.append("title", titleInput.value);
+      formDataAdd.append("category", categoryInput.value);
+      console.log(formDataAdd);      
+      url = 'http://localhost:5678/api/works';      
+      request = {
+        method: "POST",
+        headers: {
+          "Authorization": bearer,
+          Accept: "application/json",
+               "Content-Disposition": "form-data"
+           },
+        body: formDataAdd
+      };
+     }else if (Number.isInteger(parseFloat(initialId)) && initialId > 0 && initialId !== "null" && initialId !== "undefined"){
+      workId = initialId;
+      url = `http://localhost:5678/api/works/${workId}`;
+      request = {
+        method: "DELETE",
+        headers: {
+          "Authorization": bearer
+            }
+      };
      }else{
        alert("error: no valid work id");
        return;
      }
-
-    const file = addPhotoInput.files[0];
-    console.log(file);
-    if(validFileType(file)){
-      console.log("file type valid")
-    }else{
-      console.log("file type not valid");
-      return;
-    };
-    
-
-
-
-    console.log(window.returnFileURL(file));
-
-  
-      const fileURL = window.URL.createObjectURL(file);
-      // console.log(fileURL);
-      // const reader = new FileReader();
-      // reader.onload = function(e)  {
-      //   const fileURL = e.target.result;
-      //   console.log(fileURL);
-      //   return fileURL;
-      // }
-      // const fileURL = reader.readAsDataURL(file);
-
-
-    // const fromData = new FormData();
-    // fromData.append("id", workId);
-    // fromData.append("imageUrl", file);
-    // fromData.append("title", titleInput.value);
-    // fromData.append("categoryId", categoryInput.value);
-    // fromData.append("userId", "1");
-    // console.log(fromData);
-
-    const imgInput = {
-      "id": workId,
-      "title": titleInput.value,
-      "imageUrl": fileURL,
-      "categoryId": categoryInput.value,
-      "userId": 1
-    }
-    console.log(imgInput);
-    const bearer = "Bearer " + token;
-    console.log(bearer);
-    const response = await fetch('http://localhost:5678/api/works', {
-      method: "POST",
-      headers: { 
-        'Authorization': bearer,
-        'Content-Type': 'multipart/form-data' },
-      body: imgInput
-    });
+    const response = await fetch( url, request);
+    response = await response.json();
+      console.log(response);
+      if(response.ok){
+        alert("Votre photo a bien été ajoutée");
+      }else{
+      console.log("not ok");
+      console.log(response);
+      Promise.reject(response.status);
+      return
+      }
+   
     console.log(response);
-    const work = await response.json();
-    console.log(work);
 
-    alert("Votre photo a bien été ajoutée");
 
-    // console.log(event);
-    event.target.removeEventListener("click", commitWorkEdit);
-    addPhotoSubmit.click();
+    console.log(event);
+    console.log(event.target);
+    event.target.removeEventListener("click", bobSinclard);
+    modalButton.classList.add("js-modal");
+    modalLinkSetup(modal);
+    modalButton.click();
   }
 
 
 export async function getNewWorkData(modalButton, element, id) {
   console.log(id);
-  addPhotoSubmit = modalButton;
   initialId = id;
   // maybe add asome alert or message if no file changed
   console.log("creation eventListerner getNewWorkData");
@@ -254,9 +267,7 @@ export async function getNewWorkData(modalButton, element, id) {
   addPhotoInput.setAttribute("required", "");
   titleInput.setAttribute("required", "");
   categoryInput.setAttribute("required", "");
-
-  modalButton.addEventListener("click", commitWorkEdit);
-
+  modalButton.addEventListener("click", async function bobSinclard(event) {event.preventDefault; await commitWorkEdit(event, modalButton)});
 }
 
   /*
