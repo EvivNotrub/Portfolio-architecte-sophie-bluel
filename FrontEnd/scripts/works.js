@@ -12,17 +12,23 @@ function toggleEditMode(toDisplay = false) {
     }
 }
 
+// function checkAuthentication() {
+//     const token = window.localStorage.getItem('token');
+//     const loginButton = document.querySelector("#login-link");
+//     if(!token) {
+//         toggleEditMode();
+//         loginButton.innerText = "login";
+//     } 
+//     else {
+//         loginButton.innerText = "logout";
+//         toggleEditMode(true);
+//     }
+// }
 function checkAuthentication() {
     const token = window.localStorage.getItem('token');
     const loginButton = document.querySelector("#login-link");
-    if(!token) {
-        toggleEditMode();
-        loginButton.innerText = "login";
-    } 
-    else {
-        loginButton.innerText = "logout";
-        toggleEditMode(true);
-    }
+    loginButton.innerText = !token ? "login" : "logout";
+    toggleEditMode(!!token);
 }
 
 function renderFilterComponent(category, parent) {
