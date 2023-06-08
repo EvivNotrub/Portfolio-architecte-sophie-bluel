@@ -1,6 +1,7 @@
 import { token} from "./works.js";
 import { closeModal, modalLinks, modalLinkSetup } from "./modale.js";
 import  { getCategories, getWorks } from './works.js';
+import { customAlert } from "./alerts.js";
 
 // document.querySelector("#add-photo-input").addEventListener('change', function() {
 //   console.log("bob");
@@ -180,7 +181,7 @@ export function showCUrrentImage(identification) {
     if(photoForm.reportValidity() && validFileType(files) && validFileSize(files)){      
       console.log("form valid")
      }else{
-      console.log("formulaire non valide");
+      customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format.."});
       if(!validFileType(files)){
         console.log("file type not valid");
       }
@@ -199,28 +200,34 @@ export function showCUrrentImage(identification) {
      console.log(initialId);
 
      if(initialId == "add"){
-      const formDataAdd = new FormData();
-      formDataAdd.append("image", file);
-      formDataAdd.append("title", titleInput.value);
-      formDataAdd.append("category", categoryInput.value);
-      console.log(formDataAdd);      
-      url = "http://localhost:5678/api/works";      
-      request = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`
-           },
-        body: formDataAdd
-      };
-     }else if (Number.isInteger(parseFloat(initialId)) && initialId > 0 && initialId !== "null" && initialId !== "undefined"){
-      workId = initialId;
-      url = `http://localhost:5678/api/works/${workId}`;
-      request = {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`
+          const formDataAdd = new FormData();
+          formDataAdd.append("image", file);
+          formDataAdd.append("title", titleInput.value);
+          formDataAdd.append("category", categoryInput.value);
+          console.log(formDataAdd);      
+            url = "http://localhost:5678/api/works";      
+            request = {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`
+                },
+              body: formDataAdd
+            };
+            if(!customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir ajouter cette photo ?"})){
+              return;
             }
-      };
+     }else if (Number.isInteger(parseFloat(initialId)) && initialId > 0 && initialId !== "null" && initialId !== "undefined"){
+        workId = initialId;
+        url = `http://localhost:5678/api/works/${workId}`;
+        request = {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`
+              }
+        };
+        if  (!customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir remplacer cette photo ?"})){
+          return;
+        }
      }else{
        alert("error: no valid work id");
        return;
@@ -228,9 +235,9 @@ export function showCUrrentImage(identification) {
     const response = await fetch( url, request);
         if(response.ok){
           if(initialId == "add"){
-            alert("Votre photo a bien été ajoutée");
-          }else{
-            alert("Votre photo a bien été supprimée");
+            customAlert("success", {body: "Votre photo a bien été ajoutée !"});
+          }else if (Number.isInteger(parseFloat(initialId)) && initialId > 0 && initialId !== "null" && initialId !== "undefined"){
+            customAlert("success", {body: "Votre photo a bien été supprimée !"});
           }
           Promise.resolve(response);
         }else{

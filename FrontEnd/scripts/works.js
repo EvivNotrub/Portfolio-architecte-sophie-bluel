@@ -1,5 +1,6 @@
 import { filters } from "./filters.js";
 import { modalGallerySpecifics } from "./modalVersions.js";
+import { customAlert } from "./alerts.js";
 
 export let token;
 //Below we check if the user is connected or not.
@@ -12,16 +13,20 @@ export async function deletePicture(event, id) {
     event.preventDefault();
     console.log(id);
 
-    alert("delete?");
-    
-    
-    const pictureDeleteResponse = await fetch(`http://localhost:5678/api/works/${id}`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-    console.log(pictureDeleteResponse);
+    const confirmation = customAlert( "warning", {body: "Vous vous appretez à supprimer cette image!\nÊtes-vous sûr de vouloir continuer ?"});
+    console.log(confirmation);
+    if (confirmation === false){
+        return;
+    }else if(confirmation){
+        const pictureDeleteResponse = await fetch(`http://localhost:5678/api/works/${id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        console.log(pictureDeleteResponse);
+        customAlert("success", {body: "Image supprimée avec succès !"});
+    }
     
 }
 

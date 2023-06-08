@@ -47,8 +47,7 @@ export async function openModal (e) {
     console.log(id);
     removeGallery();
     removeForm();
-    // const href = e.getAttribute("href");
-    // console.log(href);
+
     const target = this.getAttribute("href");
     console.log(target);
     if (target.startsWith('#')){
@@ -60,7 +59,6 @@ export async function openModal (e) {
         element = await loadModal(target);
         console.log(element);
     }
-    // modal = document.querySelector(this.getAttribute("href"));
     console.log(modal);
     const modalVersion = this.getAttribute("data-version");
     console.log(modalVersion);
@@ -75,7 +73,6 @@ export async function openModal (e) {
     document.querySelector(".js-modal-close").addEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
     focusables[1].focus();
-    // to be able
     console.log(modal);
     modalLinkSetup(modal);
 }
