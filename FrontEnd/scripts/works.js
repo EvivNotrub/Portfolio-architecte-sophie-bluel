@@ -1,6 +1,9 @@
 import { getCategories as getCategoriesData, getWorks as getWorksData } from './api.js';
-import { openModal, closeModal, MODAL_TYPE } from './modal.js'
+// import { openModal, closeModal, MODAL_TYPE } from './modal.js';
+import { openModalLinkSetup } from './modalLink.js';
 
+export const openModalLinks = [];
+export const closeModalLinks = [];
 
 function toggleEditMode(toDisplay = false) {
     console.log('===> toDisplay', toDisplay);
@@ -78,11 +81,12 @@ async function main(){
     const categories = await getCategoriesData();
     categories.unshift({ id: 0, name: 'Tous' });
     renderFilters(categories);
-
-    const openModalButton = document.querySelector('.edit--portfolio');
-    const closeModalButton = document.querySelector('.modal-close-button');
-    openModalButton.addEventListener('click', () => openModal(MODAL_TYPE.EDIT_FORM, { data: works }));
-    closeModalButton.addEventListener('click', closeModal);
+    
+    openModalLinkSetup(openModalLinks, works, document);
+    // const openModalButton = document.querySelector('.edit--portfolio');
+    // const closeModalButton = document.querySelector('.modal-close-button');
+    // openModalButton.addEventListener('click', () => openModal(MODAL_TYPE.EDIT_FORM, { data: works }));
+    // closeModalButton.addEventListener('click', closeModal);
 }
 
 await main();

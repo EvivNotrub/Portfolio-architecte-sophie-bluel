@@ -1,3 +1,8 @@
+
+import { openModalLinkSetup, closeModalLinkSetup } from './modalLink.js';
+import { openModalLinks, closeModalLinks } from './works.js';
+
+
 export const MODAL_TYPE = {
     ADD_FORM: 'add_form',
     EDIT_FORM: 'edit_form',
@@ -51,6 +56,7 @@ function renderModalContent(type = MODAL_TYPE.GALLERY, options) {
 }
 
 export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
+    console.log('===> openModal', type, options);
     const modal = document.querySelector('#myModal');
     const modalContent = document.querySelector('.modal-content');
     modalContent.innerHTML = renderModalContent(type, options);
@@ -73,9 +79,11 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
         // fire delete action
         console.log('===> modalActionDeleteButton', event.target.href)
     });
+    closeModalLinkSetup(closeModalLinks, modal);
 }
 
 export function closeModal() {
     const modal = document.querySelector('#myModal');
     modal.style.display = 'none';
+    openModalLinkSetup(openModalLinks, works, document);
 }
