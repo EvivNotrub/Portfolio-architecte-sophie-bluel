@@ -14,10 +14,8 @@ export async function deletePicture(event, id) {
     return new Promise(async (resolve, reject) => {
         const confirmation = await customAlert( "warning", {body: "Vous vous appretez à supprimer cette image!\nÊtes-vous sûr de vouloir continuer ?"});
         console.log(confirmation);
-        if (confirmation === false){
-            
-            reject(confirmation );
-            
+        if (confirmation === false){            
+            reject(confirmation );            
         }else if(confirmation){
             const pictureDeleteResponse = await fetch(`http://localhost:5678/api/works/${id}`, {
                 method: 'DELETE',
@@ -26,8 +24,7 @@ export async function deletePicture(event, id) {
                 }
             })
             console.log(pictureDeleteResponse);
-            await customAlert("success", {body: "Image supprimée avec succès !"});
-            
+            await customAlert("success", {body: "Image supprimée avec succès !"});            
             resolve(confirmation );
         }
     })

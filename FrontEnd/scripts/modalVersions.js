@@ -92,10 +92,10 @@ async function createModalGallery(containerClass) {
     gallery2.querySelectorAll(".icon-bin").forEach( picture => {
         const id = picture.dataset.id;
         console.log(picture);
-        picture.addEventListener("click", async function myFunction(event) {
+        picture.addEventListener("click", async function deletePictureGlobal(event) {
             try {
                 await deletePicture(event, id);
-                event.target.removeEventListener("click", myFunction);
+                event.target.removeEventListener("click", deletePictureGlobal);
                 event.target.parentElement.parentElement.remove();
             } catch(e) {
                 console.log("confirmation : " + e);
