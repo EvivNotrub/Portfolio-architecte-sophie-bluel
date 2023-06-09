@@ -11,23 +11,26 @@ const loginButton = document.querySelector("#login-link");
 export async function deletePicture(event, id) {
     event.stopPropagation();
     event.preventDefault();
-    console.log(id);
-
-    const confirmation = await customAlert( "warning", {body: "Vous vous appretez à supprimer cette image!\nÊtes-vous sûr de vouloir continuer ?"});
-    console.log(confirmation);
-    if (confirmation === false){
-        return;
-    }else if(confirmation){
-        const pictureDeleteResponse = await fetch(`http://localhost:5678/api/works/${id}`, {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        console.log(pictureDeleteResponse);
-        await customAlert("success", {body: "Image supprimée avec succès !"});
-    }
-    
+    return new Promise(async (resolve, reject) => {
+        const confirmation = await customAlert( "warning", {body: "Vous vous appretez à supprimer cette image!\nÊtes-vous sûr de vouloir continuer ?"});
+        console.log(confirmation);
+        if (confirmation === false){
+            
+            reject(confirmation );
+            
+        }else if(confirmation){
+            const pictureDeleteResponse = await fetch(`http://localhost:5678/api/works/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(pictureDeleteResponse);
+            await customAlert("success", {body: "Image supprimée avec succès !"});
+            
+            resolve(confirmation );
+        }
+    })
 }
 
 function toggleEditMode(action = "hide"){

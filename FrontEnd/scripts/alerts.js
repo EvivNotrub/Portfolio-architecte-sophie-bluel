@@ -8,8 +8,8 @@ const alertAlert = document.getElementById("alert__alert");
 let confirmation = false;
 const delay = timeMs => new Promise(resolve => setTimeout(resolve, timeMs));
 
-async function getPromiseFromEvent(alertAbort, alertConfirm, alertClose, event) {
-    return new Promise( (resolve) => {
+async function getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, event) {
+    return new Promise(async (resolve) => {
         
 
       const listener = (confirmation, value) => {
@@ -33,8 +33,8 @@ async function getPromiseFromEvent(alertAbort, alertConfirm, alertClose, event) 
 
 
 
-    //   await delay(60000);
-    //     resolve();
+      await delay(30000);
+        resolve(confirmation);
     })
   }
   
@@ -71,21 +71,8 @@ export async function customAlert(type = "success", message = {headers: "Attenti
     }
     alertAlert.innerText = message.headers;
     alertMessage.innerText = message.body;
-    // Below we retunr false if it is aborted:
-    // alertAbort.forEach(element => {
-    //     element.addEventListener("click", function(e){
-    //         confirmation = false;
-    //         closeAlert();
-    //     }, {once: true})
-    // });
-    // Below we return true if it is confirmed:
-    // alertConfirm.addEventListener("click", function(e){
-    //     confirmation = true;
-    //     closeAlert();
-    // }, {once: true});
-
-    // alertClose.addEventListener("click", closeAlert, {once: true});
-    await getPromiseFromEvent(alertAbort, alertConfirm, alertClose, "click").then( (value) => {
+    
+    await getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, "click").then( (value) => {
         confirmation = value;
         console.log("resolve value" + value);
     });

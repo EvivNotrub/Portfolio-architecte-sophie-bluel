@@ -91,8 +91,18 @@ async function createModalGallery(containerClass) {
     console.log(gallery2);
     gallery2.querySelectorAll(".icon-bin").forEach( picture => {
         const id = picture.dataset.id;
-        // console.log(id);
-        picture.addEventListener("click", function (event) {deletePicture(event, id)}, {once: true} );
+        console.log(picture);
+        picture.addEventListener("click", async function myFunction(event) {
+            try {
+                await deletePicture(event, id);
+                event.target.removeEventListener("click", myFunction);
+                event.target.parentElement.parentElement.remove();
+            } catch(e) {
+                console.log("confirmation : " + e);
+            }
+            
+           
+        } );
     });
 }
 
