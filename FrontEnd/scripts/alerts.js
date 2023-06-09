@@ -5,11 +5,46 @@ const alertClose = document.getElementById("alert__close");
 const alertAbort = document.querySelectorAll(".alert__abort");
 const alertConfirm = document.getElementById("alert__confirm");
 const alertAlert = document.getElementById("alert__alert");
+let confirmation = false;
+const delay = timeMs => new Promise(resolve => setTimeout(resolve, timeMs));
 
-export function customAlert(type = "success", message = {headers: "Attention !", body: "Opération réussit !"}) {
+async function getPromiseFromEvent(alertAbort, alertConfirm, alertClose, event) {
+    return new Promise( (resolve) => {
+        
+
+      const listener = (confirmation, value) => {
+        console.log("listener firing!");
+        confirmation = value;
+        alertAbort.forEach(element => {
+            element.removeEventListener(event, listener);
+        });
+        alertConfirm.removeEventListener(event, listener);
+        alertClose.removeEventListener(event, listener);
+        resolve(confirmation);
+      }
+      alertAbort.forEach(element => {
+        element.addEventListener(event, () => {listener(confirmation, false)});
+        });
+
+          alertConfirm.addEventListener(event, () => {listener(confirmation, true)});
+
+          alertClose.addEventListener(event, () => {listener(confirmation, false)});
 
 
-    let confirmation = true;
+
+
+    //   await delay(60000);
+    //     resolve();
+    })
+  }
+  
+
+export async function customAlert(type = "success", message = {headers: "Attention !", body: ""}) {
+
+    console.log("Alert type: " + type);
+    
+
+    
 
     alert.style.display = "";
     alert.removeAttribute("aria-hidden");
@@ -37,19 +72,26 @@ export function customAlert(type = "success", message = {headers: "Attention !",
     alertAlert.innerText = message.headers;
     alertMessage.innerText = message.body;
     // Below we retunr false if it is aborted:
-    alertAbort.forEach(element => {
-        element.addEventListener("click", function(e){
-            confirmation = false;
-            closeAlert();
-        }, {once: true})
-    });
+    // alertAbort.forEach(element => {
+    //     element.addEventListener("click", function(e){
+    //         confirmation = false;
+    //         closeAlert();
+    //     }, {once: true})
+    // });
     // Below we return true if it is confirmed:
-    alertConfirm.addEventListener("click", function(e){
-        confirmation = true;
-        closeAlert();
-    }, {once: true});
+    // alertConfirm.addEventListener("click", function(e){
+    //     confirmation = true;
+    //     closeAlert();
+    // }, {once: true});
 
-    alertClose.addEventListener("click", closeAlert, {once: true});
+    // alertClose.addEventListener("click", closeAlert, {once: true});
+    await getPromiseFromEvent(alertAbort, alertConfirm, alertClose, "click").then( (value) => {
+        confirmation = value;
+        console.log("resolve value" + value);
+    });
+    
+    console.log("confirmation: " + confirmation);
+    closeAlert();
     return confirmation;
     
 }

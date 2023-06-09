@@ -181,7 +181,7 @@ export function showCUrrentImage(identification) {
     if(photoForm.reportValidity() && validFileType(files) && validFileSize(files)){      
       console.log("form valid")
      }else{
-      customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format.."});
+      await customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format.."});
       if(!validFileType(files)){
         console.log("file type not valid");
       }
@@ -213,7 +213,7 @@ export function showCUrrentImage(identification) {
                 },
               body: formDataAdd
             };
-            if(!customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir ajouter cette photo ?"})){
+            if(!await customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir ajouter cette photo ?"})){
               return;
             }
      }else if (Number.isInteger(parseFloat(initialId)) && initialId > 0 && initialId !== "null" && initialId !== "undefined"){
@@ -225,7 +225,7 @@ export function showCUrrentImage(identification) {
             "Authorization": `Bearer ${token}`
               }
         };
-        if  (!customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir remplacer cette photo ?"})){
+        if  (!await customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir remplacer cette photo ?"})){
           return;
         }
      }else{
@@ -235,9 +235,9 @@ export function showCUrrentImage(identification) {
     const response = await fetch( url, request);
         if(response.ok){
           if(initialId == "add"){
-            customAlert("success", {body: "Votre photo a bien été ajoutée !"});
+            await customAlert("success", {body: "Votre photo a bien été ajoutée !"});
           }else if (Number.isInteger(parseFloat(initialId)) && initialId > 0 && initialId !== "null" && initialId !== "undefined"){
-            customAlert("success", {body: "Votre photo a bien été supprimée !"});
+            await customAlert("success", {body: "Votre photo a bien été supprimée !"});
           }
           Promise.resolve(response);
         }else{

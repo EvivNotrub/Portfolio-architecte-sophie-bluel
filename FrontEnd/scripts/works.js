@@ -13,7 +13,7 @@ export async function deletePicture(event, id) {
     event.preventDefault();
     console.log(id);
 
-    const confirmation = customAlert( "warning", {body: "Vous vous appretez à supprimer cette image!\nÊtes-vous sûr de vouloir continuer ?"});
+    const confirmation = await customAlert( "warning", {body: "Vous vous appretez à supprimer cette image!\nÊtes-vous sûr de vouloir continuer ?"});
     console.log(confirmation);
     if (confirmation === false){
         return;
@@ -25,7 +25,7 @@ export async function deletePicture(event, id) {
             }
         })
         console.log(pictureDeleteResponse);
-        customAlert("success", {body: "Image supprimée avec succès !"});
+        await customAlert("success", {body: "Image supprimée avec succès !"});
     }
     
 }
