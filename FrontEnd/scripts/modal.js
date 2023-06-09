@@ -1,7 +1,6 @@
+import { closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
 
-import { openModalLinkSetup, closeModalLinkSetup } from './modalLink.js';
-import { openModalLinks, closeModalLinks } from './works.js';
-
+let closeModalLinks = [];
 
 export const MODAL_TYPE = {
     ADD_FORM: 'add_form',
@@ -79,11 +78,20 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
         // fire delete action
         console.log('===> modalActionDeleteButton', event.target.href)
     });
-    closeModalLinkSetup(closeModalLinks, modal);
+    modal.addEventListener("click", closeModal);
+    modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
+    closeModalLinks = closeModalLinkSetup(closeModalLinks, modal);
 }
 
 export function closeModal() {
     const modal = document.querySelector('#myModal');
+    modal.removeEventListener("click", closeModal);
+    modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
+    closeModalLinks = removeCloseModalLinkSetup(closeModalLinks, modal);
     modal.style.display = 'none';
-    openModalLinkSetup(openModalLinks, works, document);
+
 }
+
+const stopPropagation = function (event) {
+    event.stopPropagation();
+};
