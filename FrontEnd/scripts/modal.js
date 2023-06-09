@@ -78,6 +78,8 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
         // fire delete action
         console.log('===> modalActionDeleteButton', event.target.href)
     });
+
+    // When the user clicks anywhere outside of the modal, it closes!
     modal.addEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
     closeModalLinks = closeModalLinkSetup(closeModalLinks, modal);

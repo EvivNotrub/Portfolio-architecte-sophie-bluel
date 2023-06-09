@@ -1,8 +1,11 @@
 import { getCategories as getCategoriesData, getWorks as getWorksData } from './api.js';
 // import { openModal, closeModal, MODAL_TYPE } from './modal.js';
 import { openModalLinkSetup, closeModalLinkSetup} from './modalLink.js';
+import { filters } from './filters.js';
 
-export let openModalLinks = [];
+export let openModalLinks = [], token;
+
+const loginButton = document.querySelector("#login-link");
 
 function toggleEditMode(toDisplay = false) {
     console.log('===> toDisplay', toDisplay);
@@ -17,21 +20,34 @@ function toggleEditMode(toDisplay = false) {
 // function checkAuthentication() {
 //     const token = window.localStorage.getItem('token');
 //     const loginButton = document.querySelector("#login-link");
-//     if(!token) {
-//         toggleEditMode();
-//         loginButton.innerText = "login";
-//     } 
-//     else {
-//         loginButton.innerText = "logout";
-//         toggleEditMode(true);
-//     }
+//     loginButton.innerText = token ? "login" : "logout";
+//     toggleEditMode(token);
 // }
+
+
 function checkAuthentication() {
-    const token = window.localStorage.getItem('token');
-    const loginButton = document.querySelector("#login-link");
-    loginButton.innerText = !token ? "login" : "logout";
-    toggleEditMode(!!token);
+    token = window.localStorage.getItem('token');
+    if(!token) {
+        toggleEditMode();
+        loginButton.innerText = "login";
+    } 
+    else {
+        loginButton.innerText = "logout";
+        toggleEditMode(true);
+    }
 }
+
+loginButton.addEventListener("click", async function(event){
+    event.preventDefault();
+    if (loginButton.innerText === "logout"){
+        window.localStorage.removeItem("token");
+        checkAuthentication();
+        await renderFilters();
+        filters();
+    }else{
+        window.location = "./pages/login.html";
+    };
+});
 
 function renderFilterComponent(category, parent) {
     const filterElement = document.createElement("div");
@@ -49,9 +65,14 @@ function renderFilterComponent(category, parent) {
     parent.appendChild(filterElement);
 }
 
-function renderFilters(categories) {
+async function renderFilters() {
+    const categories = await getCategoriesData();
+    console.log('===> categories', categories);
+    categories.unshift({ id: 0, name: 'Tous' });
     const filtersElement = document.querySelector(".filters");
-    return categories.map((category, index) => renderFilterComponent(category, filtersElement));
+    for (let i in categories) {
+        renderFilterComponent(categories[i], filtersElement);
+    }
 }
 
 function renderWorkCard(work, parent) {
@@ -77,9 +98,11 @@ async function main(){
     const works = await getWorksData();
     renderWorkCards(works);
 
-    const categories = await getCategoriesData();
-    categories.unshift({ id: 0, name: 'Tous' });
-    renderFilters(categories);
+    if(token === undefined){
+        console.log(token);
+        await renderFilters();
+        filters();  
+    }
     
     openModalLinks = openModalLinkSetup(openModalLinks, works, document);
     console.log('===> openModalLinks', openModalLinks);
