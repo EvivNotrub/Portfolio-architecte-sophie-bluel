@@ -3,7 +3,7 @@ import { getCategories as getCategoriesData, getWorks as getWorksData } from './
 import { openModalLinkSetup, closeModalLinkSetup} from './modalLink.js';
 import { filters } from './filters.js';
 
-export let openModalLinks = [], token;
+export let openModalLinks = [], token, categories;
 
 const loginButton = document.querySelector("#login-link");
 
@@ -66,7 +66,7 @@ function renderFilterComponent(category, parent) {
 }
 
 async function renderFilters() {
-    const categories = await getCategoriesData();
+    categories = await getCategoriesData();
     console.log('===> categories', categories);
     categories.unshift({ id: 0, name: 'Tous' });
     const filtersElement = document.querySelector(".filters");
@@ -80,7 +80,10 @@ function renderWorkCard(work, parent) {
     const workImage = document.createElement("img")
     const workTitle = document.createElement("figcaption");
     workElement.dataset.id = work.category.id;
+    workElement.dataset.cat = work.category.name;
+    workElement.dataset.title = work.title;
     workImage.src = work.imageUrl;
+    workImage.alt = work.title;
     workTitle.textContent = work.title;
     workElement.appendChild(workImage);
     workElement.appendChild(workTitle);
@@ -96,6 +99,7 @@ async function main(){
     checkAuthentication();
 
     const works = await getWorksData();
+    console.log('===> works after getWorksData', works);
     renderWorkCards(works);
 
     if(token === undefined){
