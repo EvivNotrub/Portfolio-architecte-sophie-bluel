@@ -22,26 +22,32 @@ function renderWorksCards(options) {
 
 function renderAddWorkForm(options) {
     return `
-    <form id="modal__form" class="modal__form" action="#">
-    <div class="modal__form__imgDiv">
-        <!-- i want to change the name displayed in the input type file -->
-        <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
-            imagesmode
-            <span class="add-photo-button">+ Ajouter photo</span>
-            <span class="add-photo-specs">jpg, png: 4mo max</span>
-        </label>
-        <input id="add-photo-input"class="add-photo-input"  type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo">
+<form id="modal__form" class="modal__form" action="#">
+    <div class="modal__content">
+        <div class="modal__form__imgDiv">
+            <!-- i want to change the name displayed in the input type file -->
+            <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
+                imagesmode
+                <span class="add-photo-button">+ Ajouter photo</span>
+                <span class="add-photo-specs">jpg, png: 4mo max</span>
+            </label>
+            <input id="add-photo-input"class="add-photo-input"  type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo">
+        </div>
+        <div class="file-input-info">
+            <label for="img-title">Titre</label>
+            <input type="text" name="img-title" id="img-title">
+        </div>
+        <div class="file-input-info">
+            <label for="img-category">Catégorie</label>
+            <select id="img-category">
+                <!-- here we add the category options using the API response and category availables -->
+            </select>
+        </div>
     </div>
-    <div class="file-input-info">
-        <label for="img-title">Titre</label>
-        <input type="text" name="img-title" id="img-title">
+    <div class="modal__footer">
+        <div class="modal__line"></div>
+        <button type="submit" class="modal-action-add">Valider</button>
     </div>
-    <div class="file-input-info">
-        <label for="img-category">Catégorie</label>
-        <select id="img-category">
-            <!-- here we add the category options using the API response and category availables -->
-        </select>
-    </div>  
 </form>
     `;
 }
@@ -115,6 +121,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
 
 export function closeModal() {
     if (modal === null) return;
+    if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
     modal = document.querySelector('#myModal');
     modal.removeEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
