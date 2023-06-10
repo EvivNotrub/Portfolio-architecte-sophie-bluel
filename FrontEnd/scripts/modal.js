@@ -12,43 +12,40 @@ export const MODAL_TYPE = {
 };
 
 function renderWorksCards(options) {
-
-				/* <h3 id="modal__title" class="modal__title">Galerie Photos</h3>
-				<div class="modal__content">
-					<!-- here we add the gallery using the API data -->
-				<div id="galleryModal" class="galleryModal">
-                    <a data-id="1" href="./pages/modalImageForm.html#modal__form" class="js-modal" data-version="editPhoto">
-                        <div class="modal__icons">
-                            <span class="icon-bin material-symbols-outlined" data-id="1">delete</span>
-                            <span class="icon-drag material-symbols-outlined">drag_pan</span>
-                        </div>
-                        <img src="http://localhost:5678/images/abajour-tahina1651286843956.png">
-                        <figcaption>éditer</figcaption>
-                    </a>
-                    <a data-id="2" href="./pages/modalImageForm.html#modal__form" class="js-modal" data-version="editPhoto">
-                        <div class="modal__icons">
-                            <span class="icon-bin material-symbols-outlined" data-id="2">delete</span>
-                            <span class="icon-drag material-symbols-outlined">drag_pan</span>
-                        </div>
-                        <img src="http://localhost:5678/images/appartement-paris-v1651287270508.png">
-                        <figcaption>éditer</figcaption>
-                    </a>
-                    
-				<div class="modal__footer">
-					<div class="modal__line"></div>
-					<button class="rnd-button rnd-button--green modal__action js-modal" type="button" href="./pages/modalImageForm.html#modal__form" data-version="editPhoto" data-id="add">Ajouter une photo</button>
-				</div> */
-
     console.log("==> renderWorksCards\n", "options :", options);
-    return options.data.map((work) => (`
-        <div>
-            <a href="#?work=${work.id}" class="modal-action-delete-item">x</a>
-            <div>${work.imageUrl}</div>
-            <div>${work.title}</div>
-            <div>${work.id}</div>
+    const worksGallery = options.data.map((work) => (`
+    <a data-id="${work.id}" data-title="${work.title}" data-cat="${work.category.name}" href="#" class="js-modal" data-version="edit_work">
+        <div class="modal__icons">
+            <span class="icon-bin material-symbols-outlined" data-id="1">delete</span>
+            <span class="icon-drag material-symbols-outlined">drag_pan</span>
         </div>
+        <img src="${work.imageUrl}" alt="${work.title}">
+        <figcaption>éditer</figcaption>
+    </a>
     `));
+     
+    return       `<h3 id="modal__title" class="modal__title">Galerie Photos</h3>
+    <div class="modal__content">
+        <div id="galleryModal" class="galleryModal">
+            ${worksGallery.join('')}
+        </div>
+    </div>
+    
+    <div class="modal__footer">
+        <div class="modal__line"></div>
+        <button class="rnd-button rnd-button--green modal__action js-modal" type="button" href="#" data-version="add_form" data-id="add">Ajouter une photo</button>
+    </div>`;    
 }
+
+    //  options.data.map((work) => (`
+    //     <div>
+    //         <a href="#?work=${work.id}" class="modal-action-delete-item">x</a>
+    //         <div>${work.imageUrl}</div>
+    //         <div>${work.title}</div>
+    //         <div>${work.id}</div>
+    //     </div>
+    // `));
+
 
 // function renderAddWorkForm(options) {
 //     return `
@@ -86,29 +83,30 @@ function renderAddWorkForm(options) {
     return `
     <h3 id="modal__title" class="modal__title">Ajout photo</h3>
     <div class="modal__content">
-        <!-- here we add the gallery using the API data -->
-    <form id="modal__form" class="modal__form" action="#">
-            <div class="modal__form__imgDiv">
-                <!-- i want to change the name displayed in the input type file -->
-                <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
-                    imagesmode
-                    <span class="add-photo-button">+ Ajouter photo</span>
-                    <span class="add-photo-specs">jpg, png: 4mo max</span>
-                </label>
-                <input id="add-photo-input" class="add-photo-input" type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo" required="">
-            </div>
-            <div class="file-input-info">
-                <label for="img-title">Titre</label>
-                <input type="text" name="img-title" id="img-title" required="">
-            </div>
-            <div class="file-input-info">
-                <label for="img-category">Catégorie</label>
-                <select id="img-category" required="">
-            
-                <!-- here we add the category options using the API response and category availables -->
-            <option value="1">Objets</option><option value="2">Appartements</option><option value="3">Hotels &amp; restaurants</option></select>
-        
-    </div></form></div>
+        <form id="modal__form" class="modal__form" action="#">
+                <div class="modal__form__imgDiv">
+                    <!-- i want to change the name displayed in the input type file -->
+                    <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
+                        imagesmode
+                        <span class="add-photo-button">+ Ajouter photo</span>
+                        <span class="add-photo-specs">jpg, png: 4mo max</span>
+                    </label>
+                    <input id="add-photo-input" class="add-photo-input" type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo" required="">
+                </div>
+                <div class="file-input-info">
+                    <label for="img-title">Titre</label>
+                    <input type="text" name="img-title" id="img-title" required="">
+                </div>
+                <div class="file-input-info">
+                    <label for="img-category">Catégorie</label>
+                    <select id="img-category" required=""><!-- here we add the category options using the API response and category availables -->
+                        <option value="1">Objets</option>
+                        <option value="2">Appartements</option>
+                        <option value="3">Hotels &amp; restaurants</option>
+                    </select>
+                </div>
+        </form>
+    </div>
     <div class="modal__footer">
         <div class="modal__line"></div>
         <button class="rnd-button rnd-button--green modal__action" type="button" data-version="gallery" href="#modal" form="modal__form">Valider</button>
@@ -158,34 +156,34 @@ function renderEditWorkForm(options) {
     return `
 				<h3 id="modal__title" class="modal__title">Éditer la photo</h3>
 				<div class="modal__content">
-					<!-- here we add the gallery using the API data -->
-				<form id="modal__form" class="modal__form" action="#" abineguid="F2AC75F3045740E2AB37BEF8E4F0A01B">
-						<div class="modal__form__imgDiv">
-							<!-- i want to change the name displayed in the input type file -->
-							<label for="add-photo-input" class="material-symbols-outlined add-photo-label">
-								imagesmode
-								<span class="add-photo-button">+ Ajouter photo</span>
-								<span class="add-photo-specs">jpg, png: 4mo max</span>
-							</label>
-							<input id="add-photo-input" class="add-photo-input" type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo" required="">
-						</div>
-						<div class="file-input-info">
-							<label for="img-title">Titre</label>
-							<input type="text" name="img-title" id="img-title" required="" placeholder="${options.imgTitle}">
-						</div>
-						<div class="file-input-info">
-							<label for="img-category">Catégorie</label>
-							<select id="img-category" required="">
-						
-							<!-- here we add the category options using the API response and category availables -->
-						<option value="1">Objets</option><option value="2">Appartements</option><option value="3">Hotels &amp; restaurants</option></select>
-					
-				</div></form></div>
+                    <form id="modal__form" class="modal__form" action="#" abineguid="F2AC75F3045740E2AB37BEF8E4F0A01B">
+                            <div class="modal__form__imgDiv">
+                                <!-- i want to change the name displayed in the input type file -->
+                                <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
+                                    imagesmode
+                                    <span class="add-photo-button">+ Ajouter photo</span>
+                                    <span class="add-photo-specs">jpg, png: 4mo max</span>
+                                </label>
+                                <input id="add-photo-input" class="add-photo-input" type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo" required="">
+                            </div>
+                            <div class="file-input-info">
+                                <label for="img-title">Titre</label>
+                                <input type="text" name="img-title" id="img-title" required="" placeholder="${options.imgTitle}">
+                            </div>
+                            <div class="file-input-info">
+                                <label for="img-category">Catégorie</label>
+                                <select id="img-category" required=""><!-- here we add the category options using the API response and category availables -->
+                                    <option value="1">Objets</option>
+                                    <option value="2">Appartements</option>
+                                    <option value="3">Hotels &amp; restaurants</option>
+                                </select>
+                            </div>
+                    </form>
+                </div>
 				<div class="modal__footer">
 					<div class="modal__line"></div>
 					<button class="rnd-button rnd-button--green modal__action" type="button" data-version="gallery" href="#modal" form="modal__form">Valider</button>
 				</div>
-
     `;
 }
 
@@ -194,8 +192,7 @@ function renderEditImageFrom(options) {
 
     <h3 id="modal__title" class="modal__title">Éditer la photo</h3>
     <div class="modal__content">
-        <!-- here we add the gallery using the API data -->
-    <form id="modal__form" class="modal__form" action="#">
+        <form id="modal__form" class="modal__form" action="#">
             <div class="modal__form__imgDiv">
                 <!-- i want to change the name displayed in the input type file -->
                 <label for="add-photo-input" class="material-symbols-outlined add-photo-label" style="background-image: url(&quot;http://127.0.0.1:5501/FrontEnd/assets/images/sophie-bluel.png&quot;); background-size: cover;">
@@ -210,10 +207,9 @@ function renderEditImageFrom(options) {
                 <input type="text" name="img-title" id="img-title">
             </div>
             <div class="file-input-info">
-                
-                
-        
-    </div></form></div>
+            </div>
+        </form>
+    </div>
     <div class="modal__footer">
         <div class="modal__line"></div>
         <button class="rnd-button rnd-button--green modal__action" type="button">Valider</button>
@@ -225,17 +221,17 @@ function renderEditText(options) {
     return `
     <h3 id="modal__title" class="modal__title">Changer le texte</h3>
     <div class="modal__content">
-        <!-- here we add the gallery using the API data -->
-    <form id="modal__txt--change" class="modal__form" action="#">
-            <div class="about-input">
-                <label for="about-title">Titre d'introduction</label>
-                <input type="text" name="about-title" id="about-title">
-            </div>
-            <div class="about-input">
-                <label for="about-txt">Éditer la description</label>
-                <textarea name="about-txt" id="about-txt" cols="1000" rows="1000"></textarea>
-            </div>
-        </form></div>
+        <form id="modal__txt--change" class="modal__form" action="#">
+                <div class="about-input">
+                    <label for="about-title">Titre d'introduction</label>
+                    <input type="text" name="about-title" id="about-title">
+                </div>
+                <div class="about-input">
+                    <label for="about-txt">Éditer la description</label>
+                    <textarea name="about-txt" id="about-txt" cols="1000" rows="1000"></textarea>
+                </div>
+        </form>
+    </div>
     <div class="modal__footer">
         <div class="modal__line"></div>
         <button class="rnd-button rnd-button--green modal__action" type="button">Valider</button>
