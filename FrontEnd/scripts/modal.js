@@ -77,11 +77,11 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     console.log('===> openModal', type, options);
     previouslyFocusedElement = document.querySelector(':focus');
     modal = document.querySelector('#myModal');
-    const modalContent = document.querySelector('.modal__content');
-    modalContent.innerHTML = renderModalContent(type, options);
+    const modalBody = document.querySelector('.modal__body');
+    modalBody.innerHTML = renderModalContent(type, options);
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
-    modal.style.display = "block";
+    modal.style.display = "";
 
 
 
