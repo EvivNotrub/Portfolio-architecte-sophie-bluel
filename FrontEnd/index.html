@@ -13,16 +13,34 @@
 	<link rel="stylesheet" href="./assets/modal.css">
 </head>
 <body>
-	<div id="myModal" class="modal">
+	<!-- <div id="myModal" class="modal">
 		<div class="modal-wrapper js-modal-stop">
 			<div class="modal-header">
 				<span class="modal-close-button js-modal-close">&times;</span>
 			</div>
 			<div class="modal-content">
-				<!--- Modal content -->
+				---- Modal content-----
 			</div>
 		</div>
-  	</div>
+  	</div> -->
+	  <aside id="myModal" class="modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="modal__title" >
+		<div class="modal-wrapper js-modal-stop">
+			<div class="modal__header">
+				<button class="material-symbols-outlined modal__arrow">arrow_back</button>
+				<button class="js-modal-close material-symbols-outlined modal__close">close</button>
+			</div>
+			<div class="modal__content"><!--ex modal__body -->
+				<!-- <h3 id="modal__title" class="modal__title"></h3>
+				<div class="modal__content">
+					here we add the gallery using the API data
+				</div>
+				<div class="modal__footer">
+					<div class="modal__line"></div>
+					<button class="rnd-button rnd-button--green modal__action"></button>
+				</div> -->
+			</div>
+		</div>
+	</aside>
 	<header>
 		<div class="edit">
 			<p class="header__edit__indication">

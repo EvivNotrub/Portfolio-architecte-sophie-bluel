@@ -1,6 +1,7 @@
 import { closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
-
-let closeModalLinks = [];
+import { getFocusables, focusInModal, focusables} from "./focus.js";
+let closeModalLinks = [], previouslyFocusedElement = null;
+export let modal = null;
 
 export const MODAL_TYPE = {
     ADD_FORM: 'add_form',
@@ -21,10 +22,27 @@ function renderWorksCards(options) {
 
 function renderAddWorkForm(options) {
     return `
-        <div>
-            <input name="title" placeholder="Titre" />
-            <button class="modal-action-add">Valider</button>
-        </div>
+    <form id="modal__form" class="modal__form" action="#">
+    <div class="modal__form__imgDiv">
+        <!-- i want to change the name displayed in the input type file -->
+        <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
+            imagesmode
+            <span class="add-photo-button">+ Ajouter photo</span>
+            <span class="add-photo-specs">jpg, png: 4mo max</span>
+        </label>
+        <input id="add-photo-input"class="add-photo-input"  type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo">
+    </div>
+    <div class="file-input-info">
+        <label for="img-title">Titre</label>
+        <input type="text" name="img-title" id="img-title">
+    </div>
+    <div class="file-input-info">
+        <label for="img-category">Catégorie</label>
+        <select id="img-category">
+            <!-- here we add the category options using the API response and category availables -->
+        </select>
+    </div>  
+</form>
     `;
 }
 
@@ -54,12 +72,18 @@ function renderModalContent(type = MODAL_TYPE.GALLERY, options) {
     return modalContent;
 }
 
+
 export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     console.log('===> openModal', type, options);
-    const modal = document.querySelector('#myModal');
-    const modalContent = document.querySelector('.modal-content');
+    previouslyFocusedElement = document.querySelector(':focus');
+    modal = document.querySelector('#myModal');
+    const modalContent = document.querySelector('.modal__content');
     modalContent.innerHTML = renderModalContent(type, options);
-    modal.style.display = 'block';
+    modal.removeAttribute("aria-hidden");
+    modal.setAttribute("aria-modal", "true");
+    modal.style.display = "block";
+
+
 
     const modalActionAddButton = document.querySelector('.modal-action-add');
     modalActionAddButton && modalActionAddButton.addEventListener('click', function() {
@@ -79,21 +103,42 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
         console.log('===> modalActionDeleteButton', event.target.href)
     });
 
-    // When the user clicks anywhere outside of the modal, it closes!
+
+    getFocusables();
+    focusables[1].focus();
+
+    // When the user clicks anywhere outside of the modal, it closes
     modal.addEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
     closeModalLinks = closeModalLinkSetup(closeModalLinks, modal);
 }
 
 export function closeModal() {
-    const modal = document.querySelector('#myModal');
+    if (modal === null) return;
+    modal = document.querySelector('#myModal');
     modal.removeEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
     closeModalLinks = removeCloseModalLinkSetup(closeModalLinks, modal);
-    modal.style.display = 'none';
+    modal.setAttribute("aria-hidden", "true");
+    modal.removeAttribute("aria-modal");
+    const hideModal = function () {
+        modal.style.display = "none";
+        modal.removeEventListener('animationend', hideModal)
+        modal = null;
+    };
+    modal.addEventListener('animationend', hideModal)
 
 }
 
 const stopPropagation = function (event) {
     event.stopPropagation();
 };
+
+window.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" || event.key === "Esc") {
+        closeModal(event);
+    }
+    if (event.key === "Tab" && modal !== null) {
+        focusInModal(event);
+    }
+});
