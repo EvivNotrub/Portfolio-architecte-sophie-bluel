@@ -1,9 +1,8 @@
 import { getCategories as getCategoriesData, getWorks as getWorksData } from './api.js';
-// import { openModal, closeModal, MODAL_TYPE } from './modal.js';
 import { openModalLinkSetup, closeModalLinkSetup} from './modalLink.js';
 import { filters } from './filters.js';
 
-export let openModalLinks = [], token, categories;
+let openModalLinks = [], token, categories;
 
 const loginButton = document.querySelector("#login-link");
 

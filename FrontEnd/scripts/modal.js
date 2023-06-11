@@ -1,7 +1,11 @@
-import { closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
+import { openModalLinkSetup, closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
 import { getFocusables, focusInModal, focusables} from "./focus.js";
+// import { openModalLinks} from "./works.js";
+// let openModalLinks2 = [];
 let closeModalLinks = [], previouslyFocusedElement = null;
 export let modal = null;
+let works;
+const arrow = document.getElementById('modal__arrow');
 
 export const MODAL_TYPE = {
     ADD_FORM: 'add_form',
@@ -12,6 +16,7 @@ export const MODAL_TYPE = {
 };
 
 function renderWorksCards(options) {
+    works = options.data;
     console.log("==> renderWorksCards\n", "options :", options);
     const worksGallery = options.data.map((work) => (`
     <a data-id="${work.id}" data-title="${work.title}" data-cat="${work.category.name}" href="#" class="js-modal" data-version="edit_work">
@@ -109,7 +114,7 @@ function renderAddWorkForm(options) {
     </div>
     <div class="modal__footer">
         <div class="modal__line"></div>
-        <button class="rnd-button rnd-button--green modal__action" type="button" data-version="gallery" href="#modal" form="modal__form">Valider</button>
+        <button class="js-modal rnd-button rnd-button--green modal__action" type="button" data-version="gallery" href="#modal" form="modal__form">Valider</button>
     </div>
     `;
 }
@@ -158,7 +163,6 @@ function renderEditWorkForm(options) {
 				<div class="modal__content">
                     <form id="modal__form" class="modal__form" action="#" abineguid="F2AC75F3045740E2AB37BEF8E4F0A01B">
                             <div class="modal__form__imgDiv">
-                                <!-- i want to change the name displayed in the input type file -->
                                 <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
                                     imagesmode
                                     <span class="add-photo-button">+ Ajouter photo</span>
@@ -182,7 +186,7 @@ function renderEditWorkForm(options) {
                 </div>
 				<div class="modal__footer">
 					<div class="modal__line"></div>
-					<button class="rnd-button rnd-button--green modal__action" type="button" data-version="gallery" href="#modal" form="modal__form">Valider</button>
+					<button class="js-modal rnd-button rnd-button--green modal__action" type="button" data-version="gallery" href="#modal" form="modal__form">Valider</button>
 				</div>
     `;
 }
@@ -241,21 +245,27 @@ function renderEditText(options) {
 
 function renderModalContent(type = MODAL_TYPE.GALLERY, options) {
     let modalContent;
+    
     switch (type) {
         case MODAL_TYPE.ADD_FORM:
+
             modalContent = renderAddWorkForm(options);
             break;
         case MODAL_TYPE.EDIT_WORK:
+
             modalContent = renderEditWorkForm(options);
             break;
         case MODAL_TYPE.GALLERY:
         default:
+
             modalContent = renderWorksCards(options);
             break;
         case MODAL_TYPE.EDIT_TEXT:
+ 
             modalContent = renderEditText(options);
             break;
         case MODAL_TYPE.EDIT_IMAGE:
+
             modalContent = renderEditImageFrom(options);
             break;
     }
@@ -263,18 +273,26 @@ function renderModalContent(type = MODAL_TYPE.GALLERY, options) {
 }
 
 
-export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
-    console.log('===> openModal with : ', type, options);
+export function openModal(type = MODAL_TYPE.GALLERY, options = {}, openModalLinks) {
+    console.log('===> openModal with type: ', type, 'options : ', options, 'openLinksSetup', openModalLinks);
     previouslyFocusedElement = document.querySelector(':focus');
     modal = document.querySelector('#myModal');
     const modalBody = document.querySelector('.modal__body');
     modalBody.innerHTML = renderModalContent(type, options);
+    console.log('===> arrow', arrow, 'options.arrow', options.arrow);
+    if (options.arrow) {
+        arrow.classList.add('js-modal');
+        arrow.style.transform = "scale(1)";
+     }else{
+        arrow.classList.remove('js-modal');
+        arrow.style.transform = "scale(0)";
+     }
+    openModalLinks = openModalLinkSetup(openModalLinks, works, modal);
+    console.log('===> openModalLinksModal', openModalLinks);
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
     modal.style.display = "";
-
-
-
+    
     const modalActionAddButton = document.querySelector('.modal-action-add');
     modalActionAddButton && modalActionAddButton.addEventListener('click', function() {
         // fire add action
@@ -294,7 +312,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     });
 
 
-    getFocusables();
+    getFocusables(options.arrow);
     focusables[2].focus();
 
     // When the user clicks anywhere outside of the modal, it closes
@@ -307,6 +325,8 @@ export function closeModal() {
     if (modal === null) return;
     if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
     modal = document.querySelector('#myModal');
+    arrow.classList.remove('js-modal');
+    arrow.style.transform = "scale(0)";
     modal.removeEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
     closeModalLinks = removeCloseModalLinkSetup(closeModalLinks, modal);

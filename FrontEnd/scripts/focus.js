@@ -6,7 +6,7 @@ export const focusableSelector = "button, a, input, textarea, select";
 export function getFocusables(arrow = false) {
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
     console.log(focusables);
-    if (arrow) {
+    if (!arrow) {
         focusables = focusables.filter(f => !f.classList.contains("modal__arrow"));
         console.log(focusables);
     }

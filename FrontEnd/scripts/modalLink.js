@@ -22,13 +22,22 @@ function setModalOptions(link, type, works) {
     let options;
     if(type === "gallery") {
         console.log(works);
-        options = { data: works };
+        options = { data: works,
+                    arrow: false  };
     } else if (type === "edit_work") {
-        options = { imgId: link.dataset.id,
-                    imgCat : link.dataset.cat,
-                    imgTitle : link.dataset.title,
+        options = { id: link.dataset.id,
+                    category : link.dataset.cat,
+                    title : link.dataset.title,
+                    arrow: true
                 };
+    } else if (type === "edit_text") {
+        options = { arrow: false };
+    } else if (type === "edit_image") {
+        options = { arrow: false };
+    } else if (type === "add_form") {
+        options = { arrow: true };
     }
+
     console.log('===> options in linkSetup function: ', options);
     return options;
 }
@@ -38,9 +47,10 @@ export function openModalLinkSetup (openModalLinks, works, container) {
     if (!!openModalLinks) {
         openModalLinks.forEach( link => {
             link.removeEventListener('click', openModal);
+            console.log('===> link', link, 'removed EL openModal', );
         })
     };
-
+    console.log("input works", works, "input container", container);
     openModalLinks = Array.from(container.querySelectorAll('.js-modal'));
         console.log("openModalLinks setup EL after :", openModalLinks);
         openModalLinks.forEach( link => {
@@ -51,7 +61,8 @@ export function openModalLinkSetup (openModalLinks, works, container) {
             console.log('===> options in linkSetup function: ', options);
             link.removeEventListener('click', openModal);
             link.addEventListener('click', () => {
-                openModal(type, options)
+                console.log("==>> link click fired");
+                openModal(type, options, openModalLinks)
             })
         });
     return openModalLinks;
