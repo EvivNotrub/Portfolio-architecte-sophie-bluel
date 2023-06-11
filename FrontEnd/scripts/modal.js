@@ -21,14 +21,13 @@ function renderWorksCards(options) {
     const worksGallery = options.data.map((work) => (`
     <a data-id="${work.id}" data-title="${work.title}" data-cat="${work.category.name}" href="#" class="js-modal" data-version="edit_work">
         <div class="modal__icons">
-            <span class="icon-bin material-symbols-outlined" data-id="1">delete</span>
+            <span class="icon-bin material-symbols-outlined modal-action-delete-item" data-id="1">delete</span>
             <span class="icon-drag material-symbols-outlined">drag_pan</span>
         </div>
         <img src="${work.imageUrl}" alt="${work.title}">
         <figcaption>éditer</figcaption>
     </a>
     `));
-     
     return       `<h3 id="modal__title" class="modal__title">Galerie Photos</h3>
     <div class="modal__content">
         <div id="galleryModal" class="galleryModal">
@@ -38,7 +37,7 @@ function renderWorksCards(options) {
     
     <div class="modal__footer">
         <div class="modal__line"></div>
-        <button class="rnd-button rnd-button--green modal__action js-modal" type="button" href="#" data-version="add_form" data-id="add">Ajouter une photo</button>
+        <button class="js-modal rnd-button rnd-button--green modal__action" type="button" href="#" data-version="add_form" data-id="add">Ajouter une photo</button>
     </div>`;    
 }
 
@@ -88,7 +87,7 @@ function renderAddWorkForm(options) {
     return `
     <h3 id="modal__title" class="modal__title">Ajout photo</h3>
     <div class="modal__content">
-        <form id="modal__form" class="modal__form" action="#">
+        <form id="modal__form-add" class="modal__form" action="#">
                 <div class="modal__form__imgDiv">
                     <!-- i want to change the name displayed in the input type file -->
                     <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
@@ -114,7 +113,7 @@ function renderAddWorkForm(options) {
     </div>
     <div class="modal__footer">
         <div class="modal__line"></div>
-        <button class="js-modal rnd-button rnd-button--green modal__action" type="button" data-version="gallery" href="#modal" form="modal__form">Valider</button>
+        <button class="js-modal rnd-button rnd-button--green modal__action modal-action-add" type="submit" data-version="gallery" href="#modal" form="modal__form-add">Valider</button>
     </div>
     `;
 }
@@ -161,7 +160,7 @@ function renderEditWorkForm(options) {
     return `
 				<h3 id="modal__title" class="modal__title">Éditer la photo</h3>
 				<div class="modal__content">
-                    <form id="modal__form" class="modal__form" action="#" abineguid="F2AC75F3045740E2AB37BEF8E4F0A01B">
+                    <form id="modal__form-edit-work" class="modal__form" action="#">
                             <div class="modal__form__imgDiv">
                                 <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
                                     imagesmode
@@ -186,7 +185,7 @@ function renderEditWorkForm(options) {
                 </div>
 				<div class="modal__footer">
 					<div class="modal__line"></div>
-					<button class="js-modal rnd-button rnd-button--green modal__action" type="button" data-version="gallery" href="#modal" form="modal__form">Valider</button>
+					<button class="js-modal rnd-button rnd-button--green modal__action modal-action-edit-work" type="submit" data-version="gallery" href="#modal" form="modal__form-edit-work">Valider</button>
 				</div>
     `;
 }
@@ -196,7 +195,7 @@ function renderEditImageFrom(options) {
 
     <h3 id="modal__title" class="modal__title">Éditer la photo</h3>
     <div class="modal__content">
-        <form id="modal__form" class="modal__form" action="#">
+        <form id="modal__form-edit-img" class="modal__form" action="#">
             <div class="modal__form__imgDiv">
                 <!-- i want to change the name displayed in the input type file -->
                 <label for="add-photo-input" class="material-symbols-outlined add-photo-label" style="background-image: url(&quot;http://127.0.0.1:5501/FrontEnd/assets/images/sophie-bluel.png&quot;); background-size: cover;">
@@ -216,7 +215,7 @@ function renderEditImageFrom(options) {
     </div>
     <div class="modal__footer">
         <div class="modal__line"></div>
-        <button class="rnd-button rnd-button--green modal__action" type="button">Valider</button>
+        <button type="submit" class="rnd-button rnd-button--green modal__action modal-action-edit-image" form="modal__form-edit-img">Valider</button>
     </div>
     `;
 }
@@ -225,7 +224,7 @@ function renderEditText(options) {
     return `
     <h3 id="modal__title" class="modal__title">Changer le texte</h3>
     <div class="modal__content">
-        <form id="modal__txt--change" class="modal__form" action="#">
+        <form id="modal__form-edit-txt" class="modal__form" action="#">
                 <div class="about-input">
                     <label for="about-title">Titre d'introduction</label>
                     <input type="text" name="about-title" id="about-title">
@@ -238,7 +237,7 @@ function renderEditText(options) {
     </div>
     <div class="modal__footer">
         <div class="modal__line"></div>
-        <button class="rnd-button rnd-button--green modal__action" type="button">Valider</button>
+        <button type="submit" class="rnd-button rnd-button--green modal__action modal-action-edit-text" form="modal__form-edit-txt">Valider</button>
     </div>
     `;
 }
@@ -298,20 +297,34 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}, openModalLink
         // fire add action
     });
 
-    const modalActionEditButton = document.querySelector('.modal-action-edit');
+    const modalActionEditButton = document.querySelector('.modal-action-edit-work');
     modalActionEditButton && modalActionEditButton.addEventListener('click', function(event) {
         // fire edit action
         event.preventDefault();
         console.log('===> modalActionEditButton', event)
     });
 
-    const modalActionDeleteButton = document.querySelector('.modal-action-delete-item');
-    modalActionDeleteButton && modalActionDeleteButton.addEventListener('click', function(event) {
-        // fire delete action
-        console.log('===> modalActionDeleteButton', event.target.href)
+    document.querySelectorAll('.modal-action-delete-item').forEach( modalActionDeleteButton => {
+        modalActionDeleteButton && modalActionDeleteButton.addEventListener('click', function(event) {
+            // fire delete action
+            event.stopPropagation();
+            alert('delete item !');
+            console.log('===> modalActionDeleteButton', event.target.href)
+        });
     });
 
+    const modalActionEditImageButton = document.querySelector('.modal-action-edit-image');
+    modalActionEditImageButton && modalActionEditImageButton.addEventListener('click', function(event) {
+        // fire edit image action
+        console.log('===> modalActionEditImageButton', event.target.href)
+    });
 
+    const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
+    modalActionEditTextButton && modalActionEditTextButton.addEventListener('click', function(event) {
+        // fire edit text action
+        console.log('===> modalActionEditTextButton', event.target.href)
+    });
+    
     getFocusables(options.arrow);
     focusables[2].focus();
 
