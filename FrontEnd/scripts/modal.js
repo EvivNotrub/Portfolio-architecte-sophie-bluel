@@ -1,8 +1,8 @@
-import { openModalLinkSetup, closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
+import { openModalLinkSetup, removeOpenModalLinkSetup, closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
 import { getFocusables, focusInModal, focusables} from "./focus.js";
 import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete } from "./modalActions.js";
 // import { openModalLinks} from "./works.js";
-// let openModalLinks2 = [];
+let openModalLinks = [];
 let closeModalLinks = [], previouslyFocusedElement = null;
 export let modal = null;
 let works;
@@ -273,8 +273,16 @@ function renderModalContent(type = MODAL_TYPE.GALLERY, options) {
 }
 
 
-export function openModal(type = MODAL_TYPE.GALLERY, options = {}, openModalLinks) {
-    console.log('===> openModal with type: ', type, 'options : ', options, 'openLinksSetup', openModalLinks);
+export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
+    console.log("==> Open Modal!  ?existing modal? : ",modal);
+    if (modal) {
+        removeOpenModalLinkSetup(modal);
+    }
+    
+    // console.log(modal, "openModalLinks before", openModalLinks);
+    // openModalLinks = openModalLinks != [] ? removeOpenModalLinkSetup(openModalLinks) : [];
+    // console.log('===> openModalLinks after remove', openModalLinks);
+    console.log('===> openModal with type: ', type, 'options : ', options);
     previouslyFocusedElement = document.querySelector(':focus');
     modal = document.querySelector('#myModal');
     const modalBody = document.querySelector('.modal__body');
@@ -287,7 +295,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}, openModalLink
         arrow.classList.remove('js-modal');
         arrow.style.transform = "scale(0)";
      }
-    openModalLinks = openModalLinkSetup(openModalLinks, works, modal);
+    openModalLinks = openModalLinkSetup( works, modal);
     console.log('===> openModalLinksModal', openModalLinks);
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
@@ -341,21 +349,20 @@ function removeActionEventListerner() {
 
 }
 
-
-
 export function closeModal() {
     if (modal === null) return;
+    removeOpenModalLinkSetup(modal);
     if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
     modal = document.querySelector('#myModal');
     arrow.classList.remove('js-modal');
     arrow.style.transform = "scale(0)";
 
     removeActionEventListerner();
-
+    
 
     modal.removeEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
-    closeModalLinks = removeCloseModalLinkSetup(closeModalLinks, modal);
+    closeModalLinks = removeCloseModalLinkSetup(closeModalLinks);
     modal.setAttribute("aria-hidden", "true");
     modal.removeAttribute("aria-modal");
     const hideModal = function () {
