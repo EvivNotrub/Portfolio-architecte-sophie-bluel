@@ -1,6 +1,5 @@
 import { openModal, closeModal, MODAL_TYPE } from './modal.js';
 // import { openModal, MODAL_TYPE } from './modal.js';
-let openModalLinks = [];
 
 
 function setModalTyp(link) {
