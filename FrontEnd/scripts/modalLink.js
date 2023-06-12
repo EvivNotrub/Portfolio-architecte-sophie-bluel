@@ -43,19 +43,10 @@ function setModalOptions(link, type, works) {
 }
 
 export function openModalLinkSetup (works, container) {
-    console.log("==> openModalLinkSetup\n", "openModalLinks setup EL before :", openModalLinks);
-    if (!!openModalLinks) {
-        openModalLinks.forEach( link => {
-            link.classList.remove('js-modal');
-            link.removeEventListener('click', () => {
-                console.log("==>> link click fired");
-                openModal(type, options)
-            });
-            console.log('===> link', link, 'removed EL openModal', );
-        })
-    };
+    console.log("==> openModalLinkSetup\n" );
+   
     console.log("input works", works, "input container", container);
-    openModalLinks = Array.from(container.querySelectorAll('.js-modal'));
+    const openModalLinks = Array.from(container.querySelectorAll('.js-modal'));
         console.log("openModalLinks setup EL after :", openModalLinks);
         openModalLinks.forEach( link => {
 
@@ -71,10 +62,36 @@ export function openModalLinkSetup (works, container) {
     return openModalLinks;
 }
 
+export function removeOpenModalLinkSetup (modal) {
+    console.log("==> removeOpenModalLinkSetup\n");
+    const openModalLinks = modal.querySelectorAll(".js-modal");
+    console.log("openModalLinks rmvEL before :\n", openModalLinks);
+    openModalLinks && openModalLinks.forEach( link => {
+        link.classList.remove("js-modal");
+        link.removeEventListener('click', () => {
+            console.log("==>> link click fired");
+            openModal(type, options)
+        });
+    });
+    console.log("openModalLinks rmvEL after :\n", openModalLinks);
+}
+// export function removeOpenModalLinkSetup (openModalLinks) {
+//     console.log("==> removeOpenModalLinkSetup\n", "openModalLinks rmvEL before :\n", openModalLinks);
+//     openModalLinks.forEach( link => {
+//         link.removeEventListener('click', () => {
+//             console.log("==>> link click fired");
+//             openModal(type, options)
+//         });
+//     });
+//     return openModalLinks;
+// }
+
 export function closeModalLinkSetup (closeModalLinks, container) {
     console.log("==> closeModalLinkSetup\n", "closeModalLinks set EL before :\n", closeModalLinks);
     if (!!closeModalLinks) {
+        console.log("closeModalLinks set EL before :\n", closeModalLinks);
         closeModalLinks.forEach( link => {
+            console.log('===> link in closeModalLinkSetup', link);
             link.removeEventListener('click', closeModal);
         })
     };
@@ -87,7 +104,7 @@ export function closeModalLinkSetup (closeModalLinks, container) {
     });
     return closeModalLinks;
 }
-export function removeCloseModalLinkSetup (closeModalLinks, container) {
+export function removeCloseModalLinkSetup (closeModalLinks) {
     console.log("==> removeCloseModalLinkSetup\n", "closeModalLinks rmvEL before :\n", closeModalLinks);
     closeModalLinks.forEach( link => {
         link.removeEventListener('click', closeModal);
