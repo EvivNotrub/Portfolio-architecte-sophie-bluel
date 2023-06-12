@@ -1,6 +1,6 @@
 import { openModal, closeModal, MODAL_TYPE } from './modal.js';
 // import { openModal, MODAL_TYPE } from './modal.js';
-
+import { getWorks } from './api.js';
 
 function setModalTyp(link) {
         let type;
@@ -16,11 +16,12 @@ function setModalTyp(link) {
         return type;
 }
 
-function setModalOptions(link, type, works) {
+async function setModalOptions(link, type) {
     let id = link.dataset.id ? link.dataset.id : null;
     let options;
     if(type === "gallery") {
-        console.log(works);
+        const works = await getWorks();
+        console.log("works from setModalOptions : ",works);
         options = { data: works,
                     arrow: false  };
     } else if (type === "edit_work") {
@@ -41,17 +42,17 @@ function setModalOptions(link, type, works) {
     return options;
 }
 
-export function openModalLinkSetup (works, container) {
+export function openModalLinkSetup (works, container = document) {
     console.log("==> openModalLinkSetup\n" );
    
     console.log("input works", works, "input container", container);
     const openModalLinks = Array.from(container.querySelectorAll('.js-modal'));
         console.log("openModalLinks setup EL after :", openModalLinks);
-        openModalLinks.forEach( link => {
+        openModalLinks.forEach( async link => {
 
             const type = setModalTyp(link);
             console.log('===> type in linkSetup function: ', type);
-            const options = setModalOptions(link, type, works);
+            const options = await setModalOptions(link, type);
             console.log('===> options in linkSetup function: ', options);
             link.addEventListener('click', () => {
                 console.log("==>> link click fired");

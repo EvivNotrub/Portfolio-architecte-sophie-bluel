@@ -90,7 +90,7 @@ export async function actionAdd(event) {
               alert("Annulation de l'ajout de la photo");
               return;
           }
-    openModal();
+    
 }
 
 export function actionEdit(event) {
@@ -114,6 +114,8 @@ export async function actionDelete(event) {
   console.log(title);
   const token = JSON.parse(localStorage.getItem("token"));
   console.log(token);
+  const parent = event.target.parentNode.parentNode;
+  console.log(parent);
   url = `http://localhost:5678/api/works/${id}`;
         request = {
           method: "DELETE",
@@ -121,10 +123,11 @@ export async function actionDelete(event) {
             "Authorization": `Bearer ${token}`
               }
         };
-    // fire delete action
+    // if(!await customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir supprimer cette photo ?"})){
     if(confirm('Effacer le projet n°' + id + ' \"' + title + '\" de category : ' + category + ' ?')){
       const response = await fetch( url, request);
-        if(response.ok){          
+        if(response.ok){
+          event.target.parentNode.parentNode.remove();        
             // await customAlert("success", {body: "Votre photo a bien été supprimée !"});   
             alert("Votre photo a bien été supprimée !");       
           Promise.resolve(response);
@@ -137,6 +140,7 @@ export async function actionDelete(event) {
       alert("Annulation de la suppression de la photo");
       return;
     }
+
 }
 
 export function actionEditTxt(event) {
