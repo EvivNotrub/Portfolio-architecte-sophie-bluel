@@ -1,7 +1,7 @@
 import { openModalLinkSetup, removeOpenModalLinkSetup, closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
 import { getFocusables, focusInModal, focusables} from "./focus.js";
-import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete } from "./modalActions.js";
-// import { openModalLinks} from "./works.js";
+import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete } from "./modalActionButton.js";
+import { addFormFunctions, editWorkFunctions, editImgFunctions, galleryFunctions, editTxtFunctions } from "./modalContentFunctions.js";
 let openModalLinks = [];
 let closeModalLinks = [], previouslyFocusedElement = null;
 export let modal = null;
@@ -20,9 +20,9 @@ function renderWorksCards(options) {
     works = options.data;
     console.log("==> renderWorksCards\n", "options :", options);
     const worksGallery = options.data.map((work) => (`
-    <a data-id="${work.id}" data-title="${work.title}" data-cat="${work.category.name}" href="#" class="js-modal" data-version="edit_work">
+    <a href="#" class="js-modal" data-version="edit_work">
         <div class="modal__icons">
-            <span class="icon-bin material-symbols-outlined modal-action-delete-item" data-id="1">delete</span>
+            <span data-id="${work.id}" data-title="${work.title}" data-cat="${work.category.name}" class="icon-bin material-symbols-outlined modal-action-delete-item" data-id="1">delete</span>
             <span class="icon-drag material-symbols-outlined">drag_pan</span>
         </div>
         <img src="${work.imageUrl}" alt="${work.title}">
@@ -41,48 +41,6 @@ function renderWorksCards(options) {
         <button class="js-modal rnd-button rnd-button--green modal__action" type="button" href="#" data-version="add_form" data-id="add">Ajouter une photo</button>
     </div>`;    
 }
-
-    //  options.data.map((work) => (`
-    //     <div>
-    //         <a href="#?work=${work.id}" class="modal-action-delete-item">x</a>
-    //         <div>${work.imageUrl}</div>
-    //         <div>${work.title}</div>
-    //         <div>${work.id}</div>
-    //     </div>
-    // `));
-
-
-// function renderAddWorkForm(options) {
-//     return `
-// <form id="modal__form" class="modal__form" action="#">
-//     <div class="modal__content">
-//         <div class="modal__form__imgDiv">
-//             <!-- i want to change the name displayed in the input type file -->
-//             <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
-//                 imagesmode
-//                 <span class="add-photo-button">+ Ajouter photo</span>
-//                 <span class="add-photo-specs">jpg, png: 4mo max</span>
-//             </label>
-//             <input id="add-photo-input"class="add-photo-input"  type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo">
-//         </div>
-//         <div class="file-input-info">
-//             <label for="img-title">Titre</label>
-//             <input type="text" name="img-title" id="img-title">
-//         </div>
-//         <div class="file-input-info">
-//             <label for="img-category">Catégorie</label>
-//             <select id="img-category">
-//                 <!-- here we add the category options using the API response and category availables -->
-//             </select>
-//         </div>
-//     </div>
-//     <div class="modal__footer">
-//         <div class="modal__line"></div>
-//         <button type="submit" class="modal-action-add">Valider</button>
-//     </div>
-// </form>
-//     `;
-// }
 
 function renderAddWorkForm(options) {
     return `
@@ -118,42 +76,6 @@ function renderAddWorkForm(options) {
     </div>
     `;
 }
-
-// function renderEditWorkForm(options) {
-    
-//     return `
-//     <h3 id="modal__title" class="modal__title">Éditer la Photo</h3>
-// 	<div class="modal__content">
-//         <form id="modal__form" class="modal__form" action="#">
-//             <div class="modal__form__imgDiv">
-//                 <!-- i want to change the name displayed in the input type file -->
-//                 <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
-//                 imagesmode
-//                 <span class="add-photo-button">+ Ajouter photo</span>
-//                 <span class="add-photo-specs">jpg, png: 4mo max</span>
-//                 </label>
-//                 <input id="add-photo-input"class="add-photo-input"  type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo">
-//             </div>
-//         <div class="file-input-info">
-//             <label for="img-title">Titre</label>
-//             <input type="text" name="img-title" id="img-title" placeholder="${options.imgTitle}">
-//         </div>
-//         <div class="file-input-info">
-//             <label for="img-category">Catégorie</label>
-//             <select id="img-category">
-//                 <!-- here we add the category options using the API response and category availables -->
-//             </select>
-//         </div>
-//         </div>
-//         </form>
-//     </div>
-// 	<div class="modal__footer">
-// 		<div class="modal__line"></div>
-// 		<button type="submit" form="modal__form" class="rnd-button rnd-button--green modal__action">Éditer</button>
-// 	</div>
-
-//     `;
-// }
 
 
 function renderEditWorkForm(options) {
@@ -248,30 +170,64 @@ function renderModalContent(type = MODAL_TYPE.GALLERY, options) {
     
     switch (type) {
         case MODAL_TYPE.ADD_FORM:
-
             modalContent = renderAddWorkForm(options);
             break;
         case MODAL_TYPE.EDIT_WORK:
-
             modalContent = renderEditWorkForm(options);
             break;
         case MODAL_TYPE.GALLERY:
         default:
-
             modalContent = renderWorksCards(options);
             break;
-        case MODAL_TYPE.EDIT_TEXT:
- 
+        case MODAL_TYPE.EDIT_TEXT: 
             modalContent = renderEditText(options);
             break;
         case MODAL_TYPE.EDIT_IMAGE:
-
             modalContent = renderEditImageFrom(options);
             break;
     }
     return modalContent;
 }
 
+function removeModalActionEventListerner() {
+
+
+    const modalActionAddButton = document.querySelector('.modal-action-add');
+    modalActionAddButton && modalActionAddButton.removeEventListener('click', actionAdd);
+
+    const modalActionEditButton = document.querySelector('.modal-action-edit-work');
+    modalActionEditButton && modalActionEditButton.removeEventListener('click', actionEdit);
+
+    const modalActionEditImageButton = document.querySelector('.modal-action-edit-image');
+    modalActionEditImageButton && modalActionEditImageButton.removeEventListener('click', actionEditImage );
+
+    const pictures = document.querySelectorAll('.modal-action-delete-item');
+    pictures && pictures.forEach( modalActionDeleteButton => {
+            console.log('picture : ', modalActionDeleteButton);
+            modalActionDeleteButton.removeEventListener('click', actionDelete);
+        });
+
+    const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
+    modalActionEditTextButton && modalActionEditTextButton.removeEventListener('click', actionEditTxt);
+
+}
+function addModalActionEventListener() {
+    const modalActionAddButton = document.querySelector('.modal-action-add');
+    modalActionAddButton && modalActionAddButton.addEventListener('click', actionAdd);
+
+    const modalActionEditButton = document.querySelector('.modal-action-edit-work');
+    modalActionEditButton && modalActionEditButton.addEventListener('click', actionEdit);
+
+    document.querySelectorAll('.modal-action-delete-item').forEach( modalActionDeleteButton => {
+        modalActionDeleteButton && modalActionDeleteButton.addEventListener('click', actionDelete);
+    });
+
+    const modalActionEditImageButton = document.querySelector('.modal-action-edit-image');
+    modalActionEditImageButton && modalActionEditImageButton.addEventListener('click', actionEditImage);
+
+    const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
+    modalActionEditTextButton && modalActionEditTextButton.addEventListener('click', actionEditTxt);
+}
 
 export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     console.log("==> Open Modal!  ?existing modal? : ",modal);
@@ -300,23 +256,16 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
     modal.style.display = "";
-    
-    const modalActionAddButton = document.querySelector('.modal-action-add');
-    modalActionAddButton && modalActionAddButton.addEventListener('click', actionAdd);
+    // manages the modal validation button:
+    addModalActionEventListener();
+    // functions for the content of the modal:
+    if (type == MODAL_TYPE.ADD_FORM ) {addFormFunctions()};
+    if (type == MODAL_TYPE.EDIT_WORK ) {editWorkFunctions()};
+    if (type == MODAL_TYPE.EDIT_IMAGE ) {editImgFunctions()};
+    if (type == MODAL_TYPE.EDIT_TEXT ) {editTxtFunctions()};
+    if (type == MODAL_TYPE.GALLERY ) {galleryFunctions()};
 
-    const modalActionEditButton = document.querySelector('.modal-action-edit-work');
-    modalActionEditButton && modalActionEditButton.addEventListener('click', actionEdit);
-
-    document.querySelectorAll('.modal-action-delete-item').forEach( modalActionDeleteButton => {
-        modalActionDeleteButton && modalActionDeleteButton.addEventListener('click', actionDelete);
-    });
-
-    const modalActionEditImageButton = document.querySelector('.modal-action-edit-image');
-    modalActionEditImageButton && modalActionEditImageButton.addEventListener('click', actionEditImage);
-
-    const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
-    modalActionEditTextButton && modalActionEditTextButton.addEventListener('click', actionEditTxt);
-    
+    // Focus on modal content
     getFocusables(options.arrow);
     focusables[2].focus();
 
@@ -326,39 +275,16 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     closeModalLinks = closeModalLinkSetup(closeModalLinks, modal);
 }
 
-function removeActionEventListerner() {
-
-
-    const modalActionAddButton = document.querySelector('.modal-action-add');
-    modalActionAddButton && modalActionAddButton.removeEventListener('click', actionAdd);
-
-    const modalActionEditButton = document.querySelector('.modal-action-edit-work');
-    modalActionEditButton && modalActionEditButton.removeEventListener('click', actionEdit);
-
-    const modalActionEditImageButton = document.querySelector('.modal-action-edit-image');
-    modalActionEditImageButton && modalActionEditImageButton.removeEventListener('click', actionEditImage );
-
-    const pictures = document.querySelectorAll('.modal-action-delete-item');
-    pictures && pictures.forEach( modalActionDeleteButton => {
-            console.log('picture : ', modalActionDeleteButton);
-            modalActionDeleteButton.removeEventListener('click', actionDelete);
-        });
-
-    const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
-    modalActionEditTextButton && modalActionEditTextButton.removeEventListener('click', actionEditTxt);
-
-}
-
 export function closeModal() {
     if (modal === null) return;
+    window.localStorage.removeItem("newImageSource");
     removeOpenModalLinkSetup(modal);
     if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
     modal = document.querySelector('#myModal');
     arrow.classList.remove('js-modal');
     arrow.style.transform = "scale(0)";
 
-    removeActionEventListerner();
-    
+    removeModalActionEventListerner();    
 
     modal.removeEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
