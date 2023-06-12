@@ -3,7 +3,7 @@ import { getFocusables, focusInModal, focusables} from "./focus.js";
 import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete } from "./modalActions.js";
 // import { openModalLinks} from "./works.js";
 // let openModalLinks2 = [];
-let closeModalLinks = [], previouslyFocusedElement = null;
+let closeModalLinks = [], openModalLinks = [], previouslyFocusedElement = null;
 export let modal = null;
 let works;
 const arrow = document.getElementById('modal__arrow');
@@ -273,8 +273,8 @@ function renderModalContent(type = MODAL_TYPE.GALLERY, options) {
 }
 
 
-export function openModal(type = MODAL_TYPE.GALLERY, options = {}, openModalLinks) {
-    console.log('===> openModal with type: ', type, 'options : ', options, 'openLinksSetup', openModalLinks);
+export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
+    console.log('===> openModal with type: ', type, 'options : ', options);
     previouslyFocusedElement = document.querySelector(':focus');
     modal = document.querySelector('#myModal');
     const modalBody = document.querySelector('.modal__body');
@@ -287,7 +287,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}, openModalLink
         arrow.classList.remove('js-modal');
         arrow.style.transform = "scale(0)";
      }
-    openModalLinks = openModalLinkSetup(openModalLinks, works, modal);
+    openModalLinks = openModalLinkSetup(works, modal);
     console.log('===> openModalLinksModal', openModalLinks);
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");

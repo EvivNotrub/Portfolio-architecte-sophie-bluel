@@ -107,7 +107,7 @@ async function main(){
         filters();  
     }
     
-    openModalLinks = openModalLinkSetup(openModalLinks, works, document);
+    openModalLinks = openModalLinkSetup(works, document);
     console.log('===> openModalLinks', openModalLinks);
     // closeModalLinkSetup(closeModalLinks, document);
     // const openModalButton = document.querySelector('.edit--portfolio');

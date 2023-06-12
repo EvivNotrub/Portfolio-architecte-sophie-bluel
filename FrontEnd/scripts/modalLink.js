@@ -1,6 +1,6 @@
 import { openModal, closeModal, MODAL_TYPE } from './modal.js';
 // import { openModal, MODAL_TYPE } from './modal.js';
-
+let openModalLinks = [];
 
 
 function setModalTyp(link) {
@@ -42,11 +42,15 @@ function setModalOptions(link, type, works) {
     return options;
 }
 
-export function openModalLinkSetup (openModalLinks, works, container) {
+export function openModalLinkSetup (works, container) {
     console.log("==> openModalLinkSetup\n", "openModalLinks setup EL before :", openModalLinks);
     if (!!openModalLinks) {
         openModalLinks.forEach( link => {
-            link.removeEventListener('click', openModal);
+            link.classList.remove('js-modal');
+            link.removeEventListener('click', () => {
+                console.log("==>> link click fired");
+                openModal(type, options)
+            });
             console.log('===> link', link, 'removed EL openModal', );
         })
     };
@@ -59,10 +63,9 @@ export function openModalLinkSetup (openModalLinks, works, container) {
             console.log('===> type in linkSetup function: ', type);
             const options = setModalOptions(link, type, works);
             console.log('===> options in linkSetup function: ', options);
-            link.removeEventListener('click', openModal);
             link.addEventListener('click', () => {
                 console.log("==>> link click fired");
-                openModal(type, options, openModalLinks)
+                openModal(type, options)
             })
         });
     return openModalLinks;
