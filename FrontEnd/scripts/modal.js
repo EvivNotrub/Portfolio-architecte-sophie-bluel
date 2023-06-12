@@ -1,5 +1,6 @@
 import { openModalLinkSetup, closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
 import { getFocusables, focusInModal, focusables} from "./focus.js";
+import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete } from "./modalActions.js";
 // import { openModalLinks} from "./works.js";
 // let openModalLinks2 = [];
 let closeModalLinks = [], previouslyFocusedElement = null;
@@ -293,37 +294,20 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}, openModalLink
     modal.style.display = "";
     
     const modalActionAddButton = document.querySelector('.modal-action-add');
-    modalActionAddButton && modalActionAddButton.addEventListener('click', function() {
-        // fire add action
-    });
+    modalActionAddButton && modalActionAddButton.addEventListener('click', actionAdd);
 
     const modalActionEditButton = document.querySelector('.modal-action-edit-work');
-    modalActionEditButton && modalActionEditButton.addEventListener('click', function(event) {
-        // fire edit action
-        event.preventDefault();
-        console.log('===> modalActionEditButton', event)
-    });
+    modalActionEditButton && modalActionEditButton.addEventListener('click', actionEdit);
 
     document.querySelectorAll('.modal-action-delete-item').forEach( modalActionDeleteButton => {
-        modalActionDeleteButton && modalActionDeleteButton.addEventListener('click', function(event) {
-            // fire delete action
-            event.stopPropagation();
-            alert('delete item !');
-            console.log('===> modalActionDeleteButton', event.target.href)
-        });
+        modalActionDeleteButton && modalActionDeleteButton.addEventListener('click', actionDelete);
     });
 
     const modalActionEditImageButton = document.querySelector('.modal-action-edit-image');
-    modalActionEditImageButton && modalActionEditImageButton.addEventListener('click', function(event) {
-        // fire edit image action
-        console.log('===> modalActionEditImageButton', event.target.href)
-    });
+    modalActionEditImageButton && modalActionEditImageButton.addEventListener('click', actionEditImage);
 
     const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
-    modalActionEditTextButton && modalActionEditTextButton.addEventListener('click', function(event) {
-        // fire edit text action
-        console.log('===> modalActionEditTextButton', event.target.href)
-    });
+    modalActionEditTextButton && modalActionEditTextButton.addEventListener('click', actionEditTxt);
     
     getFocusables(options.arrow);
     focusables[2].focus();
@@ -334,12 +318,41 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}, openModalLink
     closeModalLinks = closeModalLinkSetup(closeModalLinks, modal);
 }
 
+function removeActionEventListerner() {
+
+
+    const modalActionAddButton = document.querySelector('.modal-action-add');
+    modalActionAddButton && modalActionAddButton.removeEventListener('click', actionAdd);
+
+    const modalActionEditButton = document.querySelector('.modal-action-edit-work');
+    modalActionEditButton && modalActionEditButton.removeEventListener('click', actionEdit);
+
+    const modalActionEditImageButton = document.querySelector('.modal-action-edit-image');
+    modalActionEditImageButton && modalActionEditImageButton.removeEventListener('click', actionEditImage );
+
+    const pictures = document.querySelectorAll('.modal-action-delete-item');
+    pictures && pictures.forEach( modalActionDeleteButton => {
+            console.log('picture : ', modalActionDeleteButton);
+            modalActionDeleteButton.removeEventListener('click', actionDelete);
+        });
+
+    const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
+    modalActionEditTextButton && modalActionEditTextButton.removeEventListener('click', actionEditTxt);
+
+}
+
+
+
 export function closeModal() {
     if (modal === null) return;
     if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
     modal = document.querySelector('#myModal');
     arrow.classList.remove('js-modal');
     arrow.style.transform = "scale(0)";
+
+    removeActionEventListerner();
+
+
     modal.removeEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
     closeModalLinks = removeCloseModalLinkSetup(closeModalLinks, modal);
