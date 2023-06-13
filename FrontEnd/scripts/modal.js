@@ -21,7 +21,7 @@ function renderWorksCards(options) {
     works = options.data;
     console.log("==> renderWorksCards\n", "options :", options);
     const worksGallery = options.data.map((work) => (`
-    <a href="#" class="js-modal" data-version="edit_work">
+    <a href="#" class="js-modal" data-version="edit_work" data-id="${work.id}" data-title="${work.title}" data-catid="${work.category.id}" data-url="${work.imageUrl}">
         <div class="modal__icons">
             <span data-id="${work.id}" data-title="${work.title}" data-cat="${work.category.name}" class="icon-bin material-symbols-outlined modal-action-delete-item" data-id="1">delete</span>
             <span class="icon-drag material-symbols-outlined">drag_pan</span>
@@ -109,7 +109,7 @@ function renderEditWorkForm(options) {
                 </div>
 				<div class="modal__footer">
 					<div class="modal__line"></div>
-					<button class="js-modal rnd-button rnd-button--green modal__action modal-action-edit-work" type="submit" data-version="gallery" href="#modal" form="modal__form-edit-work">Valider</button>
+					<button class="rnd-button rnd-button--green modal__action modal-action-edit-work" type="submit" data-version="gallery" href="#modal" form="modal__form-edit-work">Valider</button>
 				</div>
     `;
 }
@@ -240,7 +240,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     // console.log(modal, "openModalLinks before", openModalLinks);
     // openModalLinks = openModalLinks != [] ? removeOpenModalLinkSetup(openModalLinks) : [];
     // console.log('===> openModalLinks after remove', openModalLinks);
-    console.log('===> openModal with type: ', type, 'options : ', options);
+    console.log('===> openModal with type:\n', type, '\noptions : ', options);
     previouslyFocusedElement = document.querySelector(':focus');
     modal = document.querySelector('#myModal');
     const modalBody = document.querySelector('.modal__body');
@@ -262,7 +262,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     addModalActionEventListener();
     // functions for the content of the modal:
     if (type == MODAL_TYPE.ADD_FORM ) {addFormFunctions()};
-    if (type == MODAL_TYPE.EDIT_WORK ) {editWorkFunctions()};
+    if (type == MODAL_TYPE.EDIT_WORK ) {console.log("bob");editWorkFunctions(options)};
     if (type == MODAL_TYPE.EDIT_IMAGE ) {editImgFunctions()};
     if (type == MODAL_TYPE.EDIT_TEXT ) {editTxtFunctions()};
     if (type == MODAL_TYPE.GALLERY ) {galleryFunctions()};

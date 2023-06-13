@@ -1,6 +1,6 @@
-export let titleInput, categoryInput, addPhotoInput, photoForm;
+export let titleInput, categoryInput, addPhotoInput, photoForm, id;
 
-  /************** Add work photos **************/
+  /************** utility functions **************/
 
 function returnFileSize(number) {
     if(number < 1024) {
@@ -48,19 +48,19 @@ function actionOnInputChange(event) {
     console.log(event.target.value);
   }); 
 }
+function showCUrrentImage(identification) {
+  const inputAlt = document.querySelector("input[name='img-title']");
+  console.log(inputAlt);
+  const image = document.querySelector(identification);
+  inputAlt.value = image.alt;
+  const formPhoto = document.querySelector(".add-photo-label");
+  formPhoto.style.backgroundImage = `url(${image.src})`;
+  formPhoto.style.backgroundSize = "cover";
+  return formPhoto;
+}
+
 
 /*************** Main functions ******************/
-  function showCUrrentImage(identification) {
-    const inputAlt = document.querySelector("input[name='img-title']");
-    console.log(inputAlt);
-    const image = document.querySelector(identification);
-    inputAlt.value = image.alt;
-    const formPhoto = document.querySelector(".add-photo-label");
-    formPhoto.style.backgroundImage = `url(${image.src})`;
-    formPhoto.style.backgroundSize = "cover";
-    return formPhoto;
-  }
-
 
 
 export function addFormFunctions() {
@@ -84,7 +84,25 @@ export function editImgFunctions() {
     const formPhoto = showCUrrentImage("#sophie-bluel");
     changeDisplayPhoto(formPhoto, true); 
 }
-export function editWorkFunctions() {
+export function editWorkFunctions(options) {
+  console.log("==> editWorkFunction",options);
+  const addPhotoLabel = document.querySelector(".add-photo-label");
+  photoForm = document.getElementById("modal__form-edit-work");
+  addPhotoInput = document.getElementById("add-photo-input");
+  titleInput = document.getElementById("img-title");
+  categoryInput = document.getElementById("img-category");
+  changeDisplayPhoto(addPhotoLabel, false);
+  actionOnInputChange();
+  console.log("options url", options.url);
+  addPhotoLabel.style.background = `center / cover no-repeat url("${options.url}")`;
+  titleInput.value = options.title;
+  categoryInput.value = options.categoryId;
+  id = options.id;
+  console.log("id in editWoF", id);
+
+
+
+
     // const formPhoto = showCUrrentImage("");// to be taken in options?
     // changeDisplayPhoto(formPhoto, false); 
 }

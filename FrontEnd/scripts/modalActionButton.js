@@ -1,5 +1,5 @@
 import { deleteWork, addWork, getWorks } from "./api.js";
-import { titleInput, categoryInput, addPhotoInput, photoForm } from "./modalContentFunctions.js";
+import { titleInput, categoryInput, addPhotoInput, photoForm, id } from "./modalContentFunctions.js";
 import { openModal } from "./modal.js";
 export let worksEdit = false;
 //in order to be able to change the value of worksEdit from another module:
@@ -49,16 +49,16 @@ export async function actionAdd(event) {
       console.log("form valid")
      }else{
       // await customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format.."});
-      if(!validFileType(files)){
+      if(validFileType(files)){
         console.log("file type not valid");
       }
-      if(!validFileSize(files)){
+      if(validFileSize(files)){
         console.log("file size not valid");
       }
-      if(!titleInput.valid){
+      if(titleInput.valid){
         console.log("Please enter a title");
       }
-      if(!categoryInput.valid){
+      if(categoryInput.valid){
         console.log("Please choose a category");        
       }
       return;
@@ -79,9 +79,7 @@ export async function actionAdd(event) {
               alert("Votre photo a bien été ajoutée !");
               worksEdit = true;
               console.log("response ok", response);
-              Promise.resolve(response);
-
-            
+              Promise.resolve(response);            
             }else{
               console.log("not ok", response);
               alert("Erreur lors de l'ajout de la photo");
@@ -98,10 +96,73 @@ export async function actionAdd(event) {
     openModal("gallery", options);
 }
 
-export function actionEdit(event) {
+export async function actionEdit(event) {
     // fire edit action
     event.preventDefault();
     console.log('===> modalActionEditButton', event)
+    const token = JSON.parse(localStorage.getItem("token"));
+    const files = addPhotoInput.files;
+    const file = files[0];
+    if(photoForm.reportValidity() && validFileType(files) && validFileSize(files)){      
+      console.log("form valid")
+     }else{
+      // await customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format.."});
+      if(!validFileType(files)){
+        alert("file type not valid");
+      }
+      if(!validFileSize(files)){
+        alert("file size not valid");
+      }
+      if(!titleInput.valid){
+        alert("Please enter a title");
+      }
+      if(!categoryInput.valid){
+        alert("Please choose a category");        
+      }
+      return;
+     }
+
+     const formDataAdd = new FormData();
+     formDataAdd.append("image", file);
+     formDataAdd.append("title", titleInput.value);
+     formDataAdd.append("category", categoryInput.value);
+     if(confirm('Êtes-vous sûr de vouloir remplacer la photo ' + id + '?')){
+      const responseDelete = await deleteWork(id, token);
+      console.log(responseDelete);
+        if(responseDelete.ok){
+            // await customAlert("success", {body: "Votre photo a bien été supprimée !"});   
+            console.log("la photo a bien été supprimée !");
+          worksEdit = true;     
+          Promise.resolve(responseDelete);
+        }else{
+          console.log("photo non supprimée", responseDelete);
+          alert("Erreur lors de la suppression de la photo");
+          Promise.reject(responseDelete.status);
+          return
+        };
+        const responseAdd = await addWork( formDataAdd, token);
+            if(responseAdd.ok){
+              // await customAlert("success", {body: "Votre photo a bien été ajoutée !"});
+              alert("la photo a bien été ajoutée !");
+              worksEdit = true;
+              console.log("response ok", responseAdd);
+              Promise.resolve(responseAdd);            
+            }else{
+              console.log("not ok", responseAdd);
+              alert("Erreur lors de l'ajout de la photo");
+              Promise.reject(responseAdd.status);
+            return
+            }
+        
+    }else{
+      alert("Annulation de l'édit de la photo");
+      return;
+    }
+    const works = await getWorks();
+    const options = { data: works,
+                    arrow: false  };
+    openModal("gallery", options);
+
 }
 
 export function actionEditImage(event) {

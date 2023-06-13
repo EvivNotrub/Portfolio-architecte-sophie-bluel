@@ -17,6 +17,7 @@ import { getWorks } from './api.js';
 // }
 
 async function setModalOptions(link, type) {
+    console.log("==> setModalOptions\n", "link :", link, "type :", type);
     let id = link.dataset.id ? link.dataset.id : null;
     let options;
     if(type === "gallery") {
@@ -26,8 +27,9 @@ async function setModalOptions(link, type) {
                     arrow: false  };
     } else if (type === "edit_work") {
         options = { id: link.dataset.id,
-                    category : link.dataset.cat,
+                    categoryId : link.dataset.catid,
                     title : link.dataset.title,
+                    url : link.dataset.url,
                     arrow: true
                 };
     } else if (type === "edit_text") {
@@ -37,14 +39,12 @@ async function setModalOptions(link, type) {
     } else if (type === "add_form") {
         options = { arrow: true };
     }
-
     console.log('===> options in linkSetup function: ', options);
     return options;
 }
 
 export function openModalLinkSetup ( container = document) {
     console.log("==> openModalLinkSetup\n" );
-   
     console.log( "input container", container);
     const openModalLinks = Array.from(container.querySelectorAll('.js-modal'));
         console.log("openModalLinks setup EL after :", openModalLinks);
