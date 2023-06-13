@@ -45,7 +45,7 @@ async function setModalOptions(link, type) {
 export function openModalLinkSetup (works, container = document) {
     console.log("==> openModalLinkSetup\n" );
    
-    console.log("input works", works, "input container", container);
+    console.log( "input container", container);
     const openModalLinks = Array.from(container.querySelectorAll('.js-modal'));
         console.log("openModalLinks setup EL after :", openModalLinks);
         openModalLinks.forEach( async link => {

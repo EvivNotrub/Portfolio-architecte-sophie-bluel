@@ -102,7 +102,7 @@ async function main(){
     console.log('===> works after getWorksData', works);
     renderWorkCards(works);
 
-    if(token === undefined){
+    if(!token){
         console.log(token);
         await renderFilters();
         filters();  

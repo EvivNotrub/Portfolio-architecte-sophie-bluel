@@ -72,7 +72,7 @@ function renderAddWorkForm(options) {
     </div>
     <div class="modal__footer">
         <div class="modal__line"></div>
-        <button class="js-modal rnd-button rnd-button--green modal__action modal-action-add" type="submit" data-version="gallery" href="#modal" form="modal__form-add">Valider</button>
+        <button class="rnd-button rnd-button--green modal__action modal-action-add" type="submit" data-version="gallery" href="#modal" form="modal__form-add">Valider</button>
     </div>
     `;
 }

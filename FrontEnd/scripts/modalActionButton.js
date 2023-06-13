@@ -1,3 +1,4 @@
+import { deleteWork, addWork } from "./api.js";
 import { titleInput, categoryInput, addPhotoInput, photoForm } from "./modalContentFunctions.js";
 
 const maxSize = 4000000;
@@ -63,34 +64,29 @@ export async function actionAdd(event) {
         formDataAdd.append("image", file);
         formDataAdd.append("title", titleInput.value);
         formDataAdd.append("category", categoryInput.value);
-        console.log(formDataAdd);      
-          url = "http://localhost:5678/api/works";      
-          request = {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`
-              },
-            body: formDataAdd
-          };
+        console.log(formDataAdd);          
           // if(!await customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir ajouter cette photo ?"})){
           //   return;
           // }
           if(confirm("Êtes-vous sûr de vouloir ajouter cette photo ?")){
-              const response = await fetch( url, request);
+              const response = await addWork( formDataAdd, token);
                   if(response.ok){
-                      // await customAlert("success", {body: "Votre photo a bien été ajoutée !"});
+                    // await customAlert("success", {body: "Votre photo a bien été ajoutée !"});
+                    alert("Votre photo a bien été ajoutée !");
+                    console.log("response ok", response);
+                    Promise.resolve(response);
+
                   
-                  Promise.resolve(response);
                   }else{
-                  console.log("not ok");
-                  Promise.reject(response.status);
+                    console.log("not ok", response);
+                    alert("Erreur lors de l'ajout de la photo");
+                    Promise.reject(response.status);
                   return
                   }
           }else{
               alert("Annulation de l'ajout de la photo");
               return;
           }
-    
 }
 
 export function actionEdit(event) {
@@ -116,16 +112,11 @@ export async function actionDelete(event) {
   console.log(token);
   const parent = event.target.parentNode.parentNode;
   console.log(parent);
-  url = `http://localhost:5678/api/works/${id}`;
-        request = {
-          method: "DELETE",
-          headers: {
-            "Authorization": `Bearer ${token}`
-              }
-        };
+  
     // if(!await customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir supprimer cette photo ?"})){
     if(confirm('Effacer le projet n°' + id + ' \"' + title + '\" de category : ' + category + ' ?')){
-      const response = await fetch( url, request);
+      const response = await deleteWork(id, token);
+      console.log(response);
         if(response.ok){
           event.target.parentNode.parentNode.remove();        
             // await customAlert("success", {body: "Votre photo a bien été supprimée !"});   
