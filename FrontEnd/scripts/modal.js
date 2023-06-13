@@ -278,6 +278,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
 }
 
 export async function closeModal() {
+    console.log("==> Close Modal!  ?existing modal? : ",modal);
     if (modal === null) return;
     window.localStorage.removeItem("newImageSource");
     removeOpenModalLinkSetup(modal);

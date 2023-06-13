@@ -70,6 +70,7 @@ export function removeOpenModalLinkSetup (modal) {
     const openModalLinks = modal.querySelectorAll(".js-modal");
     console.log("openModalLinks rmvEL before :\n", openModalLinks);
     openModalLinks && openModalLinks.forEach( link => {
+        console.log('===> link in removeOpenModalLinkSetup', link);
         link.classList.remove("js-modal");
         link.removeEventListener('click', () => {
             console.log("==>> link click fired");

@@ -1,4 +1,4 @@
-export let titleInput, categoryInput, addPhotoInput, photoForm, id;
+export let titleInput, categoryInput, addPhotoInput, photoForm, id, descriptionInput, titleDescriptionInput, introTitleElement, currentIntroDescriptionArray;
 
   /************** utility functions **************/
 
@@ -58,8 +58,24 @@ function showCUrrentImage(identification) {
   formPhoto.style.backgroundSize = "cover";
   return formPhoto;
 }
-
-
+  /********************** for text edition ****************/
+  function getIntroTexts(){
+    introTitleElement = document.querySelector(".intro__title");
+    const currentIntroTitle = introTitleElement.innerText;
+    currentIntroDescriptionArray = Array.from(document.querySelectorAll(".intro__description p"));
+    const currentIntroDescription = currentIntroDescriptionArray.map(p => p.innerText).join("\n\n");
+    return {
+        title: currentIntroTitle,
+        description: currentIntroDescription
+    }
+  }
+  function showIntroTexts(currentIntro){
+    console.log(currentIntro);
+    titleDescriptionInput = document.querySelector("input[name='about-title']");
+    descriptionInput = document.querySelector("#about-txt");
+    titleDescriptionInput.value = currentIntro.title;
+    descriptionInput.value = currentIntro.description;
+  }
 /*************** Main functions ******************/
 
 
@@ -79,10 +95,13 @@ export function addFormFunctions() {
 export function galleryFunctions() {
 }
 export function editTxtFunctions() {
+  const currentIntro = getIntroTexts();
+  showIntroTexts(currentIntro);
 }
 export function editImgFunctions() {
     const formPhoto = showCUrrentImage("#sophie-bluel");
-    changeDisplayPhoto(formPhoto, true); 
+    changeDisplayPhoto(formPhoto, true);
+    
 }
 export function editWorkFunctions(options) {
   console.log("==> editWorkFunction",options);

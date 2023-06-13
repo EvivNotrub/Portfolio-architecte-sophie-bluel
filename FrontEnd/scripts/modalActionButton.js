@@ -1,6 +1,6 @@
 import { deleteWork, addWork, getWorks } from "./api.js";
-import { titleInput, categoryInput, addPhotoInput, photoForm, id } from "./modalContentFunctions.js";
-import { openModal } from "./modal.js";
+import { titleInput, categoryInput, addPhotoInput, photoForm, id, titleDescriptionInput, descriptionInput, introTitleElement, currentIntroDescriptionArray } from "./modalContentFunctions.js";
+import { openModal, closeModal } from "./modal.js";
 import { customAlert } from "./alerts.js";
 export let worksEdit = false;
 //in order to be able to change the value of worksEdit from another module:
@@ -230,4 +230,12 @@ export async function actionDelete(event) {
 export function actionEditTxt(event) {
     // fire edit text action
     console.log('===> modalActionEditTextButton', event.target)
+          event.preventDefault();
+          const descriptionArray = descriptionInput.value.split("\n");
+          // console.log(descriptionArray);
+          const description = descriptionArray.map(p => `<p>${p}</p>`).join("").replace(/<p><\/p>/g, "");
+          introTitleElement.innerText = titleDescriptionInput.value;
+          currentIntroDescriptionArray.forEach( p => p.remove());
+          document.querySelector(".intro__description").innerHTML += description;
+          // closeModal(event);
 }
