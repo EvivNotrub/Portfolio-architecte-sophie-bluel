@@ -262,7 +262,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     addModalActionEventListener();
     // functions for the content of the modal:
     if (type == MODAL_TYPE.ADD_FORM ) {addFormFunctions()};
-    if (type == MODAL_TYPE.EDIT_WORK ) {console.log("bob");editWorkFunctions(options)};
+    if (type == MODAL_TYPE.EDIT_WORK ) {editWorkFunctions(options)};
     if (type == MODAL_TYPE.EDIT_IMAGE ) {editImgFunctions()};
     if (type == MODAL_TYPE.EDIT_TEXT ) {editTxtFunctions()};
     if (type == MODAL_TYPE.GALLERY ) {galleryFunctions()};

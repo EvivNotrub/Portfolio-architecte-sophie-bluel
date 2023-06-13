@@ -3,11 +3,12 @@ import { titleInput, categoryInput, addPhotoInput, photoForm, id } from "./modal
 import { openModal } from "./modal.js";
 export let worksEdit = false;
 //in order to be able to change the value of worksEdit from another module:
+
+const maxSize = 4000000;
+let url, request;
 export function changeWorkEdit(boolean) {
   worksEdit = boolean;
 }
-const maxSize = 4000000;
-let url, request;
 function validFileType(files) {
   console.log(files);
   const fileTypes = [
@@ -49,16 +50,19 @@ export async function actionAdd(event) {
       console.log("form valid")
      }else{
       // await customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format.."});
-      if(validFileType(files)){
+      if(files.length === 0){
+        console.log("no file selected");
+      }
+      if(!validFileType(files)){
         console.log("file type not valid");
       }
-      if(validFileSize(files)){
+      if(!validFileSize(files)){
         console.log("file size not valid");
       }
-      if(titleInput.valid){
+      if(!titleInput.valid){
         console.log("Please enter a title");
       }
-      if(categoryInput.valid){
+      if(!categoryInput.valid){
         console.log("Please choose a category");        
       }
       return;
@@ -103,21 +107,25 @@ export async function actionEdit(event) {
     const token = JSON.parse(localStorage.getItem("token"));
     const files = addPhotoInput.files;
     const file = files[0];
+    console.log("file", file);
     if(photoForm.reportValidity() && validFileType(files) && validFileSize(files)){      
       console.log("form valid")
      }else{
       // await customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format.."});
+      if(files.length === 0){
+        console.log("no file selected");
+      }
       if(!validFileType(files)){
-        alert("file type not valid");
+        console.log("file type not valid");
       }
       if(!validFileSize(files)){
-        alert("file size not valid");
+        console.log("file size not valid");
       }
       if(!titleInput.valid){
-        alert("Please enter a title");
+        console.log("Please enter a title");
       }
       if(!categoryInput.valid){
-        alert("Please choose a category");        
+        console.log("Please choose a category");        
       }
       return;
      }

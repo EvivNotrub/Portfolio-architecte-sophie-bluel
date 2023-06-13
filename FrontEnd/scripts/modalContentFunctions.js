@@ -99,11 +99,16 @@ export function editWorkFunctions(options) {
   categoryInput.value = options.categoryId;
   id = options.id;
   console.log("id in editWoF", id);
-
-
-
-
-    // const formPhoto = showCUrrentImage("");// to be taken in options?
-    // changeDisplayPhoto(formPhoto, false); 
+  
+  // const urlToObject= async()=> {
+  //   const response = await fetch(options.url);
+  //   // here image is url/location of image
+  //   const blob = await response.blob();
+  //   const file = new File([blob], `image${options.title}.jpg`, {type: blob.type});
+  //   console.log(file);
+  //   return file;
+  // }
+  // fileToEdit = await urlToObject();
+  
 }
 
