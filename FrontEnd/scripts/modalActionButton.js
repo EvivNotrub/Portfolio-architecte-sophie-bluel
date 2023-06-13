@@ -1,5 +1,6 @@
-import { deleteWork, addWork } from "./api.js";
+import { deleteWork, addWork, getWorks } from "./api.js";
 import { titleInput, categoryInput, addPhotoInput, photoForm } from "./modalContentFunctions.js";
+import { openModal } from "./modal.js";
 
 const maxSize = 4000000;
 let url, request;
@@ -34,7 +35,7 @@ function validFileSize(files) {
 
 export async function actionAdd(event) {
   event.preventDefault();
-  console.log("===> action add validation");
+  console.log("===> action add validation", "\n event: ", event, "\n event.target: ", event.target, "this", this);
   // console.log( addPhotoInput, titleInput, categoryInput);
   const token = JSON.parse(localStorage.getItem("token"));
   console.log(photoForm);
@@ -60,33 +61,39 @@ export async function actionAdd(event) {
       return;
      }
 
-     const formDataAdd = new FormData();
-        formDataAdd.append("image", file);
-        formDataAdd.append("title", titleInput.value);
-        formDataAdd.append("category", categoryInput.value);
-        console.log(formDataAdd);          
-          // if(!await customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir ajouter cette photo ?"})){
-          //   return;
-          // }
-          if(confirm("Êtes-vous sûr de vouloir ajouter cette photo ?")){
-              const response = await addWork( formDataAdd, token);
-                  if(response.ok){
-                    // await customAlert("success", {body: "Votre photo a bien été ajoutée !"});
-                    alert("Votre photo a bien été ajoutée !");
-                    console.log("response ok", response);
-                    Promise.resolve(response);
+    const formDataAdd = new FormData();
+      formDataAdd.append("image", file);
+      formDataAdd.append("title", titleInput.value);
+      formDataAdd.append("category", categoryInput.value);
+      console.log(formDataAdd);          
+        // if(!await customAlert("warning", {headers: "Action requise !" , body: "Êtes-vous sûr de vouloir ajouter cette photo ?"})){
+        //   return;
+        // }
+    if(confirm("Êtes-vous sûr de vouloir ajouter cette photo ?")){
+        const response = await addWork( formDataAdd, token);
+            if(response.ok){
+              // await customAlert("success", {body: "Votre photo a bien été ajoutée !"});
+              alert("Votre photo a bien été ajoutée !");
+              console.log("response ok", response);
+              Promise.resolve(response);
 
-                  
-                  }else{
-                    console.log("not ok", response);
-                    alert("Erreur lors de l'ajout de la photo");
-                    Promise.reject(response.status);
-                  return
-                  }
-          }else{
-              alert("Annulation de l'ajout de la photo");
-              return;
-          }
+            
+            }else{
+              console.log("not ok", response);
+              alert("Erreur lors de l'ajout de la photo");
+              Promise.reject(response.status);
+            return
+            }
+    }else{
+        alert("Annulation de l'ajout de la photo");
+        return;
+    }
+    const works = await getWorks();
+        console.log(works);
+    const options = { data: works,
+                    arrow: false  };
+    openModal("gallery", options);
+
 }
 
 export function actionEdit(event) {

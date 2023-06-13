@@ -227,6 +227,7 @@ function addModalActionEventListener() {
 
     const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
     modalActionEditTextButton && modalActionEditTextButton.addEventListener('click', actionEditTxt);
+
 }
 
 export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
@@ -251,7 +252,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
         arrow.classList.remove('js-modal');
         arrow.style.transform = "scale(0)";
      }
-    openModalLinks = openModalLinkSetup( works, modal);
+    openModalLinks = openModalLinkSetup( modal);
     console.log('===> openModalLinksModal', openModalLinks);
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");

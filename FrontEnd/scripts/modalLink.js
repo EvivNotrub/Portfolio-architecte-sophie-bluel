@@ -42,7 +42,7 @@ async function setModalOptions(link, type) {
     return options;
 }
 
-export function openModalLinkSetup (works, container = document) {
+export function openModalLinkSetup ( container = document) {
     console.log("==> openModalLinkSetup\n" );
    
     console.log( "input container", container);
