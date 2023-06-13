@@ -11,19 +11,25 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<link rel="stylesheet" href="./assets/modalold.css">
+	<link rel="stylesheet" href="./assets/alert.css">
 </head>
 <body>
-	<!-- <div id="myModal" class="modal">
-		<div class="modal-wrapper js-modal-stop">
-			<div class="modal-header">
-				<span class="modal-close-button js-modal-close">&times;</span>
+	<aside id="alertArea" aria-hidden="true" style="display: none;">
+		<div id="alert__box">
+			<div class="alert__header">
+				<span class="material-symbols-outlined alert__abort ">arrow_back</span>
+				<span id="alert__close" class="material-symbols-outlined">close</span>
 			</div>
-			<div class="modal-content">
-				---- Modal content-----
+			<h3 id="alert__alert" style="display: none;">Attention !</h3>
+			<p id="alert__message">Message</p>
+			<div class="alert__line"></div>
+			<div class="alert__footer">
+				<button type="button" class="rnd-button  alert__abort rnd-button--green abort">Annuler</button>
+				<button id="alert__confirm" type="button" class="rnd-button rnd-button--green confirmation">Valider</button>
 			</div>
 		</div>
-  	</div> -->
-	  <aside id="myModal" class="modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="modal__title" style="display: none;">
+	</aside>
+	<aside id="myModal" class="modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="modal__title" style="display: none;">
 		<div class="modal-wrapper js-modal-stop">
 			<div class="modal__header">
 				<button id="modal__arrow" data-version="gallery" class="material-symbols-outlined modal__arrow">arrow_back</button>

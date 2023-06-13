@@ -84,7 +84,7 @@
 .galleryModal {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-	grid-template-rows: 1fr 1fr 1fr 1fr;
+	grid-template-rows: repeat(auto-fill, minmax(130px, 1fr));
 	grid-column-gap: 7px;
 	grid-row-gap: 10px;
 }

@@ -29,7 +29,7 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-body {
+:root {
 	line-height: 1;
 	--main-bg-color: white;
 	--main-color: black;
@@ -42,7 +42,7 @@ body {
 	--fourth-bg-color: #E8F1F7;
 	--fifth-color: #306685;
 	--fifth-bg-color: #CBD6DC;
-
+	--appeal-color: #D65353;
 }
 ol, ul {
 	list-style: none;
@@ -277,16 +277,19 @@ li:hover {
 	color: var(--main-bg-color);
 }
 .gallery {
-	width: 100%;
+	width: 98%;
+	margin: auto;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: repeat(auto-fit, minmax(313px, 1fr));
+	grid-template-rows: repeat(auto-fit, minmax(418px, 1fr));
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
 }
 
 .gallery img {
 	width: 100%;
-
+	height: 100%;
+	object-fit: cover;
 }
 #contact, .log-in {
 	width: 50%;
