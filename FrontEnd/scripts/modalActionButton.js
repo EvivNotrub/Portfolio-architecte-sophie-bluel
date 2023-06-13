@@ -1,7 +1,11 @@
 import { deleteWork, addWork, getWorks } from "./api.js";
 import { titleInput, categoryInput, addPhotoInput, photoForm } from "./modalContentFunctions.js";
 import { openModal } from "./modal.js";
-
+export let worksEdit = false;
+//in order to be able to change the value of worksEdit from another module:
+export function changeWorkEdit(boolean) {
+  worksEdit = boolean;
+}
 const maxSize = 4000000;
 let url, request;
 function validFileType(files) {
@@ -35,7 +39,6 @@ function validFileSize(files) {
 
 export async function actionAdd(event) {
   event.preventDefault();
-  console.log("===> action add validation", "\n event: ", event, "\n event.target: ", event.target, "this", this);
   // console.log( addPhotoInput, titleInput, categoryInput);
   const token = JSON.parse(localStorage.getItem("token"));
   console.log(photoForm);
@@ -74,6 +77,7 @@ export async function actionAdd(event) {
             if(response.ok){
               // await customAlert("success", {body: "Votre photo a bien été ajoutée !"});
               alert("Votre photo a bien été ajoutée !");
+              worksEdit = true;
               console.log("response ok", response);
               Promise.resolve(response);
 
@@ -125,7 +129,8 @@ export async function actionDelete(event) {
         if(response.ok){
           event.target.parentNode.parentNode.remove();        
             // await customAlert("success", {body: "Votre photo a bien été supprimée !"});   
-            alert("Votre photo a bien été supprimée !");       
+            alert("Votre photo a bien été supprimée !");
+          worksEdit = true;     
           Promise.resolve(response);
         }else{
           console.log("not ok");
@@ -141,5 +146,5 @@ export async function actionDelete(event) {
 
 export function actionEditTxt(event) {
     // fire edit text action
-    console.log('===> modalActionEditTextButton', event.target.href)
+    console.log('===> modalActionEditTextButton', event.target)
 }

@@ -1,6 +1,6 @@
 import { openModalLinkSetup, removeOpenModalLinkSetup, closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
 import { getFocusables, focusInModal, focusables} from "./focus.js";
-import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete } from "./modalActionButton.js";
+import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete, worksEdit, changeWorkEdit } from "./modalActionButton.js";
 import { addFormFunctions, editWorkFunctions, editImgFunctions, galleryFunctions, editTxtFunctions } from "./modalContentFunctions.js";
 import { renderWorkCards } from "./works.js";
 let openModalLinks = [];
@@ -299,7 +299,13 @@ export async function closeModal() {
         modal = null;
     };
     modal.addEventListener('animationend', hideModal)
-    await renderWorkCards();
+    if(worksEdit){ 
+        console.log("==> renderWorkCards reloaded : ");
+        await renderWorkCards();
+        changeWorkEdit(false);
+    }else{ 
+        console.log("==> renderWorkCards not reloaded ! ");
+    }
 }
 
 const stopPropagation = function (event) {
