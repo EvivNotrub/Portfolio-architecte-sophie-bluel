@@ -89,11 +89,9 @@ export async function actionAdd(event) {
         return;
     }
     const works = await getWorks();
-        console.log(works);
     const options = { data: works,
                     arrow: false  };
     openModal("gallery", options);
-
 }
 
 export function actionEdit(event) {

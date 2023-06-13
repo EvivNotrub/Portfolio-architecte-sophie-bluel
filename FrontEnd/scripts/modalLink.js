@@ -2,19 +2,19 @@ import { openModal, closeModal, MODAL_TYPE } from './modal.js';
 // import { openModal, MODAL_TYPE } from './modal.js';
 import { getWorks } from './api.js';
 
-function setModalTyp(link) {
-        let type;
-        console.log('===> link', link);
-        const version = link.dataset.version; 
-        console.log('===> version', version);
-        for (const [key, value] of Object.entries(MODAL_TYPE)) {
-            if (version == value) {
-                type = MODAL_TYPE[key];
-                console.log('===> type in linkSetup function: ', type);
-            }
-        }
-        return type;
-}
+// function setModalTyp(link) {
+//         let type;
+//         console.log('===> link', link);
+//         const version = link.dataset.version; 
+//         console.log('===> version', version);
+//         for (const [key, value] of Object.entries(MODAL_TYPE)) {
+//             if (version == value) {
+//                 type = MODAL_TYPE[key];
+//                 console.log('===> type in linkSetup function: ', type);
+//             }
+//         }
+//         return type;
+// }
 
 async function setModalOptions(link, type) {
     let id = link.dataset.id ? link.dataset.id : null;
@@ -50,11 +50,14 @@ export function openModalLinkSetup ( container = document) {
         console.log("openModalLinks setup EL after :", openModalLinks);
         openModalLinks.forEach( async link => {
 
-            const type = setModalTyp(link);
+            // const type = setModalTyp(link);
+            const type = link.dataset.version;
             console.log('===> type in linkSetup function: ', type);
-            const options = await setModalOptions(link, type);
-            console.log('===> options in linkSetup function: ', options);
-            link.addEventListener('click', () => {
+            
+            link.addEventListener('click', async () => {
+                const options = await setModalOptions(link, type);
+                console.log('===> options in linkSetup function: ', options);
+
                 console.log("==>> link click fired");
                 openModal(type, options)
             })

@@ -1,4 +1,4 @@
-import { getCategories as getCategoriesData, getWorks as getWorksData } from './api.js';
+import { getCategories as getCategoriesData, getWorks } from './api.js';
 import { openModalLinkSetup, closeModalLinkSetup} from './modalLink.js';
 import { filters } from './filters.js';
 
@@ -90,17 +90,19 @@ function renderWorkCard(work, parent) {
     parent.appendChild(workElement);
 }
 
-function renderWorkCards(works) {
+
+export async function renderWorkCards() {
+    const works = await getWorks();
+    console.log('===> works after getWorksData', works);
     const galleryElement = document.querySelector(".gallery");
+    galleryElement.innerHTML = "";
     return works.map((work, index) => renderWorkCard(work, galleryElement));
 }
 
 async function main(){
     checkAuthentication();
 
-    const works = await getWorksData();
-    console.log('===> works after getWorksData', works);
-    renderWorkCards(works);
+    renderWorkCards();
 
     if(!token){
         console.log(token);

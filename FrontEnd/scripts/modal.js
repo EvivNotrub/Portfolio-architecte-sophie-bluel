@@ -2,6 +2,7 @@ import { openModalLinkSetup, removeOpenModalLinkSetup, closeModalLinkSetup, remo
 import { getFocusables, focusInModal, focusables} from "./focus.js";
 import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete } from "./modalActionButton.js";
 import { addFormFunctions, editWorkFunctions, editImgFunctions, galleryFunctions, editTxtFunctions } from "./modalContentFunctions.js";
+import { renderWorkCards } from "./works.js";
 let openModalLinks = [];
 let closeModalLinks = [], previouslyFocusedElement = null;
 export let modal = null;
@@ -276,7 +277,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     closeModalLinks = closeModalLinkSetup(closeModalLinks, modal);
 }
 
-export function closeModal() {
+export async function closeModal() {
     if (modal === null) return;
     window.localStorage.removeItem("newImageSource");
     removeOpenModalLinkSetup(modal);
@@ -298,7 +299,7 @@ export function closeModal() {
         modal = null;
     };
     modal.addEventListener('animationend', hideModal)
-
+    await renderWorkCards();
 }
 
 const stopPropagation = function (event) {
