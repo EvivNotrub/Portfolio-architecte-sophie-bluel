@@ -1,5 +1,5 @@
 import { deleteWork, addWork, getWorks } from "./api.js";
-import { titleInput, categoryInput, addPhotoInput, photoForm, id, titleDescriptionInput, descriptionInput, introTitleElement, currentIntroDescriptionArray } from "./modalContentFunctions.js";
+import { currentImage, titleInput, categoryInput, addPhotoInput, photoForm, id, titleDescriptionInput, descriptionInput, introTitleElement, currentIntroDescriptionArray } from "./modalContentFunctions.js";
 import { openModal, closeModal } from "./modal.js";
 import { customAlert } from "./alerts.js";
 export let worksEdit = false;
@@ -184,9 +184,36 @@ export async function actionEdit(event) {
 
 }
 
-export function actionEditImage(event) {
+export async function actionEditImage(event) {
     // fire edit image action
     console.log('===> modalActionEditImageButton', event)
+    event.preventDefault();
+    const form = document.getElementById("modal__form-edit-img");
+    const files = addPhotoInput.files;
+    console.log("files", files, "length: ",files.length, "file 0 : ", files[0]);
+    if(form.reportValidity() && validFileType(files) && validFileSize(files)){      
+      console.log("form valid")
+     }else{
+      if(!validFileType(files)){
+        await customAlert("error", {headers:"Erreur de formulaire !", body: "Le format de l'image n'est pas valide."});
+        console.log("file type not valid");
+      }else if(!validFileSize(files)){
+        await customAlert("error", {headers:"Erreur de formulaire !", body: "La taille de l'image est trop grande."});
+        console.log("file size not valid");
+      }else if(!titleInput.valid){
+        console.log("Please enter a title");
+        await customAlert("error", {headers:"Erreur de formulaire !", body: "Le titre doit être renseigné."});      
+      }else{
+        await customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format."});
+      }
+      return;
+     }
+    if (window.localStorage.getItem("newImageSource")) {
+      currentImage.src = window.localStorage.getItem("newImageSource");
+      window.localStorage.removeItem("newImageSource");
+    }
+    if(titleInput.value){currentImage.alt = titleInput.value};
+    closeModal();
 }
 
 export async function actionDelete(event) {
@@ -237,5 +264,5 @@ export function actionEditTxt(event) {
           introTitleElement.innerText = titleDescriptionInput.value;
           currentIntroDescriptionArray.forEach( p => p.remove());
           document.querySelector(".intro__description").innerHTML += description;
-          // closeModal(event);
+          closeModal();
 }

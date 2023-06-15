@@ -1,4 +1,4 @@
-export let titleInput, categoryInput, addPhotoInput, photoForm, id, descriptionInput, titleDescriptionInput, introTitleElement, currentIntroDescriptionArray;
+export let currentImage, titleInput, categoryInput, addPhotoInput, photoForm, id, descriptionInput, titleDescriptionInput, introTitleElement, currentIntroDescriptionArray;
 
   /************** utility functions **************/
 
@@ -12,7 +12,7 @@ function returnFileSize(number) {
     }
   }
 
-function changeDisplayPhoto(formPhoto, storage = true){
+function changeDisplayPhoto(addPhotoLabel, storage = true){
     document.getElementById("add-photo-input").addEventListener("change", function(event){
       const file = event.target.files[0];
       console.log(file);
@@ -22,9 +22,9 @@ function changeDisplayPhoto(formPhoto, storage = true){
           newImage.src = e.target.result;
           console.log(newImage);
            if (storage) { window.localStorage.setItem("newImageSource", newImage.src)};
-          formPhoto.style.backgroundImage = `url(${newImage.src})`;
-          formPhoto.style.backgroundSize = "cover";
-          formPhoto.style.backgroundPosition = "center";
+          addPhotoLabel.style.backgroundImage = `url(${newImage.src})`;
+          addPhotoLabel.style.backgroundSize = "cover";
+          addPhotoLabel.style.backgroundPosition = "center";
           const size = returnFileSize(file.size);
           console.log(size);
           const sizeSpan = document.querySelector(".add-photo-label span");
@@ -49,14 +49,13 @@ function actionOnInputChange(event) {
   }); 
 }
 function showCUrrentImage(identification) {
-  const inputAlt = document.querySelector("input[name='img-title']");
-  console.log(inputAlt);
-  const image = document.querySelector(identification);
-  inputAlt.value = image.alt;
-  const formPhoto = document.querySelector(".add-photo-label");
-  formPhoto.style.backgroundImage = `url(${image.src})`;
-  formPhoto.style.backgroundSize = "cover";
-  return formPhoto;
+  titleInput = document.querySelector("input[name='img-title']");
+  console.log(titleInput);
+  currentImage = document.querySelector(identification);
+  titleInput.value = currentImage.alt;
+  const addPhotoLabel = document.querySelector(".add-photo-label");
+  addPhotoLabel.style.background = `center / cover no-repeat url(${currentImage.src})`;
+  return addPhotoLabel;
 }
   /********************** for text edition ****************/
   function getIntroTexts(){
@@ -99,9 +98,9 @@ export function editTxtFunctions() {
   showIntroTexts(currentIntro);
 }
 export function editImgFunctions() {
-    const formPhoto = showCUrrentImage("#sophie-bluel");
-    changeDisplayPhoto(formPhoto, true);
-    
+    const addPhotoLabel = showCUrrentImage("#sophie-bluel");
+    changeDisplayPhoto(addPhotoLabel, true);
+    addPhotoInput = document.getElementById("add-photo-input");   
 }
 export function editWorkFunctions(options) {
   console.log("==> editWorkFunction",options);

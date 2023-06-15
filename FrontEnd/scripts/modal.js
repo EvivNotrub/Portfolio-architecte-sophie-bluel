@@ -114,7 +114,7 @@ function renderEditWorkForm(options) {
     `;
 }
 
-function renderEditImageFrom(options) {
+function renderEditImageForm(options) {
     return `
 
     <h3 id="modal__title" class="modal__title">Éditer la photo</h3>
@@ -127,11 +127,11 @@ function renderEditImageFrom(options) {
                     <span class="add-photo-button">+ Ajouter photo</span>
                     <span class="add-photo-specs">jpg, png: 4mo max</span>
                 </label>
-                <input id="add-photo-input" class="add-photo-input" type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo">
+                <input id="add-photo-input" class="add-photo-input" type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo" >
             </div>
             <div class="file-input-info">
                 <label for="img-title">Texte alternatif</label>
-                <input type="text" name="img-title" id="img-title">
+                <input type="text" name="img-title" id="img-title" required>
             </div>
             <div class="file-input-info">
             </div>
@@ -184,7 +184,7 @@ function renderModalContent(type = MODAL_TYPE.GALLERY, options) {
             modalContent = renderEditText(options);
             break;
         case MODAL_TYPE.EDIT_IMAGE:
-            modalContent = renderEditImageFrom(options);
+            modalContent = renderEditImageForm(options);
             break;
     }
     return modalContent;
