@@ -47,6 +47,8 @@
 	padding: 5%;
 	display: flex;
 	align-items: center;
+	justify-content: center;
+	text-align: center;
 }
 .alert__line {
 	width: min(65%, 270px);
