@@ -61,8 +61,7 @@ function showCUrrentImage(identification) {
   function getIntroTexts(){
     introTitleElement = document.querySelector(".intro__title");
     const currentIntroTitle = introTitleElement.innerText;
-    currentIntroDescriptionArray = Array.from(document.querySelectorAll(".intro__description p"));
-    const currentIntroDescription = currentIntroDescriptionArray.map(p => p.innerText).join("\n\n");
+    const currentIntroDescription = document.querySelector(".intro__description__txt").innerText
     return {
         title: currentIntroTitle,
         description: currentIntroDescription
@@ -75,6 +74,8 @@ function showCUrrentImage(identification) {
     titleDescriptionInput.value = currentIntro.title;
     descriptionInput.value = currentIntro.description;
   }
+
+  
 /*************** Main functions ******************/
 
 

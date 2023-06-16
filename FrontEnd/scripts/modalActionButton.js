@@ -1,7 +1,8 @@
 import { deleteWork, addWork, getWorks } from "./api.js";
-import { currentImage, titleInput, categoryInput, addPhotoInput, photoForm, id, titleDescriptionInput, descriptionInput, introTitleElement, currentIntroDescriptionArray } from "./modalContentFunctions.js";
+import {  currentImage, titleInput, categoryInput, addPhotoInput, photoForm, id, titleDescriptionInput, descriptionInput, introTitleElement, currentIntroDescriptionArray } from "./modalContentFunctions.js";
 import { openModal, closeModal } from "./modal.js";
 import { customAlert } from "./alerts.js";
+import { openModalLinkSetup } from "./modalLink.js";
 export let worksEdit = false;
 //in order to be able to change the value of worksEdit from another module:
 
@@ -258,11 +259,10 @@ export function actionEditTxt(event) {
     // fire edit text action
     console.log('===> modalActionEditTextButton', event.target)
           event.preventDefault();
-          const descriptionArray = descriptionInput.value.split("\n");
-          // console.log(descriptionArray);
-          const description = descriptionArray.map(p => `<p>${p}</p>`).join("").replace(/<p><\/p>/g, "");
-          introTitleElement.innerText = titleDescriptionInput.value;
-          currentIntroDescriptionArray.forEach( p => p.remove());
-          document.querySelector(".intro__description").innerHTML += description;
+            console.log("description change");
+            const currentIntroDescription = document.querySelector(".intro__description__txt")
+            currentIntroDescription.innerText = descriptionInput.value
+            console.log("title change");
+            introTitleElement.innerText = titleDescriptionInput.value;
           closeModal();
 }

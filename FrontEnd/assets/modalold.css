@@ -123,13 +123,14 @@
 	transform: scale(1);
 }
 /*** specifications for form mode ***/
+
 .modal__form {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-evenly;
+	height: 100%;
 	gap: 20px;
-	height: 90%;
 	padding: 7px;
 	margin-top: 10px;
 }
@@ -222,6 +223,24 @@
 .modal[aria-hidden="true"] {
 	animation-name: fade-out;
 }
+ @media screen and (max-width: 768px) {
+	.add-photo-label {
+		justify-content: end;
+		overflow: hidden;
+		font-size: 60px;
+		gap: 5px;
+	}
+	.add-photo-label::before {
+		display: none;
+	}
+	.modal__body {
+		gap: 10px;
+	}
+	.modal__content {
+		padding: 10px 0;
+	}
+ }
+
 @keyframes fade-in {
     from {
       opacity: 0;

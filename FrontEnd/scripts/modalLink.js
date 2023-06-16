@@ -53,7 +53,7 @@ export function openModalLinkSetup ( container = document) {
             // const type = setModalTyp(link);
             const type = link.dataset.version;
             console.log('===> type in linkSetup function: ', type);
-            
+            link.classList.remove("js-modal");
             link.addEventListener('click', async () => {
                 const options = await setModalOptions(link, type);
                 console.log('===> options in linkSetup function: ', options);

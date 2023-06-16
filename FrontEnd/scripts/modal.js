@@ -251,8 +251,10 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
         arrow.style.transform = "scale(1)";
      }else{
         arrow.classList.remove('js-modal');
+        console.log("remove js-modal on:" + arrow);
         arrow.style.transform = "scale(0)";
      }
+     console.log("modal beore openModalLinks",modal);
     openModalLinks = openModalLinkSetup( modal);
     console.log('===> openModalLinksModal', openModalLinks);
     modal.removeAttribute("aria-hidden");
