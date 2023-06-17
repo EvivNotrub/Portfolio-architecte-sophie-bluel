@@ -13,8 +13,8 @@ let confirmation = false;
 const delay = timeMs => new Promise(resolve => setTimeout(resolve, timeMs));
 
 async function getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, event) {
-    return new Promise(async (resolve) => {
-        
+    confirmation = false;
+    return new Promise(async (resolve) => {        
 
         const listener = (confirmation, value) => {
             confirmation = value;
@@ -29,13 +29,10 @@ async function getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, ev
         alertAbort.forEach(element => {
             element.addEventListener(event, () => {listener(confirmation, false)});
             });
-
         alertConfirm.addEventListener(event, () => {listener(confirmation, true)});
-
         alertClose.addEventListener(event, () => {listener(confirmation, false)});
 
-
-        await delay(30000);
+        await delay(10000);
         resolve(confirmation);
     })
   }
@@ -79,8 +76,7 @@ export async function customAlert(type = "success", message = {headers: "Attenti
     });
 
     closeAlert();
-    return confirmation;
-    
+    return confirmation;    
 }
 export function closeAlert() {
     alert.style.display = "none";
