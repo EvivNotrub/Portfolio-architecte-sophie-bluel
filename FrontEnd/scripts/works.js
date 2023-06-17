@@ -8,7 +8,6 @@ export let token;
 const loginButton = document.querySelector("#login-link");
 
 function toggleEditMode(toDisplay = false) {
-    console.log('===> toDisplay', toDisplay);
     const edits = document.querySelectorAll(".edit");
     if (!toDisplay) {
         edits.forEach( edit => edit.style.display = "none");
@@ -16,14 +15,6 @@ function toggleEditMode(toDisplay = false) {
         edits.forEach( edit => edit.style.display = "");
     }
 }
-
-// function checkAuthentication() {
-//     const token = window.localStorage.getItem('token');
-//     const loginButton = document.querySelector("#login-link");
-//     loginButton.innerText = token ? "login" : "logout";
-//     toggleEditMode(token);
-// }
-
 
 function checkAuthentication() {
     token = window.localStorage.getItem('token');
@@ -67,7 +58,6 @@ function renderFilterComponent(category, parent) {
 
 async function renderFilters() {
     categories = await getCategoriesData();
-    console.log('===> categories', categories);
     categories.unshift({ id: 0, name: 'Tous' });
     const filtersElement = document.querySelector(".filters");
     for (let i in categories) {
@@ -93,7 +83,6 @@ function renderWorkCard(work, parent) {
 
 export async function renderWorkCards() {
     const works = await getWorks();
-    console.log('===> works after getWorksData', works);
     const galleryElement = document.querySelector(".gallery");
     galleryElement.innerHTML = "";
     return works.map((work, index) => renderWorkCard(work, galleryElement));
@@ -105,18 +94,11 @@ async function main(){
     renderWorkCards();
 
     if(!token){
-        console.log(token);
         await renderFilters();
         filters();  
     }
     
     openModalLinks = openModalLinkSetup(document);
-    console.log('===> openModalLinks', openModalLinks);
-    // closeModalLinkSetup(closeModalLinks, document);
-    // const openModalButton = document.querySelector('.edit--portfolio');
-    // openModalButton.addEventListener('click', () => openModal(MODAL_TYPE.EDIT_FORM, { data: works }));
-    // const closeModalButton = document.querySelector('.js-close-modal');
-    // closeModalButton.addEventListener('click', closeModal);
 }
 
 await main();

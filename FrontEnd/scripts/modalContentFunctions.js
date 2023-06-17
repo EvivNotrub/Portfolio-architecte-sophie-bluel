@@ -15,18 +15,15 @@ function returnFileSize(number) {
 function changeDisplayPhoto(addPhotoLabel, storage = true){
     document.getElementById("add-photo-input").addEventListener("change", function(event){
       const file = event.target.files[0];
-      console.log(file);
       const reader = new FileReader();
       reader.onload = function(e)  {
           const newImage = document.createElement("img");
           newImage.src = e.target.result;
-          console.log(newImage);
            if (storage) { window.localStorage.setItem("newImageSource", newImage.src)};
           addPhotoLabel.style.backgroundImage = `url(${newImage.src})`;
           addPhotoLabel.style.backgroundSize = "cover";
           addPhotoLabel.style.backgroundPosition = "center";
           const size = returnFileSize(file.size);
-          console.log(size);
           const sizeSpan = document.querySelector(".add-photo-label span");
           sizeSpan.textContent = size;
       }
@@ -34,23 +31,9 @@ function changeDisplayPhoto(addPhotoLabel, storage = true){
       }
     );
   }
-function actionOnInputChange(event) {
-  categoryInput.addEventListener("change", function logCat(event){
-    console.log("category changed");
-    console.log(event.target.value);
-  });
-  titleInput.addEventListener("change", function logTitle(event){
-    console.log("title changed");
-    console.log(event.target.value);
-  });
-  addPhotoInput.addEventListener("change", function logPhoto(event){
-    console.log("photo changed");
-    console.log(event.target.value);
-  }); 
-}
+
 function showCUrrentImage(identification) {
   titleInput = document.querySelector("input[name='img-title']");
-  console.log(titleInput);
   currentImage = document.querySelector(identification);
   titleInput.value = currentImage.alt;
   const addPhotoLabel = document.querySelector(".add-photo-label");
@@ -68,7 +51,6 @@ function showCUrrentImage(identification) {
     }
   }
   function showIntroTexts(currentIntro){
-    console.log(currentIntro);
     titleDescriptionInput = document.querySelector("input[name='about-title']");
     descriptionInput = document.querySelector("#about-txt");
     titleDescriptionInput.value = currentIntro.title;
@@ -86,10 +68,7 @@ export function addFormFunctions() {
     titleInput = document.getElementById("img-title");
     categoryInput = document.getElementById("img-category");
 
-
-    console.log(addPhotoLabel);
     changeDisplayPhoto(addPhotoLabel, false);
-    actionOnInputChange();
 }
 
 export function galleryFunctions() {
@@ -104,30 +83,15 @@ export function editImgFunctions() {
     addPhotoInput = document.getElementById("add-photo-input");   
 }
 export function editWorkFunctions(options) {
-  console.log("==> editWorkFunction",options);
   const addPhotoLabel = document.querySelector(".add-photo-label");
   photoForm = document.getElementById("modal__form-edit-work");
   addPhotoInput = document.getElementById("add-photo-input");
   titleInput = document.getElementById("img-title");
   categoryInput = document.getElementById("img-category");
   changeDisplayPhoto(addPhotoLabel, false);
-  actionOnInputChange();
-  console.log("options url", options.url);
   addPhotoLabel.style.background = `center / cover no-repeat url("${options.url}")`;
   titleInput.value = options.title;
   categoryInput.value = options.categoryId;
-  id = options.id;
-  console.log("id in editWoF", id);
-  
-  // const urlToObject= async()=> {
-  //   const response = await fetch(options.url);
-  //   // here image is url/location of image
-  //   const blob = await response.blob();
-  //   const file = new File([blob], `image${options.title}.jpg`, {type: blob.type});
-  //   console.log(file);
-  //   return file;
-  // }
-  // fileToEdit = await urlToObject();
-  
+  id = options.id;  
 }
 
