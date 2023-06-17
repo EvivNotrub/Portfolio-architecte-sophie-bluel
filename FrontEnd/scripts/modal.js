@@ -19,7 +19,6 @@ export const MODAL_TYPE = {
 
 function renderWorksCards(options) {
     works = options.data;
-    console.log("==> renderWorksCards\n", "options :", options);
     const worksGallery = options.data.map((work) => (`
     <a href="#" class="js-modal" data-version="edit_work" data-id="${work.id}" data-title="${work.title}" data-catid="${work.category.id}" data-url="${work.imageUrl}">
         <div class="modal__icons">
@@ -204,7 +203,6 @@ function removeModalActionEventListerner() {
 
     const pictures = document.querySelectorAll('.modal-action-delete-item');
     pictures && pictures.forEach( modalActionDeleteButton => {
-            console.log('picture : ', modalActionDeleteButton);
             modalActionDeleteButton.removeEventListener('click', actionDelete);
         });
 
@@ -232,27 +230,21 @@ function addModalActionEventListener() {
 }
 
 export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
-    console.log("==> Open Modal!  ?existing modal? : ",modal);
     if (modal) {
         removeOpenModalLinkSetup(modal);
     }
-    console.log('===> openModal with type:\n', type, '\noptions : ', options);
     previouslyFocusedElement = document.querySelector(':focus');
     modal = document.querySelector('#myModal');
     const modalBody = document.querySelector('.modal__body');
     modalBody.innerHTML = renderModalContent(type, options);
-    console.log('===> arrow', arrow, 'options.arrow', options.arrow);
     if (options.arrow) {
         arrow.classList.add('js-modal');
         arrow.style.transform = "scale(1)";
      }else{
         arrow.classList.remove('js-modal');
-        console.log("remove js-modal on:" + arrow);
         arrow.style.transform = "scale(0)";
      }
-     console.log("modal beore openModalLinks",modal);
     openModalLinks = openModalLinkSetup( modal);
-    console.log('===> openModalLinksModal', openModalLinks);
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
     modal.style.display = "";    
@@ -277,7 +269,6 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
 }
 
 export async function closeModal() {
-    console.log("==> Close Modal!  ?existing modal? : ",modal);
     if (modal === null) return;
     window.localStorage.removeItem("newImageSource");
     removeOpenModalLinkSetup(modal);
