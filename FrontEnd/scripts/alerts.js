@@ -1,6 +1,8 @@
 
+import { getAlertFocusables } from "./focus.js";
+export let alert = null;
+let previouslyFocusedElement = null;
 
-const alert = document.getElementById("alertArea");
 const alertBox = document.getElementById("alert_box");
 const alertMessage = document.getElementById("alert__message");
 const alertClose = document.getElementById("alert__close");
@@ -24,6 +26,7 @@ async function getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, ev
             alertClose.removeEventListener(event, listener);
             resolve(confirmation);
         }
+
         alertAbort.forEach(element => {
             element.addEventListener(event, () => {listener(confirmation, false)});
             });
@@ -40,7 +43,8 @@ async function getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, ev
   
 
 export async function customAlert(type = "success", message = {headers: "Attention !", body: ""}) {
-
+    previouslyFocusedElement = document.querySelector(':focus');
+    alert = document.getElementById("alertArea");
     console.log("Alert type: " + type);
     alert.style.display = "";
     alert.removeAttribute("aria-hidden");
@@ -68,18 +72,21 @@ export async function customAlert(type = "success", message = {headers: "Attenti
     }
     alertAlert.innerText = message.headers;
     alertMessage.innerText = message.body;
+
+    const focusables = getAlertFocusables();
+    alertConfirm.focus();    
     
     await getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, "click").then( (value) => {
         confirmation = value;
         console.log("resolve value" + value);
     });
-    
+
     console.log("confirmation: " + confirmation);
     closeAlert();
     return confirmation;
     
 }
-function closeAlert() {
+export function closeAlert() {
     alert.style.display = "none";
     alert.setAttribute("aria-hidden", "true");
     alertMessage.innerText = "";
@@ -91,5 +98,6 @@ function closeAlert() {
     });
     alertConfirm.removeEventListener("click", closeAlert);
     alertClose.removeEventListener("click", closeAlert);
-    
+    alert = null;
+    if (previouslyFocusedElement !== null) {previouslyFocusedElement.focus()};
 }

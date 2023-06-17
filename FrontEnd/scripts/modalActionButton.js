@@ -231,20 +231,16 @@ export async function actionDelete(event) {
   console.log(parent);
   
     if(await customAlert("warning", {headers: "Action requise !" , body: 'Êtes-vous sûr de vouloir supprimer le projet n°' + id + ' \"' + title + '\" de category : ' + category + ' ?'})){
-    // if(confirm('Effacer le projet n°' + id + ' \"' + title + '\" de category : ' + category + ' ?')){
       const response = await deleteWork(id, token);
       console.log(response);
         if(response.ok){
           event.target.parentNode.parentNode.remove();        
             await customAlert("success", {body: "Votre photo a bien été supprimée !"});   
-            // alert("Votre photo a bien été supprimée !");
           worksEdit = true;     
-          Promise.resolve(response);
+          // Promise.resolve(response);
         }else{
-          console.log("not ok", response);
-          // alert("Erreur lors de la suppression de la photo");
-          await customAlert("error", {headers:"Erreur !", body: "La suppression de la photo n'a pas abouti."});
-          Promise.reject(response.status);
+          await customAlert("error", {headers:"Erreur !", body: "La suppression de la photo n'a pas abouti, car le serveur renvoie une erreur."});
+          // Promise.reject(response.status);
           return
         }
     }else{

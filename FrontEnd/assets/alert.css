@@ -35,7 +35,7 @@
 	display: flex;
 	justify-content: space-between;
 }
-.alert__header span {
+.alert__header button {
 	cursor: pointer;
 }
 #alert__box h3 {

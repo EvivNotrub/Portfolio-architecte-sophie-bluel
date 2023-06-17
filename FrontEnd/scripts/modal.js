@@ -1,8 +1,9 @@
 import { openModalLinkSetup, removeOpenModalLinkSetup, closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
-import { getFocusables, focusInModal, focusables} from "./focus.js";
+import { getModalFocusables, getAlertFocusables, focusInModal, focusables, alertFocusables} from "./focus.js";
 import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete, worksEdit, changeWorkEdit } from "./modalActionButton.js";
 import { addFormFunctions, editWorkFunctions, editImgFunctions, galleryFunctions, editTxtFunctions } from "./modalContentFunctions.js";
 import { renderWorkCards } from "./works.js";
+import { alert, closeAlert } from "./alerts.js";
 let openModalLinks = [];
 let closeModalLinks = [], previouslyFocusedElement = null;
 export let modal = null;
@@ -259,9 +260,7 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     console.log('===> openModalLinksModal', openModalLinks);
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
-    modal.style.display = "";
-    // manages the modal validation button:
-    addModalActionEventListener();
+    modal.style.display = "";    
     // functions for the content of the modal:
     if (type == MODAL_TYPE.ADD_FORM ) {addFormFunctions()};
     if (type == MODAL_TYPE.EDIT_WORK ) {editWorkFunctions(options)};
@@ -270,8 +269,11 @@ export function openModal(type = MODAL_TYPE.GALLERY, options = {}) {
     if (type == MODAL_TYPE.GALLERY ) {galleryFunctions()};
 
     // Focus on modal content
-    getFocusables(options.arrow);
+    getModalFocusables(options.arrow);
     focusables[2].focus();
+
+    // manages the modal validation button:
+    addModalActionEventListener();
 
     // When the user clicks anywhere outside of the modal, it closes
     modal.addEventListener("click", closeModal);
@@ -316,10 +318,19 @@ const stopPropagation = function (event) {
 };
 
 window.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" || event.key === "Esc") {
-        closeModal(event);
-    }
-    if (event.key === "Tab" && modal !== null) {
-        focusInModal(event);
+    if (alert !== null){
+        if (event.key === "Escape" || event.key === "Esc") {
+            closeAlert();
+        }
+        if (event.key === "Tab") {
+            focusInModal(event, alert, alertFocusables);
+        }
+    }else if (modal !== null){        
+        if (event.key === "Escape" || event.key === "Esc") {
+            closeModal(event);
+        }
+        if (event.key === "Tab") {
+            focusInModal(event);
+        }
     }
 });

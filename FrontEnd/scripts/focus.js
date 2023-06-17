@@ -1,34 +1,37 @@
 import { modal } from "./modal.js";
+import { alert } from "./alerts.js";
 
-export let focusables = [];
+export let focusables = [], alertFocusables = [];
 export const focusableSelector = "button, a, input, textarea, select";
 
-export function getFocusables(arrow = false) {
+export function getModalFocusables(arrow = false) {
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
-    console.log(focusables);
     if (!arrow) {
         focusables = focusables.filter(f => !f.classList.contains("modal__arrow"));
-        console.log(focusables);
     }
 }
-
-export const focusInModal = function (event) {
+export function getAlertFocusables(){
+    alertFocusables = Array.from(alert.querySelectorAll(focusableSelector));
+    alertFocusables = alertFocusables.filter(element => {
+        const computedStyle = getComputedStyle(element);
+        return computedStyle.display !== 'none';
+      })
+    return alertFocusables;
+}
+export const focusInModal = function (event, container = modal, array = focusables) {
     event.preventDefault();
-    console.log(focusables);
-    let index = focusables.findIndex(f => f === modal.querySelector(':focus'));
-    console.log(index);
+    let index = array.findIndex(f => f === container.querySelector(':focus'));
     if (event.shiftKey === true){
         index--
     }else{
         index++
     }
-    if (index >= focusables.length) {
+    if (index >= array.length) {
         index = 0;
     }
     if (index < 0 ) {
-        index = focusables.length - 1;
+        index = array.length - 1;
     }
-    console.log(index);
-    focusables[index].focus();
+    array[index].focus();
 }
 
