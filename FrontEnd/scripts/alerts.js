@@ -17,7 +17,6 @@ async function getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, ev
         
 
         const listener = (confirmation, value) => {
-            console.log("listener firing!");
             confirmation = value;
             alertAbort.forEach(element => {
                 element.removeEventListener(event, listener);
@@ -45,7 +44,6 @@ async function getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, ev
 export async function customAlert(type = "success", message = {headers: "Attention !", body: ""}) {
     previouslyFocusedElement = document.querySelector(':focus');
     alert = document.getElementById("alertArea");
-    console.log("Alert type: " + type);
     alert.style.display = "";
     alert.removeAttribute("aria-hidden");
     if(type === "info") {
@@ -78,10 +76,8 @@ export async function customAlert(type = "success", message = {headers: "Attenti
     
     await getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, "click").then( (value) => {
         confirmation = value;
-        console.log("resolve value" + value);
     });
 
-    console.log("confirmation: " + confirmation);
     closeAlert();
     return confirmation;
     

@@ -5,7 +5,6 @@
     //     };
 
 const form = document.querySelector(".form-login");
-console.log(form);
 form.addEventListener("submit", async function (event){
     
         event.preventDefault();
@@ -13,7 +12,6 @@ form.addEventListener("submit", async function (event){
             email: event.target.querySelector("[name=email]").value,
             password: event.target.querySelector("[name=password]").value
         };
-        console.log(logInput);
         const chargeUtile = JSON.stringify(logInput);
 
         const response = await fetch("http://localhost:5678/api/users/login", {
@@ -22,12 +20,11 @@ form.addEventListener("submit", async function (event){
             body: chargeUtile
         });
         console.log(response.status);
-        if (response.ok == false) { // if HTTP-status is NOT 200-299
+        if (response.ok == false) {
             const message = await response.json().message;
             alert("HTTP-Error: " + response.status + "\n" + message);
             return;
         };
-        // obtenir le corps de réponse
         const retourLogin = await response.json();
         const token = JSON.stringify(retourLogin.token);
         window.localStorage.setItem("token", token)
