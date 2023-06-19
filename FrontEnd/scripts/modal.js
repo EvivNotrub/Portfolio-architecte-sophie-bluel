@@ -1,6 +1,6 @@
 import { openModalLinkSetup, removeOpenModalLinkSetup, closeModalLinkSetup, removeCloseModalLinkSetup } from "./modalLink.js";
 import { getModalFocusables, getAlertFocusables, focusInModal, focusables, alertFocusables} from "./focus.js";
-import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete } from "./modalActionButton.js";
+import { actionEditImage, actionAdd, actionEdit, actionEditTxt, actionDelete, actionDeleteAll } from "./modalActionButton.js";
 import { addFormFunctions, editWorkFunctions, editImgFunctions, galleryFunctions, editTxtFunctions } from "./modalContentFunctions.js";
 import { alert, closeAlert } from "./alerts.js";
 let openModalLinks = [];
@@ -210,6 +210,9 @@ function removeModalActionEventListerner() {
     const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
     modalActionEditTextButton && modalActionEditTextButton.removeEventListener('click', actionEditTxt);
 
+    const modalActionDeleteAll = document.getElementById('delete-all');
+    modalActionDeleteAll && modalActionDeleteAll.removeEventListener('click', actionDeleteAll);
+
 }
 function addModalActionEventListener() {
     const modalActionAddButton = document.querySelector('.modal-action-add');
@@ -227,6 +230,9 @@ function addModalActionEventListener() {
 
     const modalActionEditTextButton = document.querySelector('.modal-action-edit-text');
     modalActionEditTextButton && modalActionEditTextButton.addEventListener('click', actionEditTxt);
+
+    const modalActionDeleteAll = document.getElementById('delete-all');
+    modalActionDeleteAll && modalActionDeleteAll.addEventListener('click', actionDeleteAll);
 
 }
 

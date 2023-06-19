@@ -204,3 +204,47 @@ export function actionEditTxt(event) {
             introTitleElement.innerText = titleDescriptionInput.value;
           closeModal();
 }
+
+export async function actionDeleteAll(event) {
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  if(await customAlert("warning", {headers: "Action requise !" , body: 'Êtes-vous sûr de vouloir supprimer toute la gallerie ?'})){
+    
+    const works = await getWorks();
+    works.map(async (work) => {
+      const response = await deleteWork(work.id, token);
+      if(response.ok){
+        console.log("ok" + id);
+      }else{
+        customAlert("error", {headers:"Erreur !", body: "La suppression des photos s'est interompu au n° " + id + ", car le serveur renvoie une erreur."});
+        return
+      }
+    });
+    await customAlert("success", {body: "Vos photos ont bien étées supprimées !"});
+    document.getElementById("galleryModal").innerHTML = ""; 
+    renderWorkCards();
+
+    }else{
+      await customAlert("info", {body: "Annulation de la suppression des photos!"});
+      return;
+    }
+  // if(await customAlert("warning", {headers: "Action requise !" , body: 'Êtes-vous sûr de vouloir supprimer toute la gallerie ?'})){
+  //     const response = await deleteWork(id, token);      
+  //       if(response.ok){
+  //         event.target.parentNode.parentNode.remove();        
+  //           await customAlert("success", {body: "Vos photos ont bien étées supprimées !"});   
+  //         renderWorkCards();     
+  //         // Promise.resolve(response);
+  //       }else{
+  //         await customAlert("error", {headers:"Erreur !", body: "La suppression des photos n'a pas abouti, car le serveur renvoie une erreur."});
+  //         // Promise.reject(response.status);
+  //         return
+  //       }
+  //   }else{
+  //     await customAlert("info", {body: "Annulation de la suppression des photos!"});
+  //     return;
+  //   }
+
+
+}
+

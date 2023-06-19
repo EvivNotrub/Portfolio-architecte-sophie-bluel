@@ -214,18 +214,16 @@
 	align-items: center;
 	gap: 23px;
 }
-/* #modal__footer--gallery {
-	height: 120px;
-} */
 .modal__line {
 	width: max(300px , 78% );
 	border: 1px solid #B3B3B3;
 	margin-bottom: 15px ;
 }
 .delete-all {
-	font-family: 'Syne';
+	font-family: 'Syne mono', monospace;
 	font-size: 14px;
 	color: var(--appeal-color);
+	font-weight: 400;
 }
 .modal[aria-hidden="true"] .modal-wrapper {
 	animation-name: shrink;
