@@ -63,7 +63,8 @@ function renderAddWorkForm(options) {
                 </div>
                 <div class="file-input-info">
                     <label for="img-category">Catégorie</label>
-                    <select id="img-category" required=""><!-- here we add the category options using the API response and category availables -->
+                    <select id="img-category" required="">
+                        <option disabled selected value> -- select an option -- </option>
                         <option value="1">Objets</option>
                         <option value="2">Appartements</option>
                         <option value="3">Hotels &amp; restaurants</option>
@@ -99,7 +100,7 @@ function renderEditWorkForm(options) {
                             </div>
                             <div class="file-input-info">
                                 <label for="img-category">Catégorie</label>
-                                <select id="img-category" required=""><!-- here we add the category options using the API response and category availables -->
+                                <select id="img-category" required="">
                                     <option value="1">Objets</option>
                                     <option value="2">Appartements</option>
                                     <option value="3">Hotels &amp; restaurants</option>

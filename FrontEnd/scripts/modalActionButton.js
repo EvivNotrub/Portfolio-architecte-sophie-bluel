@@ -48,9 +48,11 @@ export async function actionAdd(event) {
         await customAlert("error", {headers:"Erreur de formulaire !", body: "Le format de l'image n'est pas valide."});        
       }else if(!validFileSize(files)){
         await customAlert("error", {headers:"Erreur de formulaire !", body: "La taille de l'image est trop grande."});        
-      }else if(!titleInput.valid){        
+      }else if(!titleInput.validity.valid){
+        console.log("titleInput.valid", titleInput.value);        
         await customAlert("error", {headers:"Erreur de formulaire !", body: "Le titre doit être renseigné."});
-      }else if(!categoryInput.valid){
+      }else if(!categoryInput.validity.valid){
+        console.log("categoryInput.valid", categoryInput.valid);
         await customAlert("error", {headers:"Erreur de formulaire !", body: "La catégorie doit être renseignée."});        
       }else{
         await customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format."});
@@ -98,9 +100,9 @@ export async function actionEdit(event) {
         await customAlert("error", {headers:"Erreur de formulaire !", body: "Le format de l'image n'est pas valide."});        
       }else if(!validFileSize(files)){
         await customAlert("error", {headers:"Erreur de formulaire !", body: "La taille de l'image est trop grande."});        
-      }else if(!titleInput.valid){        
+      }else if(!titleInput.validity.valid){        
         await customAlert("error", {headers:"Erreur de formulaire !", body: "Le titre doit être renseigné."});
-      }else if(!categoryInput.valid){
+      }else if(!categoryInput.validity.valid){
         await customAlert("error", {headers:"Erreur de formulaire !", body: "La catégorie doit être renseignée."});        
       }else{
         await customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format."});
@@ -154,7 +156,7 @@ export async function actionEditImage(event) {
         await customAlert("error", {headers:"Erreur de formulaire !", body: "Le format de l'image n'est pas valide."});        
       }else if(!validFileSize(files)){
         await customAlert("error", {headers:"Erreur de formulaire !", body: "La taille de l'image est trop grande."});        
-      }else if(!titleInput.valid){        
+      }else if(!titleInput.validity.valid){        
         await customAlert("error", {headers:"Erreur de formulaire !", body: "Le titre doit être renseigné."});      
       }else{
         await customAlert("error", {headers:"Erreur de formulaire !", body: "Merci de bien renseigner tous les champs et de vérifier si l'image est au bon format."});
