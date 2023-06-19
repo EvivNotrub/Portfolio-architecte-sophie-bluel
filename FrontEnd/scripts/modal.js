@@ -36,9 +36,10 @@ function renderWorksCards(options) {
         </div>
     </div>
     
-    <div class="modal__footer">
+    <div class="modal__footer" id="modal__footer--gallery">
         <div class="modal__line"></div>
         <button class="js-modal rnd-button rnd-button--green modal__action" type="button" href="#" data-version="add_form" data-id="add">Ajouter une photo</button>
+        <button class="delete-all" id="delete-all" type="button">Supprimer la galerie</button>
     </div>`;    
 }
 
