@@ -52,7 +52,7 @@ function renderAddWorkForm(options) {
                     <!-- i want to change the name displayed in the input type file -->
                     <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
                         imagesmode
-                        <span class="add-photo-button">+ Ajouter photo</span>
+                        <span class="add-photo-button">+ Ajouter une photo</span>
                         <span class="add-photo-specs">jpg, png: 4mo max</span>
                     </label>
                     <input id="add-photo-input" class="add-photo-input" type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo" required="">
@@ -89,7 +89,7 @@ function renderEditWorkForm(options) {
                             <div class="modal__form__imgDiv">
                                 <label for="add-photo-input" class="material-symbols-outlined add-photo-label">
                                     imagesmode
-                                    <span class="add-photo-button">+ Ajouter photo</span>
+                                    <span class="add-photo-button">Changer de photo</span>
                                     <span class="add-photo-specs">jpg, png: 4mo max</span>
                                 </label>
                                 <input id="add-photo-input" class="add-photo-input" type="file" accept=".png, .jpg, .jpeg" name="+ Ajouter photo" required="">
