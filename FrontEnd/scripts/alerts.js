@@ -32,6 +32,13 @@ async function getPromiseFromAlertEvent(alertAbort, alertConfirm, alertClose, ev
         alertConfirm.addEventListener(event, () => {listener(confirmation, true)});
         alertClose.addEventListener(event, () => {listener(confirmation, false)});
 
+        window.addEventListener("keydown", function escCloseAlert(event) {
+            if (event.key === "Escape" || event.key === "Esc") {
+                resolve(confirmation);
+                window.removeEventListener("keydown", escCloseAlert);
+            }
+        });
+
         await delay(10000);
         resolve(confirmation);
     })
@@ -43,6 +50,7 @@ export async function customAlert(type = "success", message = {headers: "Attenti
     alert = document.getElementById("alertArea");
     alert.style.display = "";
     alert.removeAttribute("aria-hidden");
+    alert.setAttribute("aria-modal", "true");
     if(type === "info") {
         alertAbort.forEach(element => {
             element.style.display = "none";
@@ -79,8 +87,10 @@ export async function customAlert(type = "success", message = {headers: "Attenti
     return confirmation;    
 }
 export function closeAlert() {
+    if (alert === null) return;
     alert.style.display = "none";
     alert.setAttribute("aria-hidden", "true");
+    alert.removeAttribute("aria-modal");
     alertMessage.innerText = "";
     alertAlert.style.display = "none";
     alertClose.style.display = "";
