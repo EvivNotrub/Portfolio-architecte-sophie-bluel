@@ -76,15 +76,15 @@
 .modal__content {
 	padding: 16px 0;
 	width: 78%;
-	overflow: auto;
 	height: 100%;
+	overflow: scroll;
 }
 
 /*** specifications for gallery mode ***/
 .galleryModal {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-	grid-template-rows: repeat(auto-fill, 1fr);
+	grid-auto-rows: 150px;
 	grid-column-gap: 7px;
 	grid-row-gap: 10px;
 }
@@ -130,16 +130,20 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-evenly;
-	height: 100%;
 	gap: 20px;
 	padding: 7px;
 	margin-top: 10px;
+	overflow: auto;
 }
 .modal__form__imgDiv {
 	position: relative;
 	width: 100%;
 	flex: 1;
+	flex-basis: max(100px, 21vh);
+	flex-shrink: 0;
 	background-color: var(--fourth-bg-color);
+	overflow: scroll;
+	/* height: min(100px, 18vh); */
 }
 .add-photo-label {
 	position: absolute;
@@ -147,6 +151,7 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
+	/* min-height: 60px; */
 	cursor: pointer;
 	color: var(--fourth-color);
 	font-size: 100px;
@@ -155,7 +160,9 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	gap: 14px ;
+	flex-wrap: wrap;
+	gap: 14px;
+	padding: 7px;
 }
 .add-photo-button {
 	font-family: 'work sans';
@@ -233,13 +240,8 @@
 }
  @media screen and (max-width: 768px) {
 	.add-photo-label {
-		justify-content: end;
-		overflow: hidden;
 		font-size: 60px;
 		gap: 5px;
-	}
-	.add-photo-label::before {
-		display: none;
 	}
 	.modal__body {
 		gap: 10px;
