@@ -53,3 +53,29 @@ export async function addWork(bodyData, token) {
     throw new Error('Could not reach backend', {cause: error});
   }
 }
+
+export async function authentification(bodyData){
+  try{
+    const response = await fetch("http://localhost:5678/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: bodyData
+    });
+    if (!response.ok) {
+        if (response.status === 401) {
+            alert("HTTP-Error: " + response.status + "\n\n" + "Mot de passe incorrect");
+        };
+        if (response.status === 404) {
+            alert("HTTP-Error: " + response.status + "\n\n" + "Utilisateur non trouvé");
+        };
+    } else {
+        const retourLogin = await response.json();
+        const token = JSON.stringify(retourLogin.token);
+        console.log(token);
+        window.localStorage.setItem("token", token)
+        window.location = "../index.html"
+    }
+  } catch (error) {
+      throw new Error('Could not reach backend', {cause: error});
+  }
+}
