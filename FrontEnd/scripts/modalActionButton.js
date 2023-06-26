@@ -3,7 +3,6 @@ import {  currentImage, titleInput, categoryInput, addPhotoInput, photoForm, id,
 import { openModal, closeModal } from "./modal.js";
 import { customAlert } from "./alerts.js";
 import { renderWorkCards } from "./works.js";
-// import { openModalLinkSetup } from "./modalLink.js";
 
 const maxSize = 4000000;
 let url, request;
@@ -66,10 +65,8 @@ export async function actionAdd(event) {
         const response = await addWork( formDataAdd, token);
             if(response.ok){
               await customAlert("success", {body: "Votre photo a bien été ajoutée !"});
-              // Promise.resolve(response);            
             }else{              
               await customAlert("error", {headers:"Erreur lors de l'ajout de la photo !", body: "Veuillez réessayer en vérifiant que le fichier est bien au format jpeg ou png et que la taille est inférieure à 4Mo."});
-              Promise.reject(response.status);
             return
             }
     }else{
@@ -84,7 +81,6 @@ export async function actionAdd(event) {
 }
 
 export async function actionEdit(event) {
-    // fire edit action
     event.preventDefault();    
     const token = JSON.parse(localStorage.getItem("token"));
     const files = addPhotoInput.files;
@@ -112,7 +108,6 @@ export async function actionEdit(event) {
      formDataAdd.append("image", file);
      formDataAdd.append("title", titleInput.value);
      formDataAdd.append("category", categoryInput.value);
-    //  if(confirm()){
       if(await customAlert("warning", {headers: "Action requise !" , body: 'Êtes-vous sûr de vouloir remplacer la photo ' + id + '?'})){
       const responseDelete = await deleteWork(id, token);      
         if(responseDelete.ok){            
@@ -125,13 +120,10 @@ export async function actionEdit(event) {
         const responseAdd = await addWork( formDataAdd, token);
             if(responseAdd.ok){
               await customAlert("success", {body: "Votre photo a bien été remplacée !"});
-              // Promise.resolve(responseAdd);            
             }else{              
               await customAlert("error", {headers:"Erreur !", body: "L'ajout de la photo n'a pas abouti."});
-              // Promise.reject(responseAdd.status);
             return
-            }
-        
+            }        
     }else{
       await customAlert("info", {body: "Annulation de l'édit de la photo"});
       return;
