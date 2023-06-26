@@ -10,31 +10,40 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="./assets/modalold.css">
+	<link rel="stylesheet" href="./assets/alert.css">
 </head>
 <body>
-	<aside id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="modal__title" style="display: none;">
+	<aside id="alertArea" aria-hidden="true" aria-modal="false" role="dialog" style="display: none;">
+		<div id="alert__box">
+			<div class="alert__header">
+				<button class="material-symbols-outlined alert__abort">arrow_back</button>
+				<button id="alert__close" class="material-symbols-outlined">close</button>
+			</div>
+			<h3 id="alert__alert" style="display: none;">Attention !</h3>
+			<p id="alert__message">Message</p>
+			<div class="alert__line"></div>
+			<div class="alert__footer">
+				<button type="button" class="rnd-button  alert__abort rnd-button--green abort">Annuler</button>
+				<button id="alert__confirm" type="button" class="rnd-button rnd-button--green confirmation">Valider</button>
+			</div>
+		</div>
+	</aside>
+	<aside id="myModal" class="modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="modal__title" style="display: none;">
 		<div class="modal-wrapper js-modal-stop">
 			<div class="modal__header">
-				<a href="#modal" data-version="gallery" class="js-modal material-symbols-outlined modal__arrow">arrow_back</a>
-				<button class="js-modal-close material-symbols-outlined">close</button>
+				<button id="modal__arrow" data-version="gallery" class="material-symbols-outlined modal__arrow">arrow_back</button>
+				<button class="js-modal-close material-symbols-outlined modal__close">close</button>
 			</div>
 			<div class="modal__body">
-				<h3 id="modal__title" class="modal__title"></h3>
-				<div class="modal__content">
-					<!-- here we add the gallery using the API data -->
-				</div>
-				<div class="modal__footer">
-					<div class="modal__line"></div>
-					<button class="rnd-button rnd-button--green modal__action"></button>
-				</div>
+
 			</div>
 		</div>
 	</aside>
 	<header>
 		<div class="edit">
 			<p class="header__edit__indication">
-				<span class="material-symbols-outlined">
-				edit_square</span>
+				<span class="material-symbols-outlined edit_square-logo">edit_square</span>
 				Mode édition
 			</p>
 			<button class="header__edit__button">publier les changements</button>
@@ -46,36 +55,38 @@
 					<li class="activ-page">projets</li>
 					<li><a href="#contact">contact</a></li>
 					<li><a id="login-link" href="./pages/login.html">login</a></li>
-					<li><img class="logo-social" src="./assets/icons/instagram.png" alt="Instagram"></li>
+					<li class="logo-social__li"><img class="logo-social__img" src="./assets/icons/instagram.png" alt="Instagram"></li>
 				</ul>
 			</nav>
 		</div>
 	</header>
 	<main>
 		<section id="introduction">
-			<figure>
-				<img src="./assets/images/sophie-bluel.png" alt="">
-				<a href="./pages/modalImageForm.html#modal__form" data-version="editPhoto" class="js-modal edit edit--author-img">
-					<span class="material-symbols-outlined">edit_square</span>
+			<figure class="intro__img">
+				<img id="sophie-bluel" src="./assets/images/sophie-bluel.png" alt="Portrait de Sophie Bluel dans la nature">
+				<a href="#" data-version="edit_image" data-title="Portrait de Sophie Bluel dans la nature" class="js-modal edit edit--author-img">
+					<span class="material-symbols-outlined edit_square-logo">edit_square</span>
 					<span>modifier</span>
 				</a>
 			</figure>
 			<article class="intro__description">
-				<a href="./pages/modalImageForm.html#modal__txt--change" data-version="editText" class="js-modal edit edit--intro">
-					<span class="material-symbols-outlined">edit_square</span>
+				<a href="#" data-version="edit_text" class="js-modal edit edit--intro">
+					<span class="material-symbols-outlined edit_square-logo">edit_square</span>
 					<span>modifier</span>
 				</a>
 				<h2 class="intro__title">Designer d'espace</h2>
-				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
-				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
-				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
+				<div class="intro__description__txt">
+					<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
+					<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
+					<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
+				</div>
 			</article>
 		</section>
 		<section id="portfolio">
 				<div class="portfolio-title">
 					<h2>Mes Projets</h2>
-					<a href="#modal" data-version="gallery" class="js-modal edit edit--portfolio">
-						<span class="material-symbols-outlined">edit_square</span>
+					<a href="#" data-version="gallery" class="js-modal edit edit--portfolio">
+						<span class="material-symbols-outlined edit_square-logo">edit_square</span>
 						<span>modifier</span>
 					</a>
 				</div>
@@ -88,8 +99,8 @@
 		</section>
 		<section id="contact">
 			<h2>Contact</h2>
-			<p>Vous avez un projet ? Discutons-en !</p>
-			<form action="#" method="post">
+			<p class="contact__txt"><span class="no-wrap">Vous avez un projet ? </span><span class="no-wrap">Discutons-en !</span></p>
+			<form action="#" method="get">
 				<label for="name">Nom</label>
 				<input type="text" name="name" id="name">
 				<label for="email">Email</label>
@@ -100,7 +111,6 @@
 			</form>
 		</section>
 	</main>
-
 	<footer>
 		<nav>
 			<ul>
@@ -109,7 +119,6 @@
 		</nav>
 	</footer>
 	<script type="module" src="./scripts/works.js"></script>
-	<script type="module" src="./scripts/modale.js"></script>
-	<!-- <script type="module" src="./scripts/modalForm.js"></script> -->
+	<script type="module" src="./scripts/modal.js"></script>
 </body>
 </html>

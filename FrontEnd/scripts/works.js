@@ -1,133 +1,104 @@
-import { filters } from "./filters.js";
-import { modalGallerySpecifics } from "./modalVersions.js";
+import { getCategories as getCategoriesData, getWorks } from './api.js';
+import { openModalLinkSetup, closeModalLinkSetup} from './modalLink.js';
+import { filters } from './filters.js';
 
-let token;
-//Below we check if the user is connected or not.
-// If he is, we display the edit mode and change the login button to logout and hide the filters.
-// If not, we hide the edit mode, get filters and change the login button to login.
+let openModalLinks = [], categories;
+export let token;
+
 const loginButton = document.querySelector("#login-link");
 
-export async function deletePicture(event, id) {
-    event.stopPropagation();
-    event.preventDefault();
-    console.log(id);
-
-    alert("delete?");
-    // const pictureDelete = await fetch(`http://localhost:5678/api/works/${id}`, {
-    //     method: 'DELETE',
-    //     Authorization: Bearer + token
-    // })
-    // console.log(pictureDelete);
-}
-
-function toggleEditMode(action = "hide"){
+function toggleEditMode(toDisplay = false) {
     const edits = document.querySelectorAll(".edit");
-    if (action === "hide"){
+    if (!toDisplay) {
         edits.forEach( edit => edit.style.display = "none");
-    }else if (action === "show"){
+    } else {
         edits.forEach( edit => edit.style.display = "");
     }
 }
 
-function loginButtonAction() {
-    const valeurToken = window.localStorage.getItem('token');
-    if (valeurToken === null){
-    toggleEditMode();
-    loginButton.innerText = "login";
-    }else{
+function checkAuthentication() {
+    token = window.localStorage.getItem('token');
+    if(!token) {
+        toggleEditMode();
+        loginButton.innerText = "login";
+    } 
+    else {
         loginButton.innerText = "logout";
-        toggleEditMode("show");
-        token = JSON.parse(valeurToken);
-    };
+        toggleEditMode(true);
+    }
 }
-
-loginButtonAction();
 
 loginButton.addEventListener("click", async function(event){
     event.preventDefault();
     if (loginButton.innerText === "logout"){
         window.localStorage.removeItem("token");
-        loginButtonAction();
-        await createCategoriesFilters();
+        checkAuthentication();
+        await renderFilters();
         filters();
     }else{
         window.location = "./pages/login.html";
     };
 });
 
-export async function getWorks() {
-    
-    const worksResponse = await fetch('http://localhost:5678/api/works');
-    const works = await worksResponse.json();
-    return works;
-    
-};
-    
-export async function getCategories() {
-    const categoriesResponse = await fetch('http://localhost:5678/api/categories');
-    const categories = await categoriesResponse.json();
-    return categories;
-};
+function renderFilterComponent(category, parent) {
+    const filterElement = document.createElement("div");
+    filterElement.classList.add("filter");        
+    const checkBox = document.createElement("input");
+    checkBox.type = "checkbox";
+    checkBox.name = category.name;
+    checkBox.classList.add("filterCheck");
+    checkBox.dataset.id = category.id;
+    const button = document.createElement("button");
+    button.innerText = category.name;
+    button.classList.add("filter-button", "rnd-button", "rnd-button--white");
+    filterElement.appendChild(checkBox);
+    filterElement.appendChild(button);
+    parent.appendChild(filterElement);
+}
 
-// let categories;
-
-export async function createProjectContent(containerId, modal = false) {
-    const works = await getWorks();
-    console.log(works);
-
-    for (let i in works) {
-
-        const gallery = document.querySelector(containerId);
-
-        const work = modal === false ? document.createElement("figure"): document.createElement("a");
-        const workImage = document.createElement("img")
-        const workTitle = document.createElement("figcaption");
-        work.dataset.id = works[i].category.id;
-        workImage.src = works[i].imageUrl;
-        if (modal === false){
-            workTitle.textContent = works[i].title;
-        }else{
-            work.dataset.id = works[i].id;
-            modalGallerySpecifics(work, workTitle);
-        }
-
-        gallery.appendChild(work);
-        work.appendChild(workImage);
-        work.appendChild(workTitle);
-    }
-};
-
-
-//Below we create the filters depending on the categories in the database
-async function createCategoriesFilters() {
-    let categories = await getCategories();
-    categories.unshift({id: 0, name: "Tous"});
-    console.log(categories);
-
-    const filters = document.querySelector(".filters");
+async function renderFilters() {
+    categories = await getCategoriesData();
+    categories.unshift({ id: 0, name: 'Tous' });
+    const filtersElement = document.querySelector(".filters");
     for (let i in categories) {
-        const filter = document.createElement("div");
-        filter.classList.add("filter");        
-        const checkBox = document.createElement("input");
-        checkBox.type = "checkbox";
-        checkBox.name = categories[i].name;
-        checkBox.classList.add("filterCheck");
-        checkBox.dataset.id = categories[i].id;
-        const button = document.createElement("button");
-        button.innerText = categories[i].name;
-        button.classList.add("filter-button", "rnd-button", "rnd-button--white");
-        filters.appendChild(filter);
-        filter.appendChild(checkBox);
-        filter.appendChild(button);
+        renderFilterComponent(categories[i], filtersElement);
     }
 }
 
+function renderWorkCard(work, parent) {
+    const workElement = document.createElement("figure");
+    const workImage = document.createElement("img")
+    const workTitle = document.createElement("figcaption");
+    workElement.dataset.id = work.category.id;
+    workElement.dataset.cat = work.category.name;
+    workElement.dataset.title = work.title;
+    workImage.src = work.imageUrl;
+    workImage.alt = work.title;
+    workTitle.textContent = work.title;
+    workElement.appendChild(workImage);
+    workElement.appendChild(workTitle);
+    parent.appendChild(workElement);
+}
+
+
+export async function renderWorkCards() {
+    const works = await getWorks();
+    const galleryElement = document.querySelector(".gallery");
+    galleryElement.innerHTML = "";
+    return works.map((work, index) => renderWorkCard(work, galleryElement));
+}
+
 async function main(){
-    await createProjectContent("#gallery");
-    if(token == undefined){
-        await createCategoriesFilters();
+    checkAuthentication();
+
+    renderWorkCards();
+
+    if(!token){
+        await renderFilters();
         filters();  
     }
+    
+    openModalLinks = openModalLinkSetup(document);
 }
 
 await main();
