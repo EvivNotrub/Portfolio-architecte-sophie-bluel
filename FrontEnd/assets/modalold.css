@@ -19,7 +19,7 @@
 }
 .modal-wrapper {
 	width: min(100% - 20px, 700px);
-	height: clamp(380px, 75%, 900px);
+	height: clamp(380px, 75%, 750px);
 	padding: 32px;
 	border-radius: 10px;
 	color: var(--main-color);
